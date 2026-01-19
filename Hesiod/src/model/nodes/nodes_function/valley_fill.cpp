@@ -24,6 +24,7 @@ void setup_valley_fill_node(BaseNode &node)
 
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "noise");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG(node));
@@ -42,25 +43,34 @@ void setup_valley_fill_node(BaseNode &node)
                                 0.7f,
                                 0.f,
                                 2.f);
+  node.add_attr<BoolAttribute>("add_default_noise", "Add Default Noise", true);
+  node.add_attr<SeedAttribute>("seed", "Seed");
+  node.add_attr<FloatAttribute>("noise_amp", "Amplitude", 1.f, 0.f, 10.f);
+  node.add_attr<FloatAttribute>("kw", "Spatial Frequency", 32.f, 0.f, FLT_MAX);
 
   // attribute(s) order
-  node.set_attr_ordered_key({
-      "_GROUPBOX_BEGIN_Slope Constraints",
-      "talus_global",
-      "scale_talus_with_elevation",
-      "_GROUPBOX_END_",
-      //
-      "_GROUPBOX_BEGIN_Deposition Profile",
-      "ratio",
-      "gamma",
-      "elevation_max_ratio",
-      "preserve_elevation_range",
-      "_GROUPBOX_END_",
-      //
-      "_GROUPBOX_BEGIN_Deposition Dynamics",
-      "duration",
-      "_GROUPBOX_END_",
-  });
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Slope Constraints",
+                             "talus_global",
+                             "scale_talus_with_elevation",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Deposition Profile",
+                             "ratio",
+                             "gamma",
+                             "elevation_max_ratio",
+                             "preserve_elevation_range",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Deposition Dynamics",
+                             "duration",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Noise Parameters",
+                             "add_default_noise",
+                             "seed",
+                             "noise_amp",
+                             "kw",
+                             "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = false});
@@ -74,10 +84,13 @@ void compute_valley_fill_node(BaseNode &node)
 
   if (p_in)
   {
-    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+    hmap::VirtualArray *p_noise = node.get_value_ref<hmap::VirtualArray>("noise");
+    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
     hmap::VirtualArray *p_deposition_map = node.get_value_ref<hmap::VirtualArray>(
         "deposition");
+
+    // --- prepapre talus field
 
     float talus = node.get_attr<FloatAttribute>("talus_global") / (float)p_out->shape.x;
     int   iterations = int(node.get_attr<FloatAttribute>("duration") * p_out->shape.x);
@@ -91,19 +104,65 @@ void compute_valley_fill_node(BaseNode &node)
       talus_map.remap(talus / 10.f, talus, node.cfg().cm_cpu);
     }
 
+    // --- generate default noise
+
+    hmap::VirtualArray noise_default;
+
+    if (!p_noise && node.get_attr<BoolAttribute>("add_default_noise"))
+    {
+      // set config
+      noise_default.copy_from(*p_in, node.cfg().cm_cpu, /* copy_data */ false);
+
+      hmap::for_each_tile(
+          {&noise_default},
+          [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
+          {
+            auto [pa_noise_default] = unpack<1>(p_arrays);
+
+            hmap::Vec2<float> kw = {node.get_attr<FloatAttribute>("kw"),
+                                    node.get_attr<FloatAttribute>("kw")};
+
+            *pa_noise_default = hmap::gpu::noise_fbm(hmap::NoiseType::SIMPLEX2,
+                                                     region.shape,
+                                                     kw,
+                                                     node.get_attr<SeedAttribute>("seed"),
+                                                     8,
+                                                     0.7f,
+                                                     0.5f,
+                                                     2.f,
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     nullptr,
+                                                     region.bbox);
+
+	    pa_noise_default->dump();
+
+            *pa_noise_default *= node.get_attr<FloatAttribute>("noise_amp");
+          },
+          node.cfg().cm_gpu);
+
+      p_noise = &noise_default;
+
+      Logger::log()->trace("\n{}", p_noise->info_string(node.cfg().cm_cpu));
+    }
+    
+    // --- execute
+
     float zmin = p_in->min(node.cfg().cm_cpu);
     float zmax = p_in->max(node.cfg().cm_cpu);
 
     hmap::for_each_tile(
-        {p_out, p_in, p_mask, &talus_map, p_deposition_map},
+        {p_out, p_in, p_noise, p_mask, &talus_map, p_deposition_map},
         [&node, talus, iterations, zmin, zmax](std::vector<hmap::Array *> p_arrays,
                                                const hmap::TileRegion &)
         {
-          hmap::Array *pa_out = p_arrays[0];
-          hmap::Array *pa_in = p_arrays[1];
-          hmap::Array *pa_mask = p_arrays[2];
-          hmap::Array *pa_talus_map = p_arrays[3];
-          hmap::Array *pa_deposition_map = p_arrays[4];
+          auto [pa_out,
+                pa_in,
+                pa_noise,
+                pa_mask,
+                pa_talus_map,
+                pa_deposition_map] = unpack<6>(p_arrays);
 
           *pa_out = *pa_in;
 
@@ -117,6 +176,7 @@ void compute_valley_fill_node(BaseNode &node)
                                  zmax,
                                  node.get_attr<FloatAttribute>("elevation_max_ratio"),
                                  node.get_attr<BoolAttribute>("preserve_elevation_range"),
+                                 pa_noise,
                                  pa_deposition_map);
         },
         node.cfg().cm_gpu);
