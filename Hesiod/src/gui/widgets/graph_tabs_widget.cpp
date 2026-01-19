@@ -105,7 +105,7 @@ nlohmann::json GraphTabsWidget::json_to() const
 
   for (auto &[id, gew] : this->graph_editor_widget_map)
     if (gew)
-      json["graph_node_widgets"] = gew->json_to();
+      json["graph_node_widgets"][id] = gew->json_to();
 
   return json;
 }

@@ -76,12 +76,11 @@ nlohmann::json GraphEditorWidget::json_to() const
   // GraphNodeWidget
   if (this->graph_node_widget)
   {
-    const std::string graph_id = this->graph_node_widget->get_id();
-    json[graph_id] = this->graph_node_widget->json_to();
+    json = this->graph_node_widget->json_to();
 
     // Viewer3D
     if (this->viewer)
-      json[graph_id]["graph_editor_widget.viewer3d"] = this->viewer->json_to();
+      json["graph_editor_widget.viewer3d"] = this->viewer->json_to();
   }
 
   return json;
