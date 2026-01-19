@@ -136,7 +136,7 @@ void compute_valley_fill_node(BaseNode &node)
                                                      nullptr,
                                                      region.bbox);
 
-	    pa_noise_default->dump();
+            pa_noise_default->dump();
 
             *pa_noise_default *= node.get_attr<FloatAttribute>("noise_amp");
           },
@@ -146,7 +146,7 @@ void compute_valley_fill_node(BaseNode &node)
 
       Logger::log()->trace("\n{}", p_noise->info_string(node.cfg().cm_cpu));
     }
-    
+
     // --- execute
 
     float zmin = p_in->min(node.cfg().cm_cpu);
