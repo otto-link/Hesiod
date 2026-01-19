@@ -84,9 +84,7 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
       [this](int exp)
       {
         int val = 1 << exp; // 2^exp
-        this->config.tiling.x = val;
-        this->config.tiling.y = val;
-        this->config.update_parameters();
+        this->config.set_tiling({val, val});
         this->label_tiling->setText(
             QString("%1x%2").arg(this->config.tiling.x).arg(this->config.tiling.y));
       });
@@ -118,8 +116,7 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
                                                 this->vmax,
                                                 this->steps);
                   this->label_overlap->setText(QString::number(v, 'f', 2));
-                  this->config.overlap = v;
-                  this->config.update_parameters();
+                  this->config.set_overlap(v);
                 });
 
   row++;
@@ -149,7 +146,6 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
                   this->config.cm_cpu.trim_storage = checked;
                   this->config.cm_gpu.trim_storage = checked;
                   this->config.cm_single_array.trim_storage = checked;
-                  this->config.update_parameters();
                 });
 
   row++;

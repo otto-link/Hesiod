@@ -20,8 +20,11 @@ struct GraphConfig
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
 
-  void log_debug() const;
-  void set_shape(const hmap::Vec2<int> &new_shape);
+  std::string info_string() const;
+  void        log_debug() const;
+  void        set_shape(const hmap::Vec2<int> &new_shape);
+  void        set_tiling(const hmap::Vec2<int> &new_tiling);
+  void        set_overlap(float new_overlap);
 
   void update_parameters();
 

@@ -1,9 +1,11 @@
 /* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
-#include "hesiod/model/graph/graph_config.hpp"
+#include <sstream>
+
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
+#include "hesiod/model/graph/graph_config.hpp"
 
 namespace hesiod
 {
@@ -23,14 +25,31 @@ GraphConfig::GraphConfig()
   this->update_parameters();
 }
 
-void GraphConfig::log_debug() const
+std::string GraphConfig::info_string() const
 {
-  Logger::log()->debug("shape: {{{}, {}}}", shape.x, shape.y);
-  Logger::log()->debug("tiling: {{{}, {}}}", tiling.x, tiling.y);
-  Logger::log()->debug("overlap: {}", overlap);
-  Logger::log()->debug("tile_shape: {} {}", tile_shape.x, tile_shape.y);
-  Logger::log()->debug("halo: {}", halo);
+  std::ostringstream oss;
+
+  oss << "GraphConfig\n";
+  oss << "  Shape          : " << shape.x << " x " << shape.y << "\n";
+  oss << "  Tiling         : " << tiling.x << " x " << tiling.y << "\n";
+  oss << "  Overlap        : " << overlap << "\n";
+  oss << "  Tile shape     : " << tile_shape.x << " x " << tile_shape.y << "\n";
+  oss << "  Halo           : " << halo << "\n";
+  oss << "\n";
+  oss << "  Storage mode   : " << hmap::to_string(storage_mode) << "\n";
+  oss << "\n";
+  oss << "  Compute modes\n";
+  oss << "    CPU           : " << hmap::to_string(cm_cpu.mode)
+      << " (trim=" << cm_cpu.trim_storage << ")\n";
+  oss << "    GPU           : " << hmap::to_string(cm_gpu.mode)
+      << " (trim=" << cm_gpu.trim_storage << ")\n";
+  oss << "    Single array  : " << hmap::to_string(cm_single_array.mode)
+      << " (trim=" << cm_single_array.trim_storage << ")\n";
+
+  return oss.str();
 }
+
+void GraphConfig::log_debug() const { Logger::log()->debug("\n{}", this->info_string()); }
 
 void GraphConfig::json_from(nlohmann::json const &json)
 {
@@ -57,6 +76,18 @@ nlohmann::json GraphConfig::json_to() const
 void GraphConfig::set_shape(const hmap::Vec2<int> &new_shape)
 {
   this->shape = new_shape;
+  this->update_parameters();
+}
+
+void GraphConfig::set_tiling(const hmap::Vec2<int> &new_tiling)
+{
+  this->tiling = new_tiling;
+  this->update_parameters();
+}
+
+void GraphConfig::set_overlap(float new_overlap)
+{
+  this->overlap = new_overlap;
   this->update_parameters();
 }
 

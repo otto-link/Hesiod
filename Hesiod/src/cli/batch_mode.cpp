@@ -126,12 +126,17 @@ void run_batch_mode(const std::string     &filename,
 
   if (shape.x || shape.y || tiling.x || tiling.y || overlap >= 0.f)
   {
-    config.shape = (shape.x && shape.y) ? shape : hmap::Vec2<int>(1024, 1024);
-    config.tiling = (tiling.x && tiling.y) ? tiling : hmap::Vec2<int>(1, 1);
-    config.overlap = overlap >= 0.f
-                         ? overlap
-                         : ((config.tiling.x == 1 && config.tiling.y == 1) ? 0.f : 0.5f);
-    config.update_parameters();
+    hmap::Vec2<int> new_shape = (shape.x && shape.y) ? shape
+                                                     : hmap::Vec2<int>(1024, 1024);
+    hmap::Vec2<int> new_tiling = (tiling.x && tiling.y) ? tiling : hmap::Vec2<int>(1, 1);
+    float           new_overlap = overlap >= 0.f
+                                      ? overlap
+                                      : ((config.tiling.x == 1 && config.tiling.y == 1) ? 0.f
+                                                                                        : 0.5f);
+
+    config.set_shape(new_shape);
+    config.set_tiling(new_tiling);
+    config.set_overlap(new_overlap);
 
     Logger::log()->info("graph configurations will be overriden:");
     Logger::log()->info("compute shape: {{{}, {}}}", config.shape.x, config.shape.y);

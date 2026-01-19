@@ -87,10 +87,9 @@ void GraphManager::export_flatten()
 
   // create config
   auto export_cfg = GraphConfig();
-  export_cfg.shape = export_param.shape;
-  export_cfg.tiling = export_param.tiling;
-  export_cfg.overlap = export_param.overlap;
-  export_cfg.update_parameters();
+  export_cfg.set_shape(export_param.shape);
+  export_cfg.set_tiling(export_param.tiling);
+  export_cfg.set_overlap(export_param.overlap);
 
   // target heightmap
   hmap::VirtualArray h_export(export_cfg.shape,
