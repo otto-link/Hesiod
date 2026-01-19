@@ -45,8 +45,8 @@ void compute_reverse_midpoint_node(BaseNode &node)
 
     if (p_path->get_npoints() > 1)
     {
-      hmap::Array       path_array = hmap::Array(p_out->shape);
-      hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+      hmap::Array path_array = hmap::Array(p_out->shape);
+      glm::vec4   bbox = glm::vec4(0.f, 1.f, 0.f, 1.f);
       p_path->to_array(path_array, bbox);
 
       hmap::Array z = hmap::reverse_midpoint(path_array,

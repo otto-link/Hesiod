@@ -30,8 +30,8 @@ void setup_background_image_for_cloud_attribute(BaseNode          &node,
       return QImage();
 
     // generate a preview of the heightmap
-    hmap::Vec2<int> shape_preview = hmap::Vec2<int>(256, 256);
-    hmap::Array     array = p_in->to_array(shape_preview, node.cfg().cm_cpu);
+    glm::ivec2  shape_preview = glm::ivec2(256, 256);
+    hmap::Array array = p_in->to_array(shape_preview, node.cfg().cm_cpu);
 
     std::vector<uint8_t> img(shape_preview.x * shape_preview.y);
 

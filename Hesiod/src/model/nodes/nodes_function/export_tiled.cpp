@@ -67,8 +67,8 @@ void compute_export_tiled_node(BaseNode &node)
     else
       bit_depth = CV_16U;
 
-    hmap::Vec2<int> tiling = {node.get_attr<IntAttribute>("tiling.x"),
-                              node.get_attr<IntAttribute>("tiling.y")};
+    glm::ivec2 tiling = {node.get_attr<IntAttribute>("tiling.x"),
+                         node.get_attr<IntAttribute>("tiling.y")};
 
     // export
     hmap::export_tiled(fname.string(),

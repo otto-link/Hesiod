@@ -93,8 +93,8 @@ void compute_voronoi_fbm_node(BaseNode &node)
         hmap::VoronoiReturnType rtype = (hmap::VoronoiReturnType)
                                             node.get_attr<EnumAttribute>("return_type");
 
-        hmap::Vec2<float> jitter(node.get_attr<FloatAttribute>("jitter.x"),
-                                 node.get_attr<FloatAttribute>("jitter.y"));
+        glm::vec2 jitter(node.get_attr<FloatAttribute>("jitter.x"),
+                         node.get_attr<FloatAttribute>("jitter.y"));
 
         *pa_out = hmap::gpu::voronoi_fbm(region.shape,
                                          node.get_attr<WaveNbAttribute>("kw"),

@@ -46,7 +46,7 @@ GraphConfigDialog::GraphConfigDialog(GraphConfig &config, QWidget *parent)
       [this]()
       {
         int pos = this->slider_shape->value();
-        this->config.set_shape(hmap::Vec2<int>(std::pow(2, pos), std::pow(2, pos)));
+        this->config.set_shape(glm::ivec2(std::pow(2, pos), std::pow(2, pos)));
         this->label_shape->setText(
             QString("%1x%2").arg(this->config.shape.x).arg(this->config.shape.y));
       });

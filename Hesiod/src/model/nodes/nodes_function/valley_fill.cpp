@@ -119,8 +119,8 @@ void compute_valley_fill_node(BaseNode &node)
           {
             auto [pa_noise_default] = unpack<1>(p_arrays);
 
-            hmap::Vec2<float> kw = {node.get_attr<FloatAttribute>("kw"),
-                                    node.get_attr<FloatAttribute>("kw")};
+            glm::vec2 kw = {node.get_attr<FloatAttribute>("kw"),
+                            node.get_attr<FloatAttribute>("kw")};
 
             *pa_noise_default = hmap::gpu::noise_fbm(hmap::NoiseType::SIMPLEX2,
                                                      region.shape,

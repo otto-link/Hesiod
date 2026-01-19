@@ -25,7 +25,7 @@ void setup_plates_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  std::vector<float> kw = {4.f, 4.f};
+  glm::vec2 kw = {4.f, 4.f};
   node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency", kw, 0.f, FLT_MAX, true);
   node.add_attr<FloatAttribute>("slope", "Slope", 2.f, 0.f, FLT_MAX);
   node.add_attr<IntAttribute>("direction", "Propagation Direction (D8)", 0, 0, 7);

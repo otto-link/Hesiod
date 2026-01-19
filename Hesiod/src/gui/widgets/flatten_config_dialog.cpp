@@ -74,8 +74,7 @@ FlattenConfigDialog::FlattenConfigDialog(FlattenConfig &export_param, QWidget *p
           [this]()
           {
             int pos = this->slider_shape->value();
-            this->export_param.shape = hmap::Vec2<int>(std::pow(2, pos),
-                                                       std::pow(2, pos));
+            this->export_param.shape = glm::ivec2(std::pow(2, pos), std::pow(2, pos));
             this->label_shape->setText(QString().asprintf("%dx%d",
                                                           this->export_param.shape.x,
                                                           this->export_param.shape.y));

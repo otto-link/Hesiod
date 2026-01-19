@@ -51,9 +51,9 @@ void compute_set_borders_node(BaseNode &node)
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_in->shape.x));
-    hmap::Vec4<int> buffer_sizes(ir, ir, ir, ir);
+    glm::ivec4 buffer_sizes(ir, ir, ir, ir);
 
-    hmap::Vec4<float> border_values;
+    glm::vec4 border_values;
 
     if (node.get_attr<BoolAttribute>("unique_border_value"))
       border_values = {node.get_attr<FloatAttribute>("value_west"),

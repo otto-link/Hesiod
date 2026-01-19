@@ -5,7 +5,7 @@
 
 // in this order, required by args.hxx
 #include "highmap/algebra.hpp"
-static std::istream &operator>>(std::istream &is, hmap::Vec2<int> &vec2)
+static std::istream &operator>>(std::istream &is, glm::ivec2 &vec2)
 {
   is >> vec2.x;
   is.get();
@@ -21,11 +21,11 @@ namespace hesiod::cli
 
 int parse_args(args::ArgumentParser &parser, int argc, char *argv[]);
 
-void run_batch_mode(const std::string     &filename,
-                    const hmap::Vec2<int> &shape,
-                    const hmap::Vec2<int> &tiling,
-                    float                  overlap,
-                    const GraphConfig     *p_input_model_config = nullptr);
+void run_batch_mode(const std::string &filename,
+                    const glm::ivec2  &shape,
+                    const glm::ivec2  &tiling,
+                    float              overlap,
+                    const GraphConfig *p_input_model_config = nullptr);
 void run_node_inventory();
 void run_snapshot_generation();
 

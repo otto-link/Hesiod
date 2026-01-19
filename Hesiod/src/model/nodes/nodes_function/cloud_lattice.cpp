@@ -22,7 +22,7 @@ void setup_cloud_lattice_node(BaseNode &node)
   node.add_port<hmap::Cloud>(gnode::PortType::OUT, "cloud");
 
   // attribute(s)
-  std::vector<float> default_value = {0.1f, 0.1f};
+  glm::vec2 default_value = {0.1f, 0.1f};
   node.add_attr<IntAttribute>("npoints", "npoints", 50, 1, INT_MAX);
   node.add_attr<WaveNbAttribute>("stagger_ratio",
                                  "stagger_ratio",

@@ -157,7 +157,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
                            pa_deposition_map](hmap::Array &x)
             {
               // downscaled shape
-              hmap::Vec2<int> shape_coarse = x.shape;
+              glm::ivec2 shape_coarse = x.shape;
 
               // generate coarse arrays if needed
               std::vector<hmap::Array>   coarse_arrays = {};

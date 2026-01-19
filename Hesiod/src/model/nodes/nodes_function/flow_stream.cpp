@@ -79,9 +79,9 @@ void compute_flow_stream_node(BaseNode &node)
 
           for (auto p : p_cloud->points)
           {
-            int             i = (int)(p.x * (region.shape.x - 1.f));
-            int             j = (int)(p.y * (region.shape.y - 1.f));
-            hmap::Vec2<int> ij_start(i, j);
+            int        i = (int)(p.x * (region.shape.x - 1.f));
+            int        j = (int)(p.y * (region.shape.y - 1.f));
+            glm::ivec2 ij_start(i, j);
 
             hmap::Path path = hmap::flow_stream(
                 *pa_out,

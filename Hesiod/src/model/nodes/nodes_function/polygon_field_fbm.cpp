@@ -91,8 +91,8 @@ void compute_polygon_field_fbm_node(BaseNode &node)
         hmap::Array *pa_density = p_arrays[4];
         hmap::Array *pa_size = p_arrays[5];
 
-        hmap::Vec2<float> jitter(node.get_attr<FloatAttribute>("jitter.x"),
-                                 node.get_attr<FloatAttribute>("jitter.y"));
+        glm::vec2 jitter(node.get_attr<FloatAttribute>("jitter.x"),
+                         node.get_attr<FloatAttribute>("jitter.y"));
 
         *pa_out = hmap::gpu::polygon_field_fbm(
             region.shape,

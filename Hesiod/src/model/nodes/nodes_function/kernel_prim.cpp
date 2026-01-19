@@ -44,7 +44,7 @@ void compute_kernel_prim_node(BaseNode &node)
                     (int)(node.get_attr<FloatAttribute>("radius") * node.cfg().shape.x));
 
   // kernel definition
-  hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
+  glm::ivec2 kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
   *p_out = hmap::get_kernel(kernel_shape,
                             (hmap::KernelType)node.get_attr<EnumAttribute>("kernel"));

@@ -98,19 +98,19 @@ void GraphManager::export_flatten()
                               export_cfg.storage_mode);
 
   // compute global bounding box
-  hmap::Vec4<float> bbox_global(std::numeric_limits<float>::max(),
-                                std::numeric_limits<float>::lowest(),
-                                std::numeric_limits<float>::max(),
-                                std::numeric_limits<float>::lowest());
+  glm::vec4 bbox_global(std::numeric_limits<float>::max(),
+                        std::numeric_limits<float>::lowest(),
+                        std::numeric_limits<float>::max(),
+                        std::numeric_limits<float>::lowest());
 
   for (auto &graph_id : this->get_graph_order())
   {
-    hmap::Vec4<float> bbox = this->get_graph_nodes().at(graph_id)->compute_bounding_box();
+    glm::vec4 bbox = this->get_graph_nodes().at(graph_id)->compute_bounding_box();
 
-    bbox_global = hmap::Vec4<float>(std::min(bbox_global.a, bbox.a),
-                                    std::max(bbox_global.b, bbox.b),
-                                    std::min(bbox_global.c, bbox.c),
-                                    std::max(bbox_global.d, bbox.d));
+    bbox_global = glm::vec4(std::min(bbox_global.x, bbox.x),
+                            std::max(bbox_global.y, bbox.y),
+                            std::min(bbox_global.z, bbox.z),
+                            std::max(bbox_global.w, bbox.w));
   }
 
   // retrieve for each graph the selected tag and the corresponding data
@@ -134,10 +134,10 @@ void GraphManager::export_flatten()
     t_sources.push_back(p_t);
   }
 
-  hmap::Vec2<float> origin(bbox_global.a, bbox_global.c);
-  hmap::Vec2<float> size(bbox_global.b - bbox_global.a, bbox_global.d - bbox_global.c);
-  float             rotation_angle = 0.f;
-  hmap::CoordFrame  frame_export(origin, size, rotation_angle);
+  glm::vec2        origin(bbox_global.x, bbox_global.y);
+  glm::vec2        size(bbox_global.y - bbox_global.x, bbox_global.w - bbox_global.z);
+  float            rotation_angle = 0.f;
+  hmap::CoordFrame frame_export(origin, size, rotation_angle);
 
   hmap::flatten_heightmap(h_sources,
                           h_export,

@@ -68,7 +68,7 @@ void compute_ridgelines_node(BaseNode &node)
             hmap::Array *pa_dx = p_arrays[1];
             hmap::Array *pa_dy = p_arrays[2];
 
-            hmap::Vec4<float> bbox_points = {0.f, 1.f, 0.f, 1.f};
+            glm::vec4 bbox_points = {0.f, 1.f, 0.f, 1.f};
 
             *pa_out = hmap::ridgelines(region.shape,
                                        xs,

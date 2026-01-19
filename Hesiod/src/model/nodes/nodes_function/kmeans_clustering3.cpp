@@ -63,9 +63,9 @@ void compute_kmeans_clustering3_node(BaseNode &node)
             hmap::remap(*pa_in3);
           }
 
-          hmap::Vec3<float> weights = {node.get_attr<FloatAttribute>("weights.x"),
-                                       node.get_attr<FloatAttribute>("weights.y"),
-                                       node.get_attr<FloatAttribute>("weights.z")};
+          glm::vec3 weights = {node.get_attr<FloatAttribute>("weights.x"),
+                               node.get_attr<FloatAttribute>("weights.y"),
+                               node.get_attr<FloatAttribute>("weights.z")};
 
           *pa_out = hmap::kmeans_clustering3(*pa_in1,
                                              *pa_in2,

@@ -243,8 +243,8 @@ void GraphManagerWidget::on_apply_changes()
                                                                      size_out,
                                                                      angle_out);
 
-    graph->set_origin(hmap::Vec2<float>(origin_out.x(), origin_out.y()));
-    graph->set_size(hmap::Vec2<float>(size_out.x(), size_out.y()));
+    graph->set_origin(glm::vec2(origin_out.x(), origin_out.y()));
+    graph->set_size(glm::vec2(size_out.x(), size_out.y()));
     graph->set_rotation_angle(angle_out);
   }
 

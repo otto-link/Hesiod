@@ -30,7 +30,7 @@ void setup_dendry_node(BaseNode &node)
 
   node.add_attr<WaveNbAttribute>("kw",
                                  "Spatial Frequency",
-                                 std::vector<float>(2, 8.f),
+                                 glm::vec2(8.f, 8.f),
                                  0.f,
                                  FLT_MAX);
   node.add_attr<SeedAttribute>("seed", "Seed");
@@ -79,8 +79,7 @@ void compute_dendry_node(BaseNode &node)
   if (p_ctrl)
   {
     // TODO shape
-    hmap::Array ctrl_array = p_ctrl->to_array(hmap::Vec2<int>(128, 128),
-                                              node.cfg().cm_cpu);
+    hmap::Array ctrl_array = p_ctrl->to_array(glm::ivec2(128, 128), node.cfg().cm_cpu);
 
     hmap::for_each_tile(
         {p_out, p_dx, p_dy},

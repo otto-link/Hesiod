@@ -61,9 +61,9 @@ void CoordFrameWidget::add_frame(const std::string &id)
     return;
   }
 
-  hmap::Vec2<float> origin = graphs.at(id)->get_origin();
-  hmap::Vec2<float> size = graphs.at(id)->get_size();
-  float             angle = graphs.at(id)->get_rotation_angle();
+  glm::vec2 origin = graphs.at(id)->get_origin();
+  glm::vec2 size = graphs.at(id)->get_size();
+  float     angle = graphs.at(id)->get_rotation_angle();
 
   FrameItem *new_frame = new FrameItem(id,
                                        QPointF(origin.x, origin.y),

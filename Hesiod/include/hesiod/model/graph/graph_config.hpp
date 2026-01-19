@@ -22,17 +22,17 @@ struct GraphConfig
 
   std::string info_string() const;
   void        log_debug() const;
-  void        set_shape(const hmap::Vec2<int> &new_shape);
-  void        set_tiling(const hmap::Vec2<int> &new_tiling);
+  void        set_shape(const glm::ivec2 &new_shape);
+  void        set_tiling(const glm::ivec2 &new_tiling);
   void        set_overlap(float new_overlap);
 
   void update_parameters();
 
   // --- Members
 
-  hmap::Vec2<int> shape;
-  hmap::Vec2<int> tiling;
-  float           overlap;
+  glm::ivec2 shape;
+  glm::ivec2 tiling;
+  float      overlap;
 
   hmap::ComputeMode cm_gpu = {.mode = hmap::ForEachMode::VA_SINGLE_ARRAY,
                               .trim_storage = false};

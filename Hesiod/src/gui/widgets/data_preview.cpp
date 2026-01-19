@@ -32,8 +32,8 @@ DataPreview::DataPreview(std::weak_ptr<BaseNode> model, QWidget *parent)
                        p_model->get_id());
 
   AppContext &ctx = HSD_CTX;
-  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_w,
-                                     ctx.app_settings.node_editor.preview_h);
+  const auto  shape = glm::ivec2(ctx.app_settings.node_editor.preview_w,
+                                ctx.app_settings.node_editor.preview_h);
 
   this->setFixedSize(QSize(shape.x, shape.y));
   this->setAlignment(Qt::AlignLeft | Qt::AlignTop);
@@ -55,8 +55,8 @@ DataPreview::DataPreview(std::weak_ptr<BaseNode> model, QWidget *parent)
 void DataPreview::clear_preview()
 {
   AppContext &ctx = HSD_CTX;
-  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_w,
-                                     ctx.app_settings.node_editor.preview_h);
+  const auto  shape = glm::ivec2(ctx.app_settings.node_editor.preview_w,
+                                ctx.app_settings.node_editor.preview_h);
 
   QImage image = QImage(shape.x, shape.y, QImage::Format_Grayscale8);
   image.fill(Qt::transparent);
@@ -134,8 +134,8 @@ void DataPreview::update_preview()
   const std::string data_type = p_model->get_data_type(preview_port_index);
 
   AppContext &ctx = HSD_CTX;
-  const auto  shape = hmap::Vec2<int>(ctx.app_settings.node_editor.preview_w,
-                                     ctx.app_settings.node_editor.preview_h);
+  const auto  shape = glm::ivec2(ctx.app_settings.node_editor.preview_w,
+                                ctx.app_settings.node_editor.preview_h);
 
   Logger::log()->trace("DataPreview::update_preview, data_type: {}", data_type);
 
@@ -235,9 +235,9 @@ void DataPreview::update_preview()
       const hmap::Path *p_path = static_cast<const hmap::Path *>(blind_ptr);
       if (p_path && p_path->get_npoints() > 0)
       {
-        hmap::Array       array(shape);
-        hmap::Vec4<float> bbox(0.f, 1.f, 0.f, 1.f);
-        hmap::Path        path = *p_path;
+        hmap::Array array(shape);
+        glm::vec4   bbox(0.f, 1.f, 0.f, 1.f);
+        hmap::Path  path = *p_path;
         path.remap_values(0.1f, 1.f);
         path.to_array(array, bbox);
         img = build_colored_array(array, hmap::Cmap::MAGMA, /* normalize */ false);

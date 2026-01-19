@@ -39,16 +39,16 @@ int parse_args(args::ArgumentParser &parser, int argc, char *argv[])
                          "batch mode arguments",
                          args::Group::Validators::DontCare);
 
-  args::ValueFlag<hmap::Vec2<int>> shape_arg(
+  args::ValueFlag<glm::ivec2> shape_arg(
       batch_args,
       "shape",
       "Heightmap shape (in pixels), ex. --shape=512,512",
       {"shape"});
 
-  args::ValueFlag<hmap::Vec2<int>> tiling_arg(batch_args,
-                                              "tiling",
-                                              "Heightmap tiling, ex. --tiling=4,4",
-                                              {"tiling"});
+  args::ValueFlag<glm::ivec2> tiling_arg(batch_args,
+                                         "tiling",
+                                         "Heightmap tiling, ex. --tiling=4,4",
+                                         {"tiling"});
 
   args::ValueFlag<float> overlap_arg(
       batch_args,
@@ -63,8 +63,8 @@ int parse_args(args::ArgumentParser &parser, int argc, char *argv[])
     if (batch)
     {
       run_batch_mode(args::get(batch),
-                     shape_arg ? args::get(shape_arg) : hmap::Vec2<int>(0, 0),
-                     tiling_arg ? args::get(tiling_arg) : hmap::Vec2<int>(0, 0),
+                     shape_arg ? args::get(shape_arg) : glm::ivec2(0, 0),
+                     tiling_arg ? args::get(tiling_arg) : glm::ivec2(0, 0),
                      overlap_arg ? args::get(overlap_arg) : -1.f);
       return 0;
     }
@@ -94,11 +94,11 @@ int parse_args(args::ArgumentParser &parser, int argc, char *argv[])
   return -1;
 }
 
-void run_batch_mode(const std::string     &filename,
-                    const hmap::Vec2<int> &shape,
-                    const hmap::Vec2<int> &tiling,
-                    float                  overlap,
-                    const GraphConfig     *p_input_model_config)
+void run_batch_mode(const std::string &filename,
+                    const glm::ivec2  &shape,
+                    const glm::ivec2  &tiling,
+                    float              overlap,
+                    const GraphConfig *p_input_model_config)
 {
   Logger::log()->info("executing Hesiod in batch mode");
   Logger::log()->trace("file: {}", filename);
@@ -126,13 +126,12 @@ void run_batch_mode(const std::string     &filename,
 
   if (shape.x || shape.y || tiling.x || tiling.y || overlap >= 0.f)
   {
-    hmap::Vec2<int> new_shape = (shape.x && shape.y) ? shape
-                                                     : hmap::Vec2<int>(1024, 1024);
-    hmap::Vec2<int> new_tiling = (tiling.x && tiling.y) ? tiling : hmap::Vec2<int>(1, 1);
-    float           new_overlap = overlap >= 0.f
-                                      ? overlap
-                                      : ((config.tiling.x == 1 && config.tiling.y == 1) ? 0.f
-                                                                                        : 0.5f);
+    glm::ivec2 new_shape = (shape.x && shape.y) ? shape : glm::ivec2(1024, 1024);
+    glm::ivec2 new_tiling = (tiling.x && tiling.y) ? tiling : glm::ivec2(1, 1);
+    float      new_overlap = overlap >= 0.f
+                                 ? overlap
+                                 : ((config.tiling.x == 1 && config.tiling.y == 1) ? 0.f
+                                                                                   : 0.5f);
 
     config.set_shape(new_shape);
     config.set_tiling(new_tiling);

@@ -25,8 +25,8 @@ struct FlattenConfig
 
   // --- Members ---
   std::filesystem::path export_path = "";
-  hmap::Vec2<int>       shape = {1024, 1024};
-  hmap::Vec2<int>       tiling = {4, 4};
+  glm::ivec2            shape = {1024, 1024};
+  glm::ivec2            tiling = {4, 4};
   float                 overlap = 0.5f;
 
   // graph_id / node_id / port_id

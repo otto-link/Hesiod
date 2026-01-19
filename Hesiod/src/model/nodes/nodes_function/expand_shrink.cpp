@@ -74,9 +74,9 @@ void compute_expand_shrink_node(BaseNode &node)
     }
     else
     {
-      int             ir = std::max(1,
+      int        ir = std::max(1,
                         (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
-      hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
+      glm::ivec2 kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
       kernel_array = hmap::get_kernel(
           kernel_shape,

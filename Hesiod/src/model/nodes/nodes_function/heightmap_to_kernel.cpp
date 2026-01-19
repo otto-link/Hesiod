@@ -50,7 +50,7 @@ void compute_heightmap_to_kernel_node(BaseNode &node)
     int ir = std::max(
         1,
         (int)(node.get_attr<FloatAttribute>("radius") * node.cfg().shape.x));
-    hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
+    glm::ivec2 kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
     *p_out = p_in->to_array(kernel_shape, node.cfg().cm_cpu);
 

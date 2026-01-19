@@ -26,7 +26,7 @@ void setup_basalt_field_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
-  std::vector<float> kw = {5.f, 5.f};
+  glm::vec2 kw = {5.f, 5.f};
   node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency", kw, 0.f, FLT_MAX, true);
   node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("warp_kw", "warp_kw", 4.f, 0.f, FLT_MAX);

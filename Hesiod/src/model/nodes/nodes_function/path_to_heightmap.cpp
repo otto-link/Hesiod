@@ -58,8 +58,8 @@ void compute_path_to_heightmap_node(BaseNode &node)
       else
       {
         // work on a single array as a temporary solution
-        hmap::Array       z_array = hmap::Array(p_out->shape);
-        hmap::Vec4<float> bbox = hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f);
+        hmap::Array z_array = hmap::Array(p_out->shape);
+        glm::vec4   bbox = glm::vec4(0.f, 1.f, 0.f, 1.f);
 
         p_path->to_array(z_array, bbox, true);
         p_out->from_array(z_array, node.cfg().cm_cpu);

@@ -73,13 +73,13 @@ nlohmann::json GraphConfig::json_to() const
   return json;
 }
 
-void GraphConfig::set_shape(const hmap::Vec2<int> &new_shape)
+void GraphConfig::set_shape(const glm::ivec2 &new_shape)
 {
   this->shape = new_shape;
   this->update_parameters();
 }
 
-void GraphConfig::set_tiling(const hmap::Vec2<int> &new_tiling)
+void GraphConfig::set_tiling(const glm::ivec2 &new_tiling)
 {
   this->tiling = new_tiling;
   this->update_parameters();

@@ -29,7 +29,7 @@ void setup_island_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "inland_mask", CONFIG(node));
 
   // attribute(s)
-  std::vector<float> kw = {4.f, 4.f};
+  glm::vec2 kw = {4.f, 4.f};
 
   node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("noise_amp", "Amplitude", 0.07f, 0.f, 2.f);

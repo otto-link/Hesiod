@@ -159,8 +159,8 @@ void GraphNode::json_from(nlohmann::json const &json, GraphConfig *p_input_confi
   json_safe_get(json, "origin", vo);
   json_safe_get(json, "size", vs);
 
-  this->set_origin(hmap::Vec2<float>(vo[0], vo[1]));
-  this->set_size(hmap::Vec2<float>(vs[0], vs[1]));
+  this->set_origin(glm::vec2(vo[0], vo[1]));
+  this->set_size(glm::vec2(vs[0], vs[1]));
 
   float rotation_angle = 0.f;
   json_safe_get(json, "rotation_angle", rotation_angle);

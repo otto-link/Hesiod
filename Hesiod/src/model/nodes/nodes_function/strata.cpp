@@ -28,7 +28,7 @@ void setup_strata_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  std::vector<float> kw_default;
+  glm::vec2 kw_default;
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
   node.add_attr<FloatAttribute>("slope", "slope", 2.f, 0.01f, 10.f);
   node.add_attr<FloatAttribute>("kz", "kz", 1.f, 0.f, FLT_MAX);

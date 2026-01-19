@@ -27,7 +27,7 @@ void setup_rifts_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
 
   // attribute(s)
-  std::vector<float> kw_default = {4.f, 1.2f};
+  glm::vec2 kw_default = {4.f, 1.2f};
   node.add_attr<WaveNbAttribute>("kw", "Spatial Frequency", kw_default, 0.f, 32.f, false);
   node.add_attr<FloatAttribute>("angle", "angle", 0.f, -180.f, 180.f);
   node.add_attr<FloatAttribute>("amplitude", "amplitude", 0.1f, 0.f, 1.f);

@@ -61,7 +61,7 @@ void compute_quilting_expand_node(BaseNode &node)
         1,
         (int)(node.get_attr<FloatAttribute>("patch_width") * p_out->shape.x));
 
-    hmap::Vec2<int> patch_base_shape = hmap::Vec2<int>(ir, ir);
+    glm::ivec2 patch_base_shape = glm::ivec2(ir, ir);
 
     // --- work on a single array (i.e. not-tiled algo)
 

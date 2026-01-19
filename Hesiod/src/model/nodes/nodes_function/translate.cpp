@@ -51,7 +51,7 @@ void compute_translate_node(BaseNode &node)
         {
           auto [pa_out, pa_in, pa_dx, pa_dy] = unpack<4>(p_arrays);
 
-          hmap::Vec2<float> center = node.get_attr<Vec2FloatAttribute>("center");
+          glm::vec2 center = node.get_attr<Vec2FloatAttribute>("center");
 
           *pa_out = hmap::translate(*pa_in,
                                     center.x - 0.5f,

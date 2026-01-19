@@ -52,11 +52,11 @@ void compute_clamp_node(BaseNode &node)
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
     // retrieve parameters
-    hmap::Vec2<float> crange = node.get_attr<RangeAttribute>("clamp");
-    bool              smooth_min = node.get_attr<BoolAttribute>("smooth_min");
-    bool              smooth_max = node.get_attr<BoolAttribute>("smooth_max");
-    float             k_min = node.get_attr<FloatAttribute>("k_min");
-    float             k_max = node.get_attr<FloatAttribute>("k_max");
+    glm::vec2 crange = node.get_attr<RangeAttribute>("clamp");
+    bool      smooth_min = node.get_attr<BoolAttribute>("smooth_min");
+    bool      smooth_max = node.get_attr<BoolAttribute>("smooth_max");
+    float     k_min = node.get_attr<FloatAttribute>("k_min");
+    float     k_max = node.get_attr<FloatAttribute>("k_max");
 
     // compute
     if (!smooth_min && !smooth_max)

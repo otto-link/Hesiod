@@ -51,9 +51,9 @@ void compute_path_find_node(BaseNode &node)
     if (p_out->get_npoints() > 1)
     {
       // working shape
-      float           ds = (float)node.get_attr<IntAttribute>("downsampling");
-      hmap::Vec2<int> shape_wrk = hmap::Vec2<int>((int)(p_hmap->shape.x / ds),
-                                                  (int)(p_hmap->shape.y / ds));
+      float      ds = (float)node.get_attr<IntAttribute>("downsampling");
+      glm::ivec2 shape_wrk = glm::ivec2((int)(p_hmap->shape.x / ds),
+                                        (int)(p_hmap->shape.y / ds));
 
       shape_wrk.x = std::max(2, shape_wrk.x);
       shape_wrk.y = std::max(2, shape_wrk.y);
@@ -76,8 +76,8 @@ void compute_path_find_node(BaseNode &node)
       }
 
       // perform Dijkstra's path finding
-      hmap::Vec4<float> bbox(0.f, 1.f, 0.f, 1.f);
-      int               edge_divisions = 0;
+      glm::vec4 bbox(0.f, 1.f, 0.f, 1.f);
+      int       edge_divisions = 0;
 
       p_out->dijkstra(zw,
                       bbox,

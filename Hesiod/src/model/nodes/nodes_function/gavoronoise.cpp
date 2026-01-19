@@ -34,7 +34,7 @@ void setup_gavoronoise_node(BaseNode &node)
 
   node.add_attr<WaveNbAttribute>("kw_multiplier",
                                  "kw_multiplier",
-                                 std::vector<float>(2, 8.f),
+                                 glm::vec2(8.f, 8.f),
                                  0.f,
                                  32.f,
                                  true);

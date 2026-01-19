@@ -330,7 +330,7 @@ void HesiodApplication::on_export_batch()
       // run batch node
       hesiod::cli::run_batch_mode(
           fname.string(),
-          hmap::Vec2<int>(bake_settings.resolution, bake_settings.resolution),
+          glm::ivec2(bake_settings.resolution, bake_settings.resolution),
           bake_config.tiling,
           bake_config.overlap,
           &bake_config);

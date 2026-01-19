@@ -96,7 +96,7 @@ void compute_path_dig_node(BaseNode &node)
                        ir_decay,
                        ir_flattening_radius,
                        node.get_attr<BoolAttribute>("force_downhill"),
-                       hmap::Vec4<float>(0.f, 1.f, 0.f, 1.f), // bbox
+                       glm::vec4(0.f, 1.f, 0.f, 1.f), // bbox
                        node.get_attr<FloatAttribute>("depth"));
 
         p_out->from_array(z_array, node.cfg().cm_cpu);

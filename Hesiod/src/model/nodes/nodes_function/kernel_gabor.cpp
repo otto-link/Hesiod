@@ -41,7 +41,7 @@ void compute_kernel_gabor_node(BaseNode &node)
                     (int)(node.get_attr<FloatAttribute>("radius") * node.cfg().shape.x));
 
   // kernel definition
-  hmap::Vec2<int> kernel_shape = {2 * ir + 1, 2 * ir + 1};
+  glm::ivec2 kernel_shape = {2 * ir + 1, 2 * ir + 1};
 
   *p_out = hmap::gabor(kernel_shape,
                        node.get_attr<FloatAttribute>("kw"),

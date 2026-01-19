@@ -23,7 +23,7 @@ void setup_brush_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "out", CONFIG(node));
 
   // attribute(s)
-  node.add_attr<ArrayAttribute>("hmap", "Heightmap", hmap::Vec2<int>(512, 512));
+  node.add_attr<ArrayAttribute>("hmap", "Heightmap", glm::ivec2(512, 512));
 
   // attribute(s) order
   node.set_attr_ordered_key({"hmap"});
@@ -42,8 +42,8 @@ void setup_brush_node(BaseNode &node)
       return QImage();
 
     // generate a preview of the heightmap
-    hmap::Vec2<int> shape_preview = hmap::Vec2<int>(256, 256);
-    hmap::Array     array = p_in->to_array(shape_preview, node.cfg().cm_cpu);
+    glm::ivec2  shape_preview = glm::ivec2(256, 256);
+    hmap::Array array = p_in->to_array(shape_preview, node.cfg().cm_cpu);
 
     std::vector<uint8_t> img(shape_preview.x * shape_preview.y);
 
