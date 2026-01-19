@@ -223,7 +223,7 @@ void DataPreview::update_preview()
       {
         hmap::Array array(shape);
         p_cloud->to_array(array);
-        img = build_colored_array(array, hmap::Cmap::MAGMA, false);
+        img = build_colored_array(array, hmap::Cmap::MAGMA, /* normalize */ false);
         img_format = QImage::Format_RGB888;
       }
       else
@@ -240,7 +240,7 @@ void DataPreview::update_preview()
         hmap::Path        path = *p_path;
         path.remap_values(0.1f, 1.f);
         path.to_array(array, bbox);
-        img = build_colored_array(array, hmap::Cmap::MAGMA, false);
+        img = build_colored_array(array, hmap::Cmap::MAGMA, /* normalize */ false);
         img_format = QImage::Format_RGB888;
       }
       else
@@ -274,6 +274,8 @@ void DataPreview::update_preview()
     image = QImage(shape.x, shape.y, img_format);
     image.fill(Qt::transparent);
   }
+
+  image = image.mirrored(false, true); // (horizontal, vertical)
 
   // ---- Draw border ----
   preview_pixmap = QPixmap::fromImage(image);
