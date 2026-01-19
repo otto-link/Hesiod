@@ -29,9 +29,6 @@ public:
                             QWidget          *parent = nullptr);
 
   BakeConfig get_bake_settings() const;
-  int        get_size() const;
-  int        get_nvariants() const;
-  bool       get_force_distributed() const;
 
 private:
   QComboBox        *resolution_combo;
@@ -40,6 +37,7 @@ private:
   QCheckBox        *checkbox_force_distributed;
   QCheckBox        *checkbox_force_auto_export;
   QCheckBox        *checkbox_rename_export_files;
+  QCheckBox        *checkbox_force_maximum_fbm_octaves;
   QDialogButtonBox *buttons;
 };
 

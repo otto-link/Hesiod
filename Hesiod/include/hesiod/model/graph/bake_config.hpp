@@ -17,6 +17,7 @@ struct BakeConfig
   bool force_distributed = true;
   bool force_auto_export = true;
   bool rename_export_files = true;
+  bool force_maximum_fbm_octaves = false;
 
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;

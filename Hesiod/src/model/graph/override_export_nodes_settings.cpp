@@ -31,6 +31,27 @@ void override_export_nodes_settings(const std::string           &fname,
     {
       std::string node_label = j["label"];
 
+      // force max octaves
+      if (bake_settings.force_maximum_fbm_octaves)
+      {
+        if (j.contains("octaves") && j["octaves"].contains("value"))
+        {
+          int octaves_max = int(bake_settings.resolution / 128.f); // heuristic...
+          j["octaves"]["value"] = octaves_max;
+        }
+      }
+
+      // seed increment for variants
+      if (random_seeds_increment > 0)
+      {
+        if (j.contains("seed") && j["seed"].contains("value"))
+        {
+          unsigned int v = j["seed"]["value"];
+          j["seed"]["value"] = v + random_seeds_increment;
+        }
+      }
+
+      // Export nodes tweaking
       if (node_label.find("Export") != std::string::npos)
       {
         // force node auto export
@@ -57,15 +78,6 @@ void override_export_nodes_settings(const std::string           &fname,
                                                : export_path / basename;
 
           j["fname"]["value"] = new_path.string();
-        }
-      }
-
-      if (random_seeds_increment > 0)
-      {
-        if (j.contains("seed") && j["seed"].contains("value"))
-        {
-          unsigned int v = j["seed"]["value"];
-          j["seed"]["value"] = v + random_seeds_increment;
         }
       }
     }

@@ -21,6 +21,9 @@ BakeConfigDialog::BakeConfigDialog(int               max_size,
   this->checkbox_force_auto_export = new QCheckBox("Force auto export for export nodes",
                                                    this);
   this->checkbox_rename_export_files = new QCheckBox("Add prefix export filenames", this);
+  this->checkbox_force_maximum_fbm_octaves = new QCheckBox(
+      "Force maximum number of octaves for Fbm nodes",
+      this);
 
   this->buttons = new QDialogButtonBox(QDialogButtonBox::Ok | QDialogButtonBox::Cancel,
                                        this);
@@ -52,6 +55,8 @@ BakeConfigDialog::BakeConfigDialog(int               max_size,
   this->checkbox_force_distributed->setChecked(initial_value.force_distributed);
   this->checkbox_force_auto_export->setChecked(initial_value.force_auto_export);
   this->checkbox_rename_export_files->setChecked(initial_value.rename_export_files);
+  this->checkbox_force_maximum_fbm_octaves->setChecked(
+      initial_value.force_maximum_fbm_octaves);
 
   // Layout
   auto *form_layout = new QFormLayout;
@@ -68,6 +73,7 @@ BakeConfigDialog::BakeConfigDialog(int               max_size,
   main_layout->addWidget(this->checkbox_force_distributed);
   main_layout->addWidget(this->checkbox_force_auto_export);
   main_layout->addWidget(this->checkbox_rename_export_files);
+  main_layout->addWidget(this->checkbox_force_maximum_fbm_octaves);
   main_layout->addWidget(this->buttons);
   this->setLayout(main_layout);
 
@@ -81,19 +87,8 @@ BakeConfig BakeConfigDialog::get_bake_settings() const
                     this->slider_nvariants->value(),
                     this->checkbox_force_distributed->isChecked(),
                     this->checkbox_force_auto_export->isChecked(),
-                    this->checkbox_rename_export_files->isChecked());
-}
-
-int BakeConfigDialog::get_size() const
-{
-  return this->resolution_combo->currentData().toInt();
-}
-
-int BakeConfigDialog::get_nvariants() const { return this->slider_nvariants->value(); }
-
-bool BakeConfigDialog::get_force_distributed() const
-{
-  return this->checkbox_force_distributed->isChecked();
+                    this->checkbox_rename_export_files->isChecked(),
+                    this->checkbox_force_maximum_fbm_octaves->isChecked());
 }
 
 } // namespace hesiod
