@@ -42,4 +42,19 @@ std::shared_ptr<hmap::VirtualArray> pre_process_mask(BaseNode            &node,
 
 void setup_pre_process_mask_attributes(BaseNode &node);
 
+// --- default noise
+
+struct DefaultNoiseOptions
+{
+  bool  add_default_noise = true;
+  float noise_amp = 0.1f;
+  float kw = 2.f;
+  float smoothness = 0.f;
+};
+
+void generate_noise(BaseNode            &node,
+                    hmap::VirtualArray *&p_noise,
+                    hmap::VirtualArray  &noise);
+void setup_default_noise(BaseNode &node, const DefaultNoiseOptions &options);
+
 } // namespace hesiod

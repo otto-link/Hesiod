@@ -53,31 +53,34 @@ void setup_rifts_node(BaseNode &node)
                                 -1.f,
                                 1.f);
   node.add_attr<BoolAttribute>("apply_mask", "apply_mask", true);
-  node.add_attr<BoolAttribute>("reverse_mask", "reverse_mask", true);
+  node.add_attr<BoolAttribute>("reverse_mask", "reverse_mask", false);
   node.add_attr<FloatAttribute>("mask_gamma", "mask_gamma", 1.f, 0.01f, 4.f);
   node.add_attr<Vec2FloatAttribute>("center", "center");
 
   // attribute(s) order
-  node.set_attr_ordered_key({"_TEXT_Base paramaters",
-                             "kw",
-                             "angle",
-                             "amplitude",
-                             "seed",
-                             "_TEXT_Edge smoothing",
-                             "k_smooth_bottom",
-                             "k_smooth_top",
-                             "_TEXT_Ridge geometry",
-                             "radial_spread_amp",
-                             "elevation_noise_amp",
-                             "clamp_vmin",
-                             "remap_vmin",
-                             "elevation_noise_shift",
-                             "center",
-                             "_TEXT_Masking",
-                             "apply_mask",
-                             "reverse_mask",
-                             "mask_gamma"});
+  node.set_attr_ordered_key({
+      "_TEXT_Base paramaters",
+      "kw",
+      "angle",
+      "amplitude",
+      "seed",
+      "_TEXT_Edge smoothing",
+      "k_smooth_bottom",
+      "k_smooth_top",
+      "_TEXT_Ridge geometry",
+      "radial_spread_amp",
+      "elevation_noise_amp",
+      "clamp_vmin",
+      "remap_vmin",
+      "elevation_noise_shift",
+      "center",
+      "_TEXT_Masking",
+      "apply_mask",
+      "reverse_mask",
+      "mask_gamma",
+  });
 
+  setup_default_noise(node, {.noise_amp = 0.1f, .kw = 4.f});
   setup_pre_process_mask_attributes(node);
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = false});
@@ -98,6 +101,10 @@ void compute_rifts_node(BaseNode &node)
 
     // prepare mask
     std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
+
+    // prepare default noise
+    hmap::VirtualArray noise_default(CONFIG(node));
+    generate_noise(node, p_dx, noise_default);
 
     // remap to [0, 1] as required by this filter
     float hmin = p_in->min(node.cfg().cm_cpu);
@@ -127,7 +134,8 @@ void compute_rifts_node(BaseNode &node)
                            node.get_attr<FloatAttribute>("clamp_vmin"),
                            node.get_attr<FloatAttribute>("remap_vmin"),
                            node.get_attr<BoolAttribute>("apply_mask"),
-                           node.get_attr<BoolAttribute>("reverse_mask"),
+                           !node.get_attr<BoolAttribute>("reverse_mask") &&
+                               node.get_attr<BoolAttribute>("apply_mask"),
                            node.get_attr<FloatAttribute>("mask_gamma"),
                            pa_dx,
                            pa_dy,

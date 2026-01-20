@@ -43,10 +43,6 @@ void setup_valley_fill_node(BaseNode &node)
                                 0.7f,
                                 0.f,
                                 2.f);
-  node.add_attr<BoolAttribute>("add_default_noise", "Add Default Noise", true);
-  node.add_attr<SeedAttribute>("seed", "Seed");
-  node.add_attr<FloatAttribute>("noise_amp", "Amplitude", 1.f, 0.f, 10.f);
-  node.add_attr<FloatAttribute>("kw", "Spatial Frequency", 32.f, 0.f, FLT_MAX);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Slope Constraints",
@@ -63,15 +59,9 @@ void setup_valley_fill_node(BaseNode &node)
                              //
                              "_GROUPBOX_BEGIN_Deposition Dynamics",
                              "duration",
-                             "_GROUPBOX_END_",
-                             //
-                             "_GROUPBOX_BEGIN_Noise Parameters",
-                             "add_default_noise",
-                             "seed",
-                             "noise_amp",
-                             "kw",
                              "_GROUPBOX_END_"});
 
+  setup_default_noise(node, {.noise_amp = 1.f, .kw = 32.f});
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = false});
 }
@@ -106,46 +96,8 @@ void compute_valley_fill_node(BaseNode &node)
 
     // --- generate default noise
 
-    hmap::VirtualArray noise_default;
-
-    if (!p_noise && node.get_attr<BoolAttribute>("add_default_noise"))
-    {
-      // set config
-      noise_default.copy_from(*p_in, node.cfg().cm_cpu, /* copy_data */ false);
-
-      hmap::for_each_tile(
-          {&noise_default},
-          [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
-          {
-            auto [pa_noise_default] = unpack<1>(p_arrays);
-
-            glm::vec2 kw = {node.get_attr<FloatAttribute>("kw"),
-                            node.get_attr<FloatAttribute>("kw")};
-
-            *pa_noise_default = hmap::gpu::noise_fbm(hmap::NoiseType::SIMPLEX2,
-                                                     region.shape,
-                                                     kw,
-                                                     node.get_attr<SeedAttribute>("seed"),
-                                                     8,
-                                                     0.7f,
-                                                     0.5f,
-                                                     2.f,
-                                                     nullptr,
-                                                     nullptr,
-                                                     nullptr,
-                                                     nullptr,
-                                                     region.bbox);
-
-            pa_noise_default->dump();
-
-            *pa_noise_default *= node.get_attr<FloatAttribute>("noise_amp");
-          },
-          node.cfg().cm_gpu);
-
-      p_noise = &noise_default;
-
-      Logger::log()->trace("\n{}", p_noise->info_string(node.cfg().cm_cpu));
-    }
+    hmap::VirtualArray noise_default(CONFIG(node));
+    generate_noise(node, p_noise, noise_default);
 
     // --- execute
 
