@@ -56,7 +56,7 @@ void compute_colorize_gradient_node(BaseNode &node)
     // define colormap based on color gradient
     std::vector<attr::Stop> gradient = node.get_attr<ColorGradientAttribute>("gradient");
     std::vector<float>      positions = {};
-    std::vector<std::vector<float>> colormap_colors = {};
+    std::vector<glm::vec3>  colormap_colors = {};
 
     for (auto &data : gradient)
     {
