@@ -39,8 +39,8 @@ void compute_gain_node(BaseNode &node)
     hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    float hmin = p_out->min(node.cfg().cm_cpu);
-    float hmax = p_out->max(node.cfg().cm_cpu);
+    float hmin = p_in->min(node.cfg().cm_cpu);
+    float hmax = p_in->max(node.cfg().cm_cpu);
 
     hmap::for_each_tile(
         {p_out, p_in, p_mask},

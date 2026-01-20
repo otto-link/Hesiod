@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/filters.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
@@ -48,26 +49,27 @@ void compute_gamma_correction_local_node(BaseNode &node)
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    float hmin = p_out->min(node.cfg().cm_cpu);
-    float hmax = p_out->max(node.cfg().cm_cpu);
-    p_out->remap(0.f, 1.f, hmin, hmax, node.cfg().cm_cpu);
+    float hmin = p_in->min(node.cfg().cm_cpu);
+    float hmax = p_in->max(node.cfg().cm_cpu);
 
     hmap::for_each_tile(
         {p_out, p_in, p_mask},
-        [&node, &ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        [&node, ir, hmin, hmax](std::vector<hmap::Array *> p_arrays,
+                                const hmap::TileRegion &)
         {
           auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
           *pa_out = *pa_in;
 
+          hmap::remap(*pa_out, 0.f, 1.f, hmin, hmax);
           hmap::gpu::gamma_correction_local(*pa_out,
                                             node.get_attr<FloatAttribute>("gamma"),
                                             ir,
                                             pa_mask,
                                             node.get_attr<FloatAttribute>("k"));
+          hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);
         },
         node.cfg().cm_gpu);
 
-    p_out->remap(hmin, hmax, 0.f, 1.f, node.cfg().cm_cpu);
     p_out->smooth_overlap_buffers();
 
     // post-process

@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/filters.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
+#include "highmap/range.hpp"
 #include "highmap/selector.hpp"
 
 #include "attributes.hpp"
@@ -117,8 +118,7 @@ void compute_select_soil_rocks_node(BaseNode &node)
 
     hmap::for_each_tile(
         {p_out},
-        [&node, &hmin, &hmax](std::vector<hmap::Array *> p_arrays,
-                              const hmap::TileRegion &)
+        [&node, hmin, hmax](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           auto [pa_out] = unpack<1>(p_arrays);
 

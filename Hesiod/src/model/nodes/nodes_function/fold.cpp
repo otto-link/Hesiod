@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/filters.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
@@ -37,13 +38,12 @@ void compute_fold_node(BaseNode &node)
   {
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    float hmin = p_out->min(node.cfg().cm_cpu);
-    float hmax = p_out->max(node.cfg().cm_cpu);
+    float hmin = p_in->min(node.cfg().cm_cpu);
+    float hmax = p_in->max(node.cfg().cm_cpu);
 
     hmap::for_each_tile(
         {p_out, p_in},
-        [&node, &hmin, &hmax](std::vector<hmap::Array *> p_arrays,
-                              const hmap::TileRegion &)
+        [&node, hmin, hmax](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           auto [pa_out, pa_in] = unpack<2>(p_arrays);
           *pa_out = *pa_in;

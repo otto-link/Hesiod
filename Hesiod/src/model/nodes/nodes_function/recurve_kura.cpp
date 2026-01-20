@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/filters.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
@@ -39,26 +40,24 @@ void compute_recurve_kura_node(BaseNode &node)
     hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-    float hmin = p_out->min(node.cfg().cm_cpu);
-    float hmax = p_out->max(node.cfg().cm_cpu);
-
-    p_out->remap(0.f, 1.f, hmin, hmax, node.cfg().cm_cpu);
+    float hmin = p_in->min(node.cfg().cm_cpu);
+    float hmax = p_in->max(node.cfg().cm_cpu);
 
     hmap::for_each_tile(
         {p_out, p_in, p_mask},
-        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        [&node, hmin, hmax](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
           *pa_out = *pa_in;
 
+          hmap::remap(*pa_out, 0.f, 1.f, hmin, hmax);
           hmap::recurve_kura(*pa_out,
                              node.get_attr<FloatAttribute>("a"),
                              node.get_attr<FloatAttribute>("b"),
                              pa_mask);
+          hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);
         },
         node.cfg().cm_cpu);
-
-    p_out->remap(hmin, hmax, 0.f, 1.f, node.cfg().cm_cpu);
   }
 }
 

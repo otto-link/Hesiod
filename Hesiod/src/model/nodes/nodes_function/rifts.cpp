@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/erosion.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
+#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
@@ -99,17 +100,19 @@ void compute_rifts_node(BaseNode &node)
     std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
 
     // remap to [0, 1] as required by this filter
-    float hmin = p_out->min(node.cfg().cm_cpu);
-    float hmax = p_out->max(node.cfg().cm_cpu);
-    p_out->remap(0.f, 1.f, hmin, hmax, node.cfg().cm_cpu);
+    float hmin = p_in->min(node.cfg().cm_cpu);
+    float hmax = p_in->max(node.cfg().cm_cpu);
 
     hmap::for_each_tile(
         {p_out, p_in, p_dx, p_dy, p_mask},
-        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
+        [&node, hmin, hmax](std::vector<hmap::Array *> p_arrays,
+                            const hmap::TileRegion    &region)
         {
           auto [pa_out, pa_in, pa_dx, pa_dy, pa_mask] = unpack<5>(p_arrays);
 
           *pa_out = *pa_in;
+
+          hmap::remap(*pa_out, 0.f, 1.f, hmin, hmax);
 
           hmap::gpu::rifts(*pa_out,
                            node.get_attr<WaveNbAttribute>("kw"),
@@ -131,6 +134,7 @@ void compute_rifts_node(BaseNode &node)
                            pa_mask,
                            node.get_attr<Vec2FloatAttribute>("center"),
                            region.bbox);
+          hmap::remap(*pa_out, hmin, hmax, 0.f, 1.f);
         },
         node.cfg().cm_gpu);
 
