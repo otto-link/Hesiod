@@ -32,6 +32,7 @@ void setup_plates_node(BaseNode &node)
   node.add_attr<SeedAttribute>("seed", "Seed");
   node.add_attr<FloatAttribute>("mix_ratio", "Mix", 0.9f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("base_noise_amp", "Amplitude", 0.05f, 0.f, 1.f);
+  node.add_attr<IntAttribute>("octaves", "Octaves", 8, 0, 32);
   node.add_attr<FloatAttribute>("rugosity", "Smoothness", 0.5f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("kw_multiplier", "Frequency Scale", 2.f, 0.f, 16.f);
 
@@ -49,6 +50,7 @@ void setup_plates_node(BaseNode &node)
                              //
                              "_GROUPBOX_BEGIN_Noise Parameters",
                              "base_noise_amp",
+                             "octaves",
                              "rugosity",
                              "kw_multiplier",
                              "_GROUPBOX_END_"});
@@ -81,6 +83,7 @@ void compute_plates_node(BaseNode &node)
                                     node.get_attr<FloatAttribute>("mix_ratio"),
                                     node.get_attr<FloatAttribute>("base_noise_amp"),
                                     node.get_attr<FloatAttribute>("kw_multiplier"),
+                                    node.get_attr<IntAttribute>("octaves"),
                                     node.get_attr<FloatAttribute>("rugosity"),
                                     region.bbox);
       },
