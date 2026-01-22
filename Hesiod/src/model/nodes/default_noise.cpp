@@ -63,7 +63,7 @@ void setup_default_noise(BaseNode &node, const DefaultNoiseOptions &options)
   node.add_attr<EnumAttribute>("dn_noise_type", "Type", enum_mappings.noise_type_map_fbm);
   node.add_attr<SeedAttribute>("dn_seed", "Seed");
   node.add_attr<FloatAttribute>("dn_noise_amp", "Amplitude", options.noise_amp, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("dn_kw", "Spatial Frequency", 32.f, 0.f, FLT_MAX);
+  node.add_attr<FloatAttribute>("dn_kw", "Spatial Frequency", options.kw, 0.f, FLT_MAX);
   node.add_attr<FloatAttribute>("dn_smoothness",
                                 "Smoothness",
                                 options.smoothness,
