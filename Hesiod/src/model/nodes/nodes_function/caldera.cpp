@@ -30,8 +30,6 @@ void setup_caldera_node(BaseNode &node)
   node.add_attr<FloatAttribute>("z_bottom", "z_bottom", 0.5f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("noise_ratio_z", "noise_ratio_z", 0.1f, 0.f, 1.f);
   node.add_attr<Vec2FloatAttribute>("center", "center");
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"radius",
@@ -43,7 +41,7 @@ void setup_caldera_node(BaseNode &node)
                              "center"});
 
   setup_post_process_heightmap_attributes(node,
-                                          {.add_mix = true, .remap_active_state = true});
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_caldera_node(BaseNode &node)
