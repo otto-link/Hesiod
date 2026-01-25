@@ -34,18 +34,18 @@ void setup_hydraulic_particle_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");
-  node.add_attr<FloatAttribute>("particle_density", "particle_density", 1.f, 0.f, 4.f);
-  node.add_attr<FloatAttribute>("c_capacity", "c_capacity", 10.f, 0.1f, 100.f);
-  node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.05f, 0.f, 0.1f);
-  node.add_attr<FloatAttribute>("c_deposition", "c_deposition", 0.005f, 0.f, 0.05f);
+  node.add_attr<FloatAttribute>("particle_density", "particle_density", 0.5f, 0.f, 4.f);
+  node.add_attr<FloatAttribute>("c_capacity", "c_capacity", 10.f, 0.1f, 40.f);
+  node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.3f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>("c_deposition", "c_deposition", 0.3f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("c_inertia", "c_inertia", 0.3f, 0.01f, 2.f);
-  node.add_attr<FloatAttribute>("drag_rate", "drag_rate", 0.001f, 0.f, 0.02f);
-  node.add_attr<FloatAttribute>("evap_rate", "evap_rate", 0.001f, 0.f, 0.05f);
+  node.add_attr<FloatAttribute>("c_gravity", "c_gravity", 1.f, 0.01f, 10.f);
+  node.add_attr<IntAttribute>("radius", "radius", 2, 2, 8);
+  node.add_attr<FloatAttribute>("drag_rate", "drag_rate", 0., 0.f, 0.02f);
+  node.add_attr<FloatAttribute>("evap_rate", "evap_rate", 0.01f, 0.f, 0.05f);
   node.add_attr<BoolAttribute>("post_filtering", "post_filtering", true);
   node.add_attr<BoolAttribute>("post_filtering_local", "post_filtering_local", false);
   node.add_attr<BoolAttribute>("deposition_only", "deposition_only", false);
-  node.add_attr<BoolAttribute>("downscale", "downscale", false);
-  node.add_attr<FloatAttribute>("kc", "kc", 512.f, 0.f, FLT_MAX);
 
   // attribute(s) order
   node.set_attr_ordered_key({"seed",
@@ -54,14 +54,13 @@ void setup_hydraulic_particle_node(BaseNode &node)
                              "c_erosion",
                              "c_deposition",
                              "c_inertia",
+                             "c_gravity",
+                             "radius",
                              "drag_rate",
                              "evap_rate",
                              "post_filtering",
                              "post_filtering_local",
-                             "deposition_only",
-                             "_SEPARATOR_",
-                             "downscale",
-                             "kc"});
+                             "deposition_only"});
 
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = true});
@@ -85,9 +84,6 @@ void compute_hydraulic_particle_node(BaseNode &node)
     hmap::VirtualArray *p_deposition_map = node.get_value_ref<hmap::VirtualArray>(
         "deposition");
 
-    // copy the input heightmap
-    p_out->copy_from(*p_in, node.cfg().cm_cpu);
-
     // set the bedrock at the input heightmap to prevent any erosion,
     // if requested
     if (node.get_attr<BoolAttribute>("deposition_only"))
@@ -97,131 +93,51 @@ void compute_hydraulic_particle_node(BaseNode &node)
     int nparticles = (int)(node.get_attr<FloatAttribute>("particle_density") *
                            p_out->shape.x * p_out->shape.y);
 
-    if (!node.get_attr<BoolAttribute>("downscale"))
-    {
-      hmap::for_each_tile(
-          {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
-          [&node, &nparticles](std::vector<hmap::Array *> p_arrays,
-                               const hmap::TileRegion &)
+    hmap::for_each_tile(
+        {p_out, p_in, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
+        [&node, &nparticles](std::vector<hmap::Array *> p_arrays,
+                             const hmap::TileRegion &)
+        {
+          auto [pa_out,
+                pa_in,
+                pa_bedrock,
+                pa_moisture_map,
+                pa_mask,
+                pa_erosion_map,
+                pa_deposition_map] = unpack<7>(p_arrays);
+
+          // copy input
+          *pa_out = *pa_in;
+
+          // add hard limit
+          hmap::Array bedrock_limit;
+          if (!pa_bedrock)
           {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_bedrock = p_arrays[1];
-            hmap::Array *pa_moisture_map = p_arrays[2];
-            hmap::Array *pa_mask = p_arrays[3];
-            hmap::Array *pa_erosion_map = p_arrays[4];
-            hmap::Array *pa_deposition_map = p_arrays[5];
+            bedrock_limit = *pa_in - 0.1f;
+            pa_bedrock = &bedrock_limit;
+          }
 
-            hmap::gpu::hydraulic_particle(*pa_out,
-                                          pa_mask,
-                                          nparticles,
-                                          node.get_attr<SeedAttribute>("seed"),
-                                          pa_bedrock,
-                                          pa_moisture_map,
-                                          pa_erosion_map,
-                                          pa_deposition_map,
-                                          node.get_attr<FloatAttribute>("c_capacity"),
-                                          node.get_attr<FloatAttribute>("c_erosion"),
-                                          node.get_attr<FloatAttribute>("c_deposition"),
-                                          node.get_attr<FloatAttribute>("c_inertia"),
-                                          node.get_attr<FloatAttribute>("drag_rate"),
-                                          node.get_attr<FloatAttribute>("evap_rate"),
-                                          node.get_attr<BoolAttribute>("post_filtering"));
-          },
-          node.cfg().cm_gpu);
-    }
-    else
-    {
-      // adjust particle counts to the new working resolution
-      nparticles = (int)(node.get_attr<FloatAttribute>("kc") / p_out->shape.x *
-                         nparticles);
+          hmap::gpu::hydraulic_particle(*pa_out,
+                                        pa_mask,
+                                        nparticles,
+                                        node.get_attr<SeedAttribute>("seed"),
+                                        pa_bedrock,
+                                        pa_moisture_map,
+                                        pa_erosion_map,
+                                        pa_deposition_map,
+                                        node.get_attr<FloatAttribute>("c_capacity"),
+                                        node.get_attr<FloatAttribute>("c_erosion"),
+                                        node.get_attr<FloatAttribute>("c_deposition"),
+                                        node.get_attr<FloatAttribute>("c_inertia"),
+                                        node.get_attr<FloatAttribute>("c_gravity"),
+                                        node.get_attr<IntAttribute>("radius"),
+                                        node.get_attr<FloatAttribute>("drag_rate"),
+                                        node.get_attr<FloatAttribute>("evap_rate"),
+                                        node.get_attr<BoolAttribute>("post_filtering"));
+        },
+        node.cfg().cm_gpu);
 
-      hmap::for_each_tile(
-          {p_out, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
-          [&node, nparticles](std::vector<hmap::Array *> p_arrays,
-                              const hmap::TileRegion    &region)
-          {
-            hmap::Array *pa_out = p_arrays[0];
-            hmap::Array *pa_bedrock = p_arrays[1];
-            hmap::Array *pa_moisture_map = p_arrays[2];
-            hmap::Array *pa_mask = p_arrays[3];
-            hmap::Array *pa_erosion_map = p_arrays[4];
-            hmap::Array *pa_deposition_map = p_arrays[5];
-
-            auto lambda = [&node,
-                           &region,
-                           nparticles,
-                           pa_mask,
-                           pa_bedrock,
-                           pa_moisture_map,
-                           pa_erosion_map,
-                           pa_deposition_map](hmap::Array &x)
-            {
-              // downscaled shape
-              glm::ivec2 shape_coarse = x.shape;
-
-              // generate coarse arrays if needed
-              std::vector<hmap::Array>   coarse_arrays = {};
-              std::vector<hmap::Array *> p_coarse_arrays = {};
-
-              for (auto pa : {pa_mask,
-                              pa_bedrock,
-                              pa_moisture_map,
-                              pa_erosion_map,
-                              pa_deposition_map})
-              {
-                if (pa)
-                  coarse_arrays.push_back(std::move(pa->resample_to_shape(shape_coarse)));
-                else
-                  coarse_arrays.push_back(hmap::Array());
-              }
-
-              int k = 0;
-              for (auto pa : {pa_mask,
-                              pa_bedrock,
-                              pa_moisture_map,
-                              pa_erosion_map,
-                              pa_deposition_map})
-              {
-                if (pa)
-                  p_coarse_arrays.push_back(&coarse_arrays[k]);
-                else
-                  p_coarse_arrays.push_back(nullptr);
-                k++;
-              }
-
-              hmap::gpu::hydraulic_particle(
-                  x,
-                  p_coarse_arrays[0], // mask
-                  nparticles,
-                  node.get_attr<SeedAttribute>("seed"),
-                  p_coarse_arrays[1], // bedrock
-                  p_coarse_arrays[2], // moisture
-                  p_coarse_arrays[3], // ero map
-                  p_coarse_arrays[4], // depo map
-                  node.get_attr<FloatAttribute>("c_capacity"),
-                  node.get_attr<FloatAttribute>("c_erosion"),
-                  node.get_attr<FloatAttribute>("c_deposition"),
-                  node.get_attr<FloatAttribute>("c_inertia"),
-                  node.get_attr<FloatAttribute>("drag_rate"),
-                  node.get_attr<FloatAttribute>("evap_rate"),
-                  node.get_attr<BoolAttribute>("post_filtering"));
-
-              // resample output fields to their original shape
-              if (pa_erosion_map)
-                *pa_erosion_map = coarse_arrays[3].resample_to_shape_bicubic(
-                    region.shape);
-              if (pa_deposition_map)
-                *pa_deposition_map = coarse_arrays[4].resample_to_shape_bicubic(
-                    region.shape);
-            };
-
-            hmap::downscale_transform(*pa_out,
-                                      node.get_attr<FloatAttribute>("kc"),
-                                      lambda);
-          },
-          node.cfg().cm_single_array);
-    }
-
+    // post-traatments
     p_out->smooth_overlap_buffers();
 
     p_erosion_map->smooth_overlap_buffers();
