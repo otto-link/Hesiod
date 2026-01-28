@@ -29,7 +29,8 @@ void setup_thermal_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
-  std::vector<std::string> choices = {"Standard", "Bedrock", "Olsen", "Ridge", "Inflate"};
+  std::vector<std::string> choices =
+      {"Standard", "Linear", "Bedrock", "Olsen", "Ridge", "Inflate"};
   node.add_attr<ChoiceAttribute>("type", "", choices);
 
   node.add_attr<FloatAttribute>("talus_global", "Slope", 1.f, 0.f, FLT_MAX);
@@ -112,6 +113,22 @@ void compute_thermal_node(BaseNode &node)
                                      pa_mask,
                                      *pa_talus_map,
                                      iterations,
+                                     pa_deposition_map);
+          }
+          else if (type == "Linear")
+          {
+            int iterations_half = int(0.5f * iterations);
+
+            hmap::gpu::thermal(*pa_out,
+                               pa_mask,
+                               *pa_talus_map,
+                               iterations_half,
+                               /* pa_deposition_map */ nullptr);
+
+            hmap::gpu::thermal_ridge(*pa_out,
+                                     pa_mask,
+                                     *pa_talus_map,
+                                     iterations_half,
                                      pa_deposition_map);
           }
           else if (type == "Bedrock")
