@@ -353,7 +353,7 @@ void Viewer3D::update_renderer()
   if (!(helper_try_set_from_port<hmap::VirtualArray>(
             *p_node,
             this->view_param.port_ids.at("color"),
-            typeid(hmap::VirtualTexture),
+            typeid(hmap::VirtualArray),
             [this, p_node](const hmap::VirtualArray &h)
             {
               auto arr = h.to_array(p_node->cfg().cm_cpu);
