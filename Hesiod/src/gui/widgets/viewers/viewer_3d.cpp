@@ -324,7 +324,7 @@ void Viewer3D::update_renderer()
                   ah(i, j) += dh;
               }
 
-            ah = hmap::dilation_expand_border_only(ah, 1);
+            ah = hmap::dilation_expand_min_value_border_only(ah);
 
             // remove non-water cells
             float cut_value = -1e3f;
