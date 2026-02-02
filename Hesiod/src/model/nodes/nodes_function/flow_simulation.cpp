@@ -23,6 +23,7 @@ void setup_flow_simulation_node(BaseNode &node)
   // port(s)
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation");
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "depth_map");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "water_depth_in");
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG(node));
 
   // attribute(s)
@@ -77,6 +78,8 @@ void compute_flow_simulation_node(BaseNode &node)
   if (p_z)
   {
     hmap::VirtualArray *p_depth_map = node.get_value_ref<hmap::VirtualArray>("depth_map");
+    hmap::VirtualArray *p_water_depth_in = node.get_value_ref<hmap::VirtualArray>(
+        "water_depth_in");
     hmap::VirtualArray *p_water_depth = node.get_value_ref<hmap::VirtualArray>(
         "water_depth");
 
@@ -88,12 +91,22 @@ void compute_flow_simulation_node(BaseNode &node)
     int iterations = int(node.get_attr<FloatAttribute>("duration") * p_z->shape.x /
                          cm.stride);
 
-    // use the predefined depth map only if the dpeth map input is not
-    // set
+    // may be overriden when tne water depth is set as an input
+    float water_depth = node.get_attr<FloatAttribute>("water_depth");
+
     hmap::VirtualArray dmap(CONFIG(node));
 
-    if (!p_depth_map)
+    // provided input water depth has priority
+    if (p_water_depth_in)
     {
+      p_depth_map = &dmap;
+      copy_data(*p_water_depth_in, dmap, node.cfg().cm_cpu);
+      water_depth = p_depth_map->max(node.cfg().cm_cpu);
+    }
+    else if (!p_depth_map)
+    {
+      // use the predefined depth map only if the dpeth map input is
+      // not set
       p_depth_map = &dmap;
 
       hmap::for_each_tile(
@@ -134,9 +147,10 @@ void compute_flow_simulation_node(BaseNode &node)
     hmap::for_each_tile(
         {p_z, p_depth_map},
         {p_water_depth},
-        [&node, iterations, dmin, dmax](std::vector<const hmap::Array *> p_arrays_in,
-                                        std::vector<hmap::Array *>       p_arrays_out,
-                                        const hmap::TileRegion &)
+        [&node, iterations, dmin, dmax, water_depth](
+            std::vector<const hmap::Array *> p_arrays_in,
+            std::vector<hmap::Array *>       p_arrays_out,
+            const hmap::TileRegion &)
         {
           auto [pa_z, pa_depth_map] = unpack<2>(p_arrays_in);
           auto [pa_water_depth] = unpack<1>(p_arrays_out);
@@ -148,7 +162,7 @@ void compute_flow_simulation_node(BaseNode &node)
 
           *pa_water_depth = hmap::gpu::flow_simulation(
               *pa_z,
-              node.get_attr<FloatAttribute>("water_depth"),
+              water_depth,
               depth_map_scaled,
               iterations,
               /* dt */ 0.5f,
