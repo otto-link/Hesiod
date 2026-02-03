@@ -54,12 +54,20 @@ void setup_flow_simulation_node(BaseNode &node)
                                  choices,
                                  "Pulse");
 
+  node.add_attr<BoolAttribute>("post_filter", "Enable Filtering", false);
+  node.add_attr<FloatAttribute>("radius", "Filter Radius", 0.05f, 0.f, 0.2f);
+
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Water Setup",
                              "water_depth",
                              "predefined_depth_map",
                              "duration",
                              "dry_out_ratio",
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Post-filter",
+                             "post_filter",
+                             "radius",
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Solver",
@@ -171,6 +179,22 @@ void compute_flow_simulation_node(BaseNode &node)
               node.get_attr<FloatAttribute>("dry_out_ratio"));
         },
         cm);
+
+    // post-filter
+    if (node.get_attr<BoolAttribute>("post_filter"))
+    {
+      int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_z->shape.x));
+
+      hmap::for_each_tile(
+          {p_z, p_water_depth},
+          [&node, ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+          {
+            auto [pa_z, pa_water_depth] = unpack<2>(p_arrays);
+
+            hmap::gpu::water_depth_filter(*pa_water_depth, *pa_z, ir);
+          },
+          node.cfg().cm_gpu);
+    }
   }
 }
 
