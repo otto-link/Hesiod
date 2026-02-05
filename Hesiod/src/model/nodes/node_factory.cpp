@@ -244,6 +244,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"HydraulicStream", "WIP"},     // "Erosion/Hydraulic"
       {"HydraulicStreamLog", "Erosion/Hydraulic"},
       {"HydraulicStreamUpscaleAmplification", "WIP"}, // "Erosion/Hydraulic"
+      {"HydraulicVpipes", "WIP"},                     // "Erosion/Hydraulic"
       {"ImportHeightmap", "IO/Files"},
       {"ImportTexture", "IO/Files"},
       {"Inverse", "Math/Base"},
@@ -561,6 +562,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(HydraulicStream, hydraulic_stream);
     SETUP_NODE(HydraulicStreamUpscaleAmplification,
                hydraulic_stream_upscale_amplification);
+    SETUP_NODE(HydraulicVpipes, hydraulic_vpipes);
     SETUP_NODE(ImportHeightmap, import_heightmap);
     SETUP_NODE(ImportTexture, import_texture);
     SETUP_NODE(Inverse, inverse);

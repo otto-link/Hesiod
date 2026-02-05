@@ -35,20 +35,7 @@ void setup_color_adjust_node(BaseNode &node)
   node.add_attr<FloatAttribute>("dither_amp", "Dither Amplitude", 0.f, 0.f, 0.5f);
   node.add_attr<BoolAttribute>("filmic_tonemap", "Filmic Tonemap", false);
   node.add_attr<BoolAttribute>("aces_tonemap", "ACES Tonemap", false);
-
-  // struct ColorAdjust
-  // {
-  //   float in_min = 0.0f;
-  //   float in_max = 1.0f;
-  //   float exposure = 0.0f;
-  //   float contrast = 1.0f;
-  //   float saturation = 1.0f;
-  //   float temperature = 0.0f;
-  //   float gamma = 2.2f;
-  //   float dither_amp = 1.f / 255.f;
-  //   bool  filmic_tonemap = false;
-  //   bool  aces_tonemap = false;
-  // };
+  node.add_attr<BoolAttribute>("agx_tonemap", "AGX Tonemap", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"levels",
@@ -59,7 +46,8 @@ void setup_color_adjust_node(BaseNode &node)
                              "gamma",
                              "dither_amp",
                              "filmic_tonemap",
-                             "aces_tonemap"});
+                             "aces_tonemap",
+                             "agx_tonemap"});
 }
 
 void compute_color_adjust_node(BaseNode &node)
@@ -83,7 +71,8 @@ void compute_color_adjust_node(BaseNode &node)
         .gamma = node.get_attr<FloatAttribute>("gamma"),
         .dither_amp = node.get_attr<FloatAttribute>("dither_amp"),
         .filmic_tonemap = node.get_attr<BoolAttribute>("filmic_tonemap"),
-        .aces_tonemap = node.get_attr<BoolAttribute>("aces_tonemap")};
+        .aces_tonemap = node.get_attr<BoolAttribute>("aces_tonemap"),
+        .agx_tonemap = node.get_attr<BoolAttribute>("agx_tonemap")};
 
     hmap::color_adjust(*p_out, param, node.cfg().cm_cpu);
   }
