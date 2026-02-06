@@ -41,7 +41,7 @@ void setup_hydraulic_vpipes_node(BaseNode &node)
   node.add_attr<FloatAttribute>("evap_rate", "evap_rate", 0.01f, 0.f, 0.5f);
 
   node.add_attr<FloatAttribute>("k_capacity", "k_capacity", 0.5f, 0.01f, 2.f);
-  node.add_attr<FloatAttribute>("k_erode", "k_erode", 0.001f, 0.f, 0.1f);
+  node.add_attr<FloatAttribute>("k_erode", "k_erode", 0.002f, 0.f, 0.1f);
   node.add_attr<FloatAttribute>("k_depose", "k_depose", 0.01f, 0.f, 0.1f);
   node.add_attr<FloatAttribute>("k_discharge_exp", "k_discharge_exp", 1.f, 0.1f, 2.f);
 
