@@ -33,8 +33,9 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "deposition", CONFIG(node));
 
   // attribute(s)
+  node.add_attr<FloatAttribute>("scale", "scale", 0.5f, 0.1f, 1.f);
   node.add_attr<SeedAttribute>("seed", "Seed");
-  node.add_attr<FloatAttribute>("particle_density", "particle_density", 0.5f, 0.f, 4.f);
+  node.add_attr<FloatAttribute>("particle_density", "particle_density", 1.f, 0.f, 4.f);
   node.add_attr<FloatAttribute>("c_capacity", "c_capacity", 10.f, 0.1f, 40.f);
   node.add_attr<FloatAttribute>("c_erosion", "c_erosion", 0.3f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("c_deposition", "c_deposition", 0.3f, 0.f, 1.f);
@@ -48,7 +49,8 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_attr<BoolAttribute>("deposition_only", "deposition_only", false);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"seed",
+  node.set_attr_ordered_key({"scale",
+                             "seed",
                              "particle_density",
                              "c_capacity",
                              "c_erosion",
@@ -89,31 +91,40 @@ void compute_hydraulic_particle_node(BaseNode &node)
     if (node.get_attr<BoolAttribute>("deposition_only"))
       p_bedrock = p_in;
 
+    const float scale = node.get_attr<FloatAttribute>("scale");
+
     // number of particles based on the input particle density
     int nparticles = (int)(node.get_attr<FloatAttribute>("particle_density") *
-                           p_out->shape.x * p_out->shape.y);
+                           p_out->shape.x * p_out->shape.y * scale);
+
+    // override compute mode (but keep storage mode)
+    hmap::ComputeMode cm = node.cfg().cm_gpu;
+
+    if (scale != 1.f)
+    {
+      cm.mode = hmap::ForEachMode::VA_SINGLE_ARRAY_DOWNSCALED;
+      cm.k_cutoff = scale;
+    }
+
+    hmap::copy_data(*p_in, *p_out, node.cfg().cm_cpu);
+    p_erosion_map->fill(0.f, node.cfg().cm_cpu);
+    p_deposition_map->fill(0.f, node.cfg().cm_cpu);
 
     hmap::for_each_tile(
-        {p_out, p_in, p_bedrock, p_moisture_map, p_mask, p_erosion_map, p_deposition_map},
-        [&node, &nparticles](std::vector<hmap::Array *> p_arrays,
+        {p_bedrock, p_moisture_map, p_mask},
+        {p_out, p_erosion_map, p_deposition_map},
+        [&node, &nparticles](std::vector<const hmap::Array *> p_arrays_in,
+                             std::vector<hmap::Array *>       p_arrays_out,
                              const hmap::TileRegion &)
         {
-          auto [pa_out,
-                pa_in,
-                pa_bedrock,
-                pa_moisture_map,
-                pa_mask,
-                pa_erosion_map,
-                pa_deposition_map] = unpack<7>(p_arrays);
-
-          // copy input
-          *pa_out = *pa_in;
+          auto [pa_bedrock, pa_moisture_map, pa_mask] = unpack<3>(p_arrays_in);
+          auto [pa_out, pa_erosion_map, pa_deposition_map] = unpack<3>(p_arrays_out);
 
           // add hard limit
           hmap::Array bedrock_limit;
           if (!pa_bedrock)
           {
-            bedrock_limit = *pa_in - 0.1f;
+            bedrock_limit = *pa_out - 0.1f;
             pa_bedrock = &bedrock_limit;
           }
 
@@ -135,7 +146,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
                                         node.get_attr<FloatAttribute>("evap_rate"),
                                         node.get_attr<BoolAttribute>("post_filtering"));
         },
-        node.cfg().cm_gpu);
+        cm);
 
     // post-traatments
     p_out->smooth_overlap_buffers();
