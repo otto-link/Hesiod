@@ -39,7 +39,7 @@ void setup_snow_simulation_node(BaseNode &node)
   node.add_attr<FloatAttribute>("talus_global", "Base Repose Slope", 1.5f, 0.f, FLT_MAX);
 
   node.add_attr<FloatAttribute>("duration", "Simulation Duration", 1.f, 0.f, 2.f);
-  node.add_attr<IntAttribute>("solver_stride", "Solver Stride", 2, 1, 32);
+  node.add_attr<IntAttribute>("solver_stride", "Solver Stride", 4, 1, 32);
 
   node.add_attr<BoolAttribute>("post_filter", "Enable Thermal Relaxation", true);
   node.add_attr<FloatAttribute>("thermal_talus_ratio",
@@ -127,13 +127,13 @@ void compute_snow_simulation_node(BaseNode &node)
         float talus;
       };
 
-      const int nx_strided = int(float(p_z->shape.x) /
-                                 node.get_attr<IntAttribute>("solver_stride"));
+      const int stride = node.get_attr<IntAttribute>("solver_stride");
+      const int nx_strided = int(float(p_z->shape.x) / stride);
       const int iterations = int(node.get_attr<FloatAttribute>("duration") * nx_strided);
       const float talus = node.get_attr<FloatAttribute>("talus_global") / nx_strided;
 
       return P{
-          .solver_stride = node.get_attr<IntAttribute>("solver_stride"),
+          .solver_stride = stride,
           .talus_global = node.get_attr<FloatAttribute>("talus_global"),
           .snow_depth = node.get_attr<FloatAttribute>("snow_depth"),
           .duration = node.get_attr<FloatAttribute>("duration"),
