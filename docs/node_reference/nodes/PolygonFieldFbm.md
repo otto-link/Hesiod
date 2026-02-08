@@ -18,18 +18,18 @@ Primitive/Coherent
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|density|Heightmap|No description|
-|dr|Heightmap|No description|
-|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
-|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
-|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
-|size|Heightmap|No description|
+|density|VirtualArray|No description|
+|dr|VirtualArray|No description|
+|dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
+|dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
+|envelope|VirtualArray|Heightmap used as a post-process amplitude multiplier for the generated noise.|
+|size|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|No description|
+|output|VirtualArray|No description|
 
 # Parameters
 

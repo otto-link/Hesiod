@@ -18,15 +18,15 @@ WIP
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|TODO|
-|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|input|VirtualArray|TODO|
+|mask|VirtualArray|Mask defining the filtering intensity (expected in [0, 1]).|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|TODO|
-|ridge_mask|Heightmap|TODO|
+|output|VirtualArray|TODO|
+|ridge_mask|VirtualArray|TODO|
 
 # Parameters
 

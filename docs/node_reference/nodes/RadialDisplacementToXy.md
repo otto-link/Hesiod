@@ -18,14 +18,14 @@ Math
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|Heightmap|Radial displacement.|
+|dr|VirtualArray|Radial displacement.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
-|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
+|dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
 
 # Parameters
 

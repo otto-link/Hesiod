@@ -18,13 +18,13 @@ Mask/Selector
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Mask heightmap (in [0, 1]).|
+|output|VirtualArray|Mask heightmap (in [0, 1]).|
 
 # Parameters
 

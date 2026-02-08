@@ -18,14 +18,14 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|normal map base|HeightmapRGBA|TODO|
-|normal map detail|HeightmapRGBA|TODO|
+|normal map base|VirtualTexture|TODO|
+|normal map detail|VirtualTexture|TODO|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|normal map|HeightmapRGBA|TODO|
+|normal map|VirtualTexture|TODO|
 
 # Parameters
 

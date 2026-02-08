@@ -18,13 +18,13 @@ Converter
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|No description|
+|input|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|normal map|HeightmapRGBA|No description|
+|normal map|VirtualTexture|No description|
 
 # Example
 

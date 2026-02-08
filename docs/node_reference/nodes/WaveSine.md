@@ -18,14 +18,14 @@ Primitive/Function
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|Heightmap|Displacement with respect to the domain size (normal direction).|
-|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
+|dr|VirtualArray|Displacement with respect to the domain size (normal direction).|
+|envelope|VirtualArray|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|WaveSine heightmap.|
+|output|VirtualArray|WaveSine heightmap.|
 
 # Parameters
 

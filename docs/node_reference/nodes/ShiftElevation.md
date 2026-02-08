@@ -18,13 +18,13 @@ Filter/Range
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Resulting heightmap after applying the shift.|
+|output|VirtualArray|Resulting heightmap after applying the shift.|
 
 # Parameters
 

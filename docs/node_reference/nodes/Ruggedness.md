@@ -18,13 +18,13 @@ Features
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Heightmap input representing terrain elevations, used to calculate ruggedness.|
+|input|VirtualArray|Heightmap input representing terrain elevations, used to calculate ruggedness.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Resulting heightmap where each pixel represents the calculated ruggedness value.|
+|output|VirtualArray|Resulting heightmap where each pixel represents the calculated ruggedness value.|
 
 # Parameters
 

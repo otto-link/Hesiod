@@ -18,15 +18,15 @@ Filter/Recurve
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|The input heightmap to be transformed with terrace steps.|
-|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
-|noise|Heightmap|Optional noise map used to perturb the position of the terrace levels for a more natural look.|
+|input|VirtualArray|The input heightmap to be transformed with terrace steps.|
+|mask|VirtualArray|Mask defining the filtering intensity (expected in [0, 1]).|
+|noise|VirtualArray|Optional noise map used to perturb the position of the terrace levels for a more natural look.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Resulting heightmap after applying the terracing effect.|
+|output|VirtualArray|Resulting heightmap after applying the terracing effect.|
 
 # Parameters
 

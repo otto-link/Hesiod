@@ -18,7 +18,7 @@ Debug
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|No description|
+|input|VirtualArray|No description|
 
 # Example
 

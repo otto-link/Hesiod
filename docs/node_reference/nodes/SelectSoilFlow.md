@@ -18,13 +18,13 @@ Mask/ForTexturing
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap used to compute curvature and gradient contributions.|
+|input|VirtualArray|Input heightmap used to compute curvature and gradient contributions.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Output soil-flow mask combining flow and gradient effects.|
+|output|VirtualArray|Output soil-flow mask combining flow and gradient effects.|
 
 # Parameters
 

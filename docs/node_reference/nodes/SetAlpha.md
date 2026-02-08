@@ -18,15 +18,15 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|alpha|Heightmap|Transparency (expected to be in [0, 1]).|
-|noise|Heightmap|TODO|
-|texture in|HeightmapRGBA|TODO|
+|alpha|VirtualArray|Transparency (expected to be in [0, 1]).|
+|noise|VirtualArray|TODO|
+|texture in|VirtualTexture|TODO|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture out|HeightmapRGBA|TODO|
+|texture out|VirtualTexture|TODO|
 
 # Parameters
 

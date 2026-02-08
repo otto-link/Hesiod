@@ -18,8 +18,8 @@ Geometry/Path
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|heightmap|Heightmap|TODO|
-|mask nogo|Heightmap|TODO|
+|heightmap|VirtualArray|TODO|
+|mask nogo|VirtualArray|TODO|
 |waypoints|Path|TODO|
 
 # Outputs

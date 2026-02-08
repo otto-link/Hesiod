@@ -18,9 +18,9 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|Heightmap|Heightmap data defining elevation values.|
-|normal map details|HeightmapRGBA|Optional normal map for enhancing lighting effects on small details.|
-|texture|HeightmapRGBA|Heightmap data defining texture color values.|
+|elevation|VirtualArray|Heightmap data defining elevation values.|
+|normal map details|VirtualTexture|Optional normal map for enhancing lighting effects on small details.|
+|texture|VirtualTexture|Heightmap data defining texture color values.|
 
 # Parameters
 

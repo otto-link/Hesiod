@@ -18,15 +18,15 @@ WIP
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
-|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|input|VirtualArray|Input heightmap.|
+|mask|VirtualArray|Mask defining the filtering intensity (expected in [0, 1]).|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|erosion|Heightmap|Erosion map (in [0, 1]).|
-|output|Heightmap|Eroded heightmap.|
+|erosion|VirtualArray|Erosion map (in [0, 1]).|
+|output|VirtualArray|Eroded heightmap.|
 
 # Parameters
 

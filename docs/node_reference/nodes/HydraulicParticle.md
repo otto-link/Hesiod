@@ -18,18 +18,18 @@ Erosion/Hydraulic
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|bedrock|Heightmap|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
-|input|Heightmap|Input heightmap.|
-|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
-|moisture|Heightmap|Moisture map, influences the amount of water locally deposited.|
+|bedrock|VirtualArray|Bedrock elevation, erosion process cannot carve the heightmap further down this point.|
+|input|VirtualArray|Input heightmap.|
+|mask|VirtualArray|Mask defining the filtering intensity (expected in [0, 1]).|
+|moisture|VirtualArray|Moisture map, influences the amount of water locally deposited.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|deposition|Heightmap|Deposition map (in [0, 1]).|
-|erosion|Heightmap|Erosion map (in [0, 1]).|
-|output|Heightmap|Eroded heightmap.|
+|deposition|VirtualArray|Deposition map (in [0, 1]).|
+|erosion|VirtualArray|Erosion map (in [0, 1]).|
+|output|VirtualArray|Eroded heightmap.|
 
 # Parameters
 
@@ -38,15 +38,24 @@ Erosion/Hydraulic
 |c_capacity|Float|Particle capacity.|
 |c_deposition|Float|Particle deposition coefficient.|
 |c_erosion|Float|Particle erosion cofficient.|
+|c_gravity|Float|No description|
 |c_inertia|Float|TODO|
 |deposition_only|Bool|TODO|
-|downscale|Bool|TODO|
 |drag_rate|Float|Particle drag rate.|
 |evap_rate|Float|Particle water evaporation rate.|
-|kc|Float|TODO|
 |particle_density|Float|TODO|
 |post_filtering|Bool|TODO|
 |post_filtering_local|Bool|TODO|
+|Gain|Float|Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.|
+|Gamma|Float|Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.|
+|Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
+|Mix Factor|Float|Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.|
+|Mix Method|Enumeration|Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.|
+|Remap Range|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
+|Saturation Range|Value range|Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.|
+|Smoothing Radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
+|radius|Integer|No description|
+|scale|Float|No description|
 |Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example

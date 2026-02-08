@@ -18,7 +18,7 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightmapRGBA|Texture (RGBA).|
+|texture|VirtualTexture|Texture (RGBA).|
 
 # Parameters
 

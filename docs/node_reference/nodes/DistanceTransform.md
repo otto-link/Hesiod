@@ -18,13 +18,13 @@ Operator/Morphology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap used to compute the distance transform.|
+|input|VirtualArray|Input heightmap used to compute the distance transform.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Generated distance map based on the input heightmap.|
+|output|VirtualArray|Generated distance map based on the input heightmap.|
 
 # Parameters
 

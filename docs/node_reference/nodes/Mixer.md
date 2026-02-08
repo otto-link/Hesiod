@@ -18,17 +18,17 @@ Operator/Blend
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input 1|Heightmap|Input heightmap.|
-|input 2|Heightmap|Input heightmap.|
-|input 3|Heightmap|Input heightmap.|
-|input 4|Heightmap|Input heightmap.|
-|t|Heightmap|Mixing parameter, expected in [0, 1].|
+|input 1|VirtualArray|Input heightmap.|
+|input 2|VirtualArray|Input heightmap.|
+|input 3|VirtualArray|Input heightmap.|
+|input 4|VirtualArray|Input heightmap.|
+|t|VirtualArray|Mixing parameter, expected in [0, 1].|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Output heightmap.|
+|output|VirtualArray|Output heightmap.|
 
 # Parameters
 

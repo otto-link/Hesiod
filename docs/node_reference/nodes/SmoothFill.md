@@ -18,15 +18,15 @@ Filter/Smoothing
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
-|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|input|VirtualArray|Input heightmap.|
+|mask|VirtualArray|Mask defining the filtering intensity (expected in [0, 1]).|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|deposition|Heightmap|Deposition map (in [0, 1]).|
-|output|Heightmap|Filtered heightmap.|
+|deposition|VirtualArray|Deposition map (in [0, 1]).|
+|output|VirtualArray|Filtered heightmap.|
 
 # Parameters
 

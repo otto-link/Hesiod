@@ -18,14 +18,14 @@ Mask
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input 1|Heightmap|Input mask.|
-|input 2|Heightmap|Input mask.|
+|input 1|VirtualArray|Input mask.|
+|input 2|VirtualArray|Input mask.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Combined mask.|
+|output|VirtualArray|Combined mask.|
 
 # Parameters
 

@@ -18,7 +18,7 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightmapRGBA|TODO|
+|texture|VirtualTexture|TODO|
 
 # Parameters
 

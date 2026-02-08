@@ -19,14 +19,14 @@ Geometry/Cloud
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |cloud|Cloud|Set of points (x, y) and elevations z.|
-|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
-|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
+|dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
+|dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|heightmap|Heightmap|Interpolated heightmap.|
+|heightmap|VirtualArray|Interpolated heightmap.|
 
 # Example
 

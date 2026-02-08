@@ -18,23 +18,23 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|heightmap (guide)|Heightmap|TODO|
-|texture (guide)|HeightmapRGBA|TODO|
-|texture A|HeightmapRGBA|TODO|
-|texture B|HeightmapRGBA|TODO|
-|texture C|HeightmapRGBA|TODO|
-|texture D|HeightmapRGBA|TODO|
+|heightmap (guide)|VirtualArray|TODO|
+|texture (guide)|VirtualTexture|TODO|
+|texture A|VirtualTexture|TODO|
+|texture B|VirtualTexture|TODO|
+|texture C|VirtualTexture|TODO|
+|texture D|VirtualTexture|TODO|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|heightmap|Heightmap|TODO|
-|texture|HeightmapRGBA|TODO|
-|texture A out|HeightmapRGBA|TODO|
-|texture B out|HeightmapRGBA|TODO|
-|texture C out|HeightmapRGBA|TODO|
-|texture D out|HeightmapRGBA|TODO|
+|heightmap|VirtualArray|TODO|
+|texture|VirtualTexture|TODO|
+|texture A out|VirtualTexture|TODO|
+|texture B out|VirtualTexture|TODO|
+|texture C out|VirtualTexture|TODO|
+|texture D out|VirtualTexture|TODO|
 
 # Parameters
 

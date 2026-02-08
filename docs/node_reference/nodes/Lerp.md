@@ -18,15 +18,15 @@ Math/Base
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|a|Heightmap|Start heightmap (t = 0).|
-|b|Heightmap|End heightmap (t = 1).|
-|t|Heightmap|Lerp factor, expected in [0, 1].|
+|a|VirtualArray|Start heightmap (t = 0).|
+|b|VirtualArray|End heightmap (t = 1).|
+|t|VirtualArray|Lerp factor, expected in [0, 1].|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Interpolated heightmap.|
+|output|VirtualArray|Interpolated heightmap.|
 
 # Parameters
 

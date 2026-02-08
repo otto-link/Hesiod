@@ -18,13 +18,13 @@ Filter
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|in|Heightmap|No description|
+|in|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|out|Heightmap|No description|
+|out|VirtualArray|No description|
 
 # Parameters
 

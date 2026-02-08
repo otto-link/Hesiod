@@ -18,13 +18,13 @@ Mask
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Adjusted heightmap.|
+|output|VirtualArray|Adjusted heightmap.|
 
 # Parameters
 

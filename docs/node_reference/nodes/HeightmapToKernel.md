@@ -18,7 +18,7 @@ Converter
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|heightmap|Heightmap|Input heightmap.|
+|heightmap|VirtualArray|Input heightmap.|
 
 # Outputs
 

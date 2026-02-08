@@ -18,16 +18,16 @@ Primitive/Geological
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|control|Heightmap|Optional control field used to modulate step height or shape along the axis.|
-|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
-|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
-|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
+|control|VirtualArray|Optional control field used to modulate step height or shape along the axis.|
+|dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
+|dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
+|envelope|VirtualArray|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Resulting heightmap containing the generated multi-step profile after optional modulation and post-processing.|
+|output|VirtualArray|Resulting heightmap containing the generated multi-step profile after optional modulation and post-processing.|
 
 # Parameters
 

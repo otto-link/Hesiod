@@ -18,7 +18,7 @@ Primitive/Function
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|No description|
+|output|VirtualArray|No description|
 
 # Parameters
 

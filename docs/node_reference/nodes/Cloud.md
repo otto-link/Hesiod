@@ -18,7 +18,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|background|Heightmap|Input heightmap.|
+|background|VirtualArray|Input heightmap.|
 
 # Outputs
 

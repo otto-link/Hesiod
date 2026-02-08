@@ -18,23 +18,22 @@ Erosion/Water
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation_in|Heightmap|No description|
-|water_depth_in|Heightmap|No description|
+|elevation_in|VirtualArray|No description|
+|water_depth_in|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|Heightmap|No description|
-|water_depth|Heightmap|Output water depth map representing flooded areas.|
-|water_mask|Heightmap|No description|
+|elevation|VirtualArray|No description|
+|water_depth|VirtualArray|Output water depth map representing flooded areas.|
+|water_mask|VirtualArray|No description|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |additional_depth|Float|No description|
-|distributed|Bool|No description|
 |iterations|Integer|No description|
 
 # Example

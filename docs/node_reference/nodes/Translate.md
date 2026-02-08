@@ -18,15 +18,15 @@ Operator/Transform
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
-|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
-|input|Heightmap|Displacement with respect to the domain size (x-direction).|
+|dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
+|dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
+|input|VirtualArray|Displacement with respect to the domain size (x-direction).|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Translate heightmap.|
+|output|VirtualArray|Translate heightmap.|
 
 # Parameters
 

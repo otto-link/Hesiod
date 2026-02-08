@@ -18,13 +18,13 @@ Operator/Resynthesis
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Synthetized heightmap.|
+|output|VirtualArray|Synthetized heightmap.|
 
 # Parameters
 

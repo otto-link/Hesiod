@@ -18,14 +18,14 @@ Filter/Recurve
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Heightmap to be modified using the corrective curve.|
-|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|input|VirtualArray|Heightmap to be modified using the corrective curve.|
+|mask|VirtualArray|Mask defining the filtering intensity (expected in [0, 1]).|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Resulting heightmap after the curve has been applied.|
+|output|VirtualArray|Resulting heightmap after the curve has been applied.|
 
 # Parameters
 

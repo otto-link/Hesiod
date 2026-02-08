@@ -18,15 +18,15 @@ Primitive/Function
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
-|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
-|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
+|dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
+|dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
+|envelope|VirtualArray|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Generated conical heightfield.|
+|output|VirtualArray|Generated conical heightfield.|
 
 # Parameters
 

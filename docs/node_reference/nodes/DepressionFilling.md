@@ -18,21 +18,19 @@ Erosion
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|fill map|Heightmap|Filling map.|
-|output|Heightmap|Filled heightmap.|
+|fill map|VirtualArray|Filling map.|
+|output|VirtualArray|Filled heightmap.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|epsilon|Float|Minimum slope tolerance.|
-|iterations|Integer|Maximum number of iterations.|
 |remap fill map|Bool|Remap to [0, 1] the filling map.|
 
 # Example

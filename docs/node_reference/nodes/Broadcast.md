@@ -18,13 +18,13 @@ Routing
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Heightmap data to be shared with other graph nodes.|
+|input|VirtualArray|Heightmap data to be shared with other graph nodes.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|thru|Heightmap|Pass-through of the input heightmap, unchanged.|
+|thru|VirtualArray|Pass-through of the input heightmap, unchanged.|
 
 # Parameters
 

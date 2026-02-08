@@ -18,7 +18,7 @@ Routing
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|The heightmap retrieved from the broadcast source.|
+|output|VirtualArray|The heightmap retrieved from the broadcast source.|
 
 # Parameters
 

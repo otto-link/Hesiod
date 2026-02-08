@@ -18,7 +18,7 @@ WIP
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|TODO|
+|input|VirtualArray|TODO|
 
 # Parameters
 

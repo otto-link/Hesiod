@@ -18,13 +18,13 @@ Math/Base
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Output heightmap with the smoothstep function applied.|
+|output|VirtualArray|Output heightmap with the smoothstep function applied.|
 
 # Parameters
 

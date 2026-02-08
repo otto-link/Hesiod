@@ -18,14 +18,14 @@ Filter/Recurve
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|No description|
-|mask|Heightmap|No description|
+|input|VirtualArray|No description|
+|mask|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|No description|
+|output|VirtualArray|No description|
 
 # Parameters
 

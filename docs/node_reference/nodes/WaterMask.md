@@ -18,14 +18,14 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|Heightmap|Elevation map corresponding to the water depth grid.|
-|water_depth|Heightmap|Output water depth map representing flooded areas.|
+|elevation|VirtualArray|Elevation map corresponding to the water depth grid.|
+|water_depth|VirtualArray|Output water depth map representing flooded areas.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|mask|Heightmap|Output normalized water-extension mask, ranging from 0 to 1.|
+|mask|VirtualArray|Output normalized water-extension mask, ranging from 0 to 1.|
 
 # Parameters
 

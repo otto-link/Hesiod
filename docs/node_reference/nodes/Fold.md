@@ -18,13 +18,13 @@ Filter/Recast
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Folded heightmap.|
+|output|VirtualArray|Folded heightmap.|
 
 # Parameters
 

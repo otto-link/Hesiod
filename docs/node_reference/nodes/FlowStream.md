@@ -18,15 +18,15 @@ WIP
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|TODO|
+|input|VirtualArray|TODO|
 |sources|Cloud|TODO|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|TODO|
-|river_mask|Heightmap|TODO|
+|output|VirtualArray|TODO|
+|river_mask|VirtualArray|TODO|
 
 # Parameters
 

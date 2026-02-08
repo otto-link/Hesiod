@@ -13,20 +13,20 @@ No description available
 # Category
 
 
-WIP
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|Heightmap|No description|
-|mask|Heightmap|No description|
-|texture|HeightmapRGBA|No description|
+|elevation|VirtualArray|No description|
+|input|VirtualTexture|No description|
+|mask|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|HeightmapRGBA|No description|
+|texture|VirtualTexture|No description|
 
 # Parameters
 

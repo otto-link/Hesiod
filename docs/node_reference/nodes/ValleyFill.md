@@ -18,20 +18,27 @@ Erosion/Thermal
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
-|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
+|input|VirtualArray|Input heightmap.|
+|mask|VirtualArray|Mask defining the filtering intensity (expected in [0, 1]).|
+|noise|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|deposition|Heightmap|No description|
-|output|Heightmap|Eroded heightmap.|
+|deposition|VirtualArray|No description|
+|output|VirtualArray|Eroded heightmap.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|Activate|Bool|No description|
+|Spatial Frequency|Float|No description|
+|Amplitude|Float|No description|
+|Type|Enumeration|No description|
+|Seed|Random seed number|No description|
+|Smoothness|Float|No description|
 |Duration|Float|Controls the number of erosion iterations or the simulated time span during which thermal erosion is applied. Higher values increase slope relaxation and material transport.|
 |Scree Max Elevation|Float|No description|
 |Deposition Gamma|Float|Gamma applied to the height-based mixing mask.|

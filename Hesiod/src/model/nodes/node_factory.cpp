@@ -217,8 +217,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"FloodingFromPoint", "Hydrology"},
       {"FloodingLakeSystem", "Hydrology"},
       {"FloodingUniformLevel", "Hydrology"},
-      {"FlowSimulation", "Hydrology"}, // Hydrology
-      {"FlowStream", "WIP"},           // Hydrology
+      {"FlowSimulation", "Hydrology"},
+      {"FlowStream", "WIP"}, // Hydrology
       {"Fold", "Filter/Recast"},
       {"GaborWaveFbm", "Primitive/Coherent"},
       {"Gain", "Filter/Recurve"},
@@ -372,6 +372,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SmoothFillHoles", "Filter/Smoothing"},
       {"SmoothFillSmearPeaks", "Filter/Smoothing"},
       {"Smoothstep", "Math/Base"},
+      {"SnowSimulation", "Hydrology"},
       {"Stamping", "Primitive/Coherent"},
       {"StdLocal", "Features"},
       {"SteepenConvective", "Filter/Recast"},
@@ -686,6 +687,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(SmoothFillHoles, smooth_fill_holes);
     SETUP_NODE(SmoothFillSmearPeaks, smooth_fill_smear_peaks);
     SETUP_NODE(Smoothstep, smoothstep);
+    SETUP_NODE(SnowSimulation, snow_simulation);
     SETUP_NODE(Stamping, stamping);
     SETUP_NODE(StdLocal, std_local);
     SETUP_NODE(SteepenConvective, steepen_convective);

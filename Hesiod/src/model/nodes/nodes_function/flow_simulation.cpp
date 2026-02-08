@@ -46,7 +46,7 @@ void setup_flow_simulation_node(BaseNode &node)
                                 0.01f,
                                 0.f,
                                 0.1f);
-  node.add_attr<IntAttribute>("solver_stride", "Solver Iteration Stride", 8, 1, 128);
+  node.add_attr<IntAttribute>("solver_stride", "Solver Iteration Stride", 8, 1, 32);
 
   std::vector<std::string> choices = {"Uniform", "Pulse"};
   node.add_attr<ChoiceAttribute>("predefined_depth_map",
@@ -165,8 +165,6 @@ void compute_flow_simulation_node(BaseNode &node)
 
           hmap::Array depth_map_scaled = *pa_depth_map;
           hmap::remap(depth_map_scaled, 0.f, 1.f, dmin, dmax);
-
-          depth_map_scaled.dump();
 
           *pa_water_depth = hmap::gpu::flow_simulation(
               *pa_z,

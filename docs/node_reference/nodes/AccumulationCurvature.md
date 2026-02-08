@@ -18,13 +18,13 @@ Features/Landform
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap used for accumulation curvature analysis.|
+|input|VirtualArray|Input heightmap used for accumulation curvature analysis.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Computed accumulation curvature of the input heightmap.|
+|output|VirtualArray|Computed accumulation curvature of the input heightmap.|
 
 # Parameters
 

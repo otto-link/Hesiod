@@ -18,16 +18,16 @@ Converter
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|A|Heightmap|Alpha channel.|
-|B|Heightmap|Blue channel.|
-|G|Heightmap|Green channel.|
-|R|Heightmap|Red channel.|
+|A|VirtualArray|Alpha channel.|
+|B|VirtualArray|Blue channel.|
+|G|VirtualArray|Green channel.|
+|R|VirtualArray|Red channel.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|RGBA|HeightmapRGBA|RGBA heightmap.|
+|RGBA|VirtualTexture|RGBA heightmap.|
 
 # Example
 

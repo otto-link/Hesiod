@@ -18,13 +18,13 @@ WIP
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|TODO|
+|input|VirtualArray|TODO|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|TODO|
+|output|VirtualArray|TODO|
 
 # Parameters
 

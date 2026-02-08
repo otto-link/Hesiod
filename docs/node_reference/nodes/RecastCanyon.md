@@ -18,15 +18,15 @@ Filter/Recast
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|TODO|
-|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
-|noise|Heightmap|TODO|
+|input|VirtualArray|TODO|
+|mask|VirtualArray|Mask defining the filtering intensity (expected in [0, 1]).|
+|noise|VirtualArray|TODO|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|TODO|
+|output|VirtualArray|TODO|
 
 # Parameters
 

@@ -18,16 +18,16 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture1|HeightmapRGBA|Input texture.|
-|texture2|HeightmapRGBA|Input texture.|
-|texture3|HeightmapRGBA|Input texture.|
-|texture4|HeightmapRGBA|Input texture.|
+|texture1|VirtualTexture|Input texture.|
+|texture2|VirtualTexture|Input texture.|
+|texture3|VirtualTexture|Input texture.|
+|texture4|VirtualTexture|Input texture.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightmapRGBA|Output texture.|
+|texture|VirtualTexture|Output texture.|
 
 # Parameters
 

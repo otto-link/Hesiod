@@ -18,16 +18,16 @@ Erosion/Thermal
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|TODO|
-|mask|Heightmap|Mask defining the filtering intensity (expected in [0, 1]).|
-|zmax|Heightmap|TODO|
+|input|VirtualArray|TODO|
+|mask|VirtualArray|Mask defining the filtering intensity (expected in [0, 1]).|
+|zmax|VirtualArray|TODO|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|deposition|Heightmap|Deposition map (in [0, 1]).|
-|output|Heightmap|TODO|
+|deposition|VirtualArray|Deposition map (in [0, 1]).|
+|output|VirtualArray|TODO|
 
 # Parameters
 

@@ -18,7 +18,7 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightmapRGBA|TODO|
+|texture|VirtualTexture|TODO|
 
 # Parameters
 

@@ -18,13 +18,13 @@ Routing
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap to be routed unchanged.|
+|input|VirtualArray|Input heightmap to be routed unchanged.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Output identical to the input heightmap.|
+|output|VirtualArray|Output identical to the input heightmap.|
 
 # Parameters
 

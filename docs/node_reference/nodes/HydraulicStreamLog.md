@@ -18,17 +18,17 @@ Erosion/Hydraulic
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input elevation map to erode.|
-|mask|Heightmap|Mask controlling the local intensity of erosion (expected in [0, 1]).|
+|input|VirtualArray|Input elevation map to erode.|
+|mask|VirtualArray|Mask controlling the local intensity of erosion (expected in [0, 1]).|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|deposition|Heightmap|Sediment deposition map, normalized in [0, 1].|
-|erosion|Heightmap|Erosion intensity map, normalized in [0, 1].|
-|flow_map|Heightmap|Flow accumulation map computed using the infinite flow direction algorithm.|
-|output|Heightmap|Final terrain after erosion, deposition, and post-processing.|
+|deposition|VirtualArray|Sediment deposition map, normalized in [0, 1].|
+|erosion|VirtualArray|Erosion intensity map, normalized in [0, 1].|
+|flow_map|VirtualArray|Flow accumulation map computed using the infinite flow direction algorithm.|
+|output|VirtualArray|Final terrain after erosion, deposition, and post-processing.|
 
 # Parameters
 

@@ -18,17 +18,17 @@ Primitive/Coherent
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|angle|Heightmap|Optional input for dynamically controlling the wavelet orientation per pixel.|
-|control|Heightmap|Optional input for modulating noise intensity or distribution.|
-|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
-|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
-|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
+|angle|VirtualArray|Optional input for dynamically controlling the wavelet orientation per pixel.|
+|control|VirtualArray|Optional input for modulating noise intensity or distribution.|
+|dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
+|dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
+|envelope|VirtualArray|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|The generated Gabor wavelet-based fractal noise heightmap.|
+|output|VirtualArray|The generated Gabor wavelet-based fractal noise heightmap.|
 
 # Parameters
 

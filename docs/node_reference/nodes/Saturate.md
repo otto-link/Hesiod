@@ -18,13 +18,13 @@ Filter/Recurve
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Saturated heightmap.|
+|output|VirtualArray|Saturated heightmap.|
 
 # Parameters
 

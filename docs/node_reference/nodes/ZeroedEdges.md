@@ -18,14 +18,14 @@ Boundaries
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|Heightmap|Displacement relative to the domain size (radial direction).|
-|input|Heightmap|The input heightmap.|
+|dr|VirtualArray|Displacement relative to the domain size (radial direction).|
+|input|VirtualArray|The input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|The filtered heightmap result.|
+|output|VirtualArray|The filtered heightmap result.|
 
 # Parameters
 

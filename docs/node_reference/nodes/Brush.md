@@ -18,13 +18,13 @@ Primitive/Authoring
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|background|Heightmap|No description|
+|background|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|out|Heightmap|The generated heightmap from brush strokes.|
+|out|VirtualArray|The generated heightmap from brush strokes.|
 
 # Parameters
 

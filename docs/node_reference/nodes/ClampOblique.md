@@ -18,13 +18,13 @@ Filter/Range
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap or scalar field to be clamped against the oblique plane.|
+|input|VirtualArray|Input heightmap or scalar field to be clamped against the oblique plane.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Resulting heightmap after applying the oblique clamping operation.|
+|output|VirtualArray|Resulting heightmap after applying the oblique clamping operation.|
 
 # Parameters
 

@@ -18,16 +18,16 @@ Erosion/Hydraulic
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
-|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
-|input|Heightmap|No description|
-|mask|Heightmap|No description|
+|dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
+|dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
+|input|VirtualArray|No description|
+|mask|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|No description|
+|output|VirtualArray|No description|
 
 # Parameters
 
@@ -38,6 +38,12 @@ Erosion/Hydraulic
 |apply_mask|Bool|No description|
 |center|Vec2Float|No description|
 |clamp_vmin|Float|No description|
+|Activate|Bool|No description|
+|Spatial Frequency|Float|No description|
+|Amplitude|Float|No description|
+|Type|Enumeration|No description|
+|Seed|Random seed number|No description|
+|Smoothness|Float|No description|
 |elevation_noise_amp|Float|No description|
 |elevation_noise_shift|Float|No description|
 |k_smooth_bottom|Float|No description|

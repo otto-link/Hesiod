@@ -18,14 +18,14 @@ Routing
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input A|Heightmap|First heightmap input. Used when the 'toggle' parameter is true (A).|
-|input B|Heightmap|Second heightmap input. Used when the 'toggle' parameter is false (B).|
+|input A|VirtualArray|First heightmap input. Used when the 'toggle' parameter is true (A).|
+|input B|VirtualArray|Second heightmap input. Used when the 'toggle' parameter is false (B).|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Selected input passed through: either input A or input B depending on the 'toggle' state.|
+|output|VirtualArray|Selected input passed through: either input A or input B depending on the 'toggle' state.|
 
 # Parameters
 

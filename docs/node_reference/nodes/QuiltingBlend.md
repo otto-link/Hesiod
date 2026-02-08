@@ -18,16 +18,16 @@ Operator/Resynthesis
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input 1|Heightmap|TODO|
-|input 2|Heightmap|TODO|
-|input 3|Heightmap|TODO|
-|input 4|Heightmap|TODO|
+|input 1|VirtualArray|TODO|
+|input 2|VirtualArray|TODO|
+|input 3|VirtualArray|TODO|
+|input 4|VirtualArray|TODO|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|TODO|
+|output|VirtualArray|TODO|
 
 # Parameters
 

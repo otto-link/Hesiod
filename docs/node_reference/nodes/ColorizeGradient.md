@@ -18,15 +18,15 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|alpha|Heightmap|Texture alpha map.|
-|level|Heightmap|Data values for color selection.|
-|noise|Heightmap|TODO|
+|alpha|VirtualArray|Texture alpha map.|
+|level|VirtualArray|Data values for color selection.|
+|noise|VirtualArray|TODO|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightmapRGBA|Texture (RGBA).|
+|texture|VirtualTexture|Texture (RGBA).|
 
 # Parameters
 

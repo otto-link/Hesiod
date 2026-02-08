@@ -18,14 +18,14 @@ Filter
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap whose values are projected along the selected direction.|
-|mask|Heightmap|Optional mask controlling where the projection effect is applied.|
+|input|VirtualArray|Input heightmap whose values are projected along the selected direction.|
+|mask|VirtualArray|Optional mask controlling where the projection effect is applied.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Resulting heightmap after directional projection and talus-based attenuation.|
+|output|VirtualArray|Resulting heightmap after directional projection and talus-based attenuation.|
 
 # Parameters
 

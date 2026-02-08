@@ -18,13 +18,13 @@ Operator/Morphology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Gradient heightmap.|
+|output|VirtualArray|Gradient heightmap.|
 
 # Parameters
 

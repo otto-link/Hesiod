@@ -19,12 +19,12 @@ Debug
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |cloud|Cloud|No description|
-|elevation|Heightmap|TODO|
-|normal map|HeightmapRGBA|TODO|
+|elevation|VirtualArray|TODO|
+|normal map|VirtualTexture|TODO|
 |path|Path|No description|
-|scalar|Heightmap|TODO|
-|texture|HeightmapRGBA|TODO|
-|water_depth|Heightmap|Output water depth map representing flooded areas.|
+|scalar|VirtualArray|TODO|
+|texture|VirtualTexture|TODO|
+|water_depth|VirtualArray|Output water depth map representing flooded areas.|
 
 # Example
 

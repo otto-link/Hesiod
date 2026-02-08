@@ -18,21 +18,19 @@ Features/Clustering
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|feature 1|Heightmap|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
-|feature 2|Heightmap|Second measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+|feature 1|VirtualArray|First measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
+|feature 2|VirtualArray|Second measurable property or characteristic of the data points being analyzed (e.g elevation, gradient norm, etc...|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Cluster labelling.|
-|scoring|vector<Heightmap>|Score in [0, 1] of the cell to belong to a given cluster|
+|output|VirtualArray|Cluster labelling.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|compute_scoring|Bool|Determine whether scoring is computed.|
 |nclusters|Integer|Number of clusters.|
 |normalize_inputs|Bool|Determine whether the feature amplitudes are normalized before the clustering.|
 |Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|

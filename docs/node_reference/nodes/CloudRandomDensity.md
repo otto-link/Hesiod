@@ -18,7 +18,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|density|Heightmap|Output noise amplitude envelope.|
+|density|VirtualArray|Output noise amplitude envelope.|
 
 # Outputs
 

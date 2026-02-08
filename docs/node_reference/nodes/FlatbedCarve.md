@@ -18,16 +18,16 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dr|Heightmap|Optional radial noise map used to perturb the bed shape.|
-|input|Heightmap|Input heightmap to be modified by the flatbed carving operation.|
+|dr|VirtualArray|Optional radial noise map used to perturb the bed shape.|
+|input|VirtualArray|Input heightmap to be modified by the flatbed carving operation.|
 |path|Path|Path defining the centerline along which the flatbed is carved.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|mask|Heightmap|Output falloff mask representing the influence region of the flatbed carve.|
-|output|Heightmap|Resulting heightmap after carving and blending the flatbed along the path.|
+|mask|VirtualArray|Output falloff mask representing the influence region of the flatbed carve.|
+|output|VirtualArray|Resulting heightmap after carving and blending the flatbed along the path.|
 
 # Parameters
 

@@ -18,13 +18,13 @@ Features/Landform
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Input heightmap.|
+|input|VirtualArray|Input heightmap.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Relative elevation.|
+|output|VirtualArray|Relative elevation.|
 
 # Parameters
 

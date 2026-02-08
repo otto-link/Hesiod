@@ -18,13 +18,13 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|No description|
+|input|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|water_depth|Heightmap|Output water depth map representing flooded areas.|
+|water_depth|VirtualArray|Output water depth map representing flooded areas.|
 
 # Parameters
 

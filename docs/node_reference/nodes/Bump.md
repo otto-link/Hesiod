@@ -18,16 +18,16 @@ Primitive/Function
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|control|Heightmap|Control parameter, acts as a multiplier for the weight parameter.|
-|dx|Heightmap|Displacement with respect to the domain size (x-direction).|
-|dy|Heightmap|Displacement with respect to the domain size (y-direction).|
-|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
+|control|VirtualArray|Control parameter, acts as a multiplier for the weight parameter.|
+|dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
+|dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
+|envelope|VirtualArray|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Bump heightmap.|
+|output|VirtualArray|Bump heightmap.|
 
 # Parameters
 

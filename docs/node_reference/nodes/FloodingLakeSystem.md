@@ -18,20 +18,18 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|Heightmap|Terrain elevation.|
+|elevation|VirtualArray|Terrain elevation.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|water_depth|Heightmap|Output water depth map representing flooded areas.|
+|water_depth|VirtualArray|Output water depth map representing flooded areas.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|epsilon|Float|Convergence tolerance for the depression-filling process. Smaller values yield higher precision but may increase computation time.|
-|iterations|Integer|Maximum number of iterations allowed during the depression-filling algorithm before convergence is assumed.|
 |mininal_radius|Float|Minimum radius (in normalized terrain units) used to define the smallest valid lake surface. Water bodies smaller than this threshold are discarded.|
 
 # Example

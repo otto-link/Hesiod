@@ -18,13 +18,13 @@ Operator/Morphology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|Heightmap input on which the morphological border operation is applied.|
+|input|VirtualArray|Heightmap input on which the morphological border operation is applied.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|Resulting heightmap after computing the morphological border.|
+|output|VirtualArray|Resulting heightmap after computing the morphological border.|
 
 # Parameters
 

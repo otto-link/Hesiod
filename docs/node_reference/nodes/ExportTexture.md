@@ -18,7 +18,7 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightmapRGBA|Input texture.|
+|texture|VirtualTexture|Input texture.|
 
 # Parameters
 

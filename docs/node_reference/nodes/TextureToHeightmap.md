@@ -18,13 +18,13 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture|HeightmapRGBA|No description|
+|texture|VirtualTexture|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|Heightmap|No description|
+|elevation|VirtualArray|No description|
 
 # Parameters
 

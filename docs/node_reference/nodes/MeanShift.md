@@ -18,14 +18,14 @@ WIP
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|TODO|
-|mask|Heightmap|No description|
+|input|VirtualArray|TODO|
+|mask|VirtualArray|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|TODO|
+|output|VirtualArray|TODO|
 
 # Parameters
 

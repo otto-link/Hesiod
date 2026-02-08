@@ -18,13 +18,13 @@ Primitive/Geological
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|envelope|Heightmap|Heightmap used as a post-process amplitude multiplier for the generated noise.|
+|envelope|VirtualArray|Heightmap used as a post-process amplitude multiplier for the generated noise.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|No description|
+|output|VirtualArray|No description|
 
 # Parameters
 
@@ -35,6 +35,7 @@ Primitive/Geological
 |Spatial Frequency|Wavenumber|Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).|
 |Frequency Scale|Float|No description|
 |Mix|Float|No description|
+|Octaves|Integer|The number of octaves for fractal noise generation. More octaves add finer details to the terrain.|
 |Gain|Float|Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.|
 |Gamma|Float|Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|

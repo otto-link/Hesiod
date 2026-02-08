@@ -18,13 +18,13 @@ Operator/Tiling
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|input|Heightmap|The input heightmap to be made tileable.|
+|input|VirtualArray|The input heightmap to be made tileable.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Heightmap|The output heightmap with smooth transitions at the boundaries, making it tileable.|
+|output|VirtualArray|The output heightmap with smooth transitions at the boundaries, making it tileable.|
 
 # Parameters
 
