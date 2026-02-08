@@ -28,22 +28,18 @@ void setup_sediment_deposition_node(BaseNode &node)
   // attribute(s)
   node.add_attr<FloatAttribute>("talus_global", "talus_global", 0.2f, 0.f, FLT_MAX);
   node.add_attr<FloatAttribute>("max_deposition", "max_deposition", 0.001f, 0.f, 0.1f);
-  node.add_attr<IntAttribute>("iterations", "iterations", 1, 1, 20);
-  node.add_attr<IntAttribute>("thermal_subiterations",
-                              "thermal_subiterations",
-                              50,
-                              1,
-                              INT_MAX);
+  node.add_attr<FloatAttribute>("duration", "Duration", 0.3f, 0.05f, 6.f);
   node.add_attr<BoolAttribute>("scale_talus_with_elevation",
                                "scale_talus_with_elevation",
                                true);
+  node.add_attr<IntAttribute>("subiterations", "subiterations", 10, 1, 50);
 
   // attribute(s) order
   node.set_attr_ordered_key({"talus_global",
                              "max_deposition",
-                             "iterations",
-                             "thermal_subiterations",
-                             "scale_talus_with_elevation"});
+                             "duration",
+                             "scale_talus_with_elevation",
+                             "subiterations"});
 }
 
 void compute_sediment_deposition_node(BaseNode &node)
@@ -70,9 +66,13 @@ void compute_sediment_deposition_node(BaseNode &node)
       talus_map.remap(talus / 100.f, talus, node.cfg().cm_cpu);
     }
 
+    int iterations = int(node.get_attr<FloatAttribute>("duration") * p_out->shape.x /
+                         node.get_attr<IntAttribute>("subiterations"));
+
     hmap::for_each_tile(
         {p_out, p_in, p_mask, &talus_map, p_deposition_map},
-        [&node, &talus](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        [&node, &talus, iterations](std::vector<hmap::Array *> p_arrays,
+                                    const hmap::TileRegion &)
         {
           hmap::Array *pa_out = p_arrays[0];
           hmap::Array *pa_in = p_arrays[1];
@@ -82,13 +82,13 @@ void compute_sediment_deposition_node(BaseNode &node)
 
           *pa_out = *pa_in;
 
-          hmap::sediment_deposition(*pa_out,
-                                    pa_mask,
-                                    *pa_talus,
-                                    pa_deposition_map,
-                                    node.get_attr<FloatAttribute>("max_deposition"),
-                                    node.get_attr<IntAttribute>("iterations"),
-                                    node.get_attr<IntAttribute>("thermal_subiterations"));
+          hmap::gpu::sediment_deposition(*pa_out,
+                                         pa_mask,
+                                         *pa_talus,
+                                         pa_deposition_map,
+                                         node.get_attr<FloatAttribute>("max_deposition"),
+                                         node.get_attr<IntAttribute>("subiterations"),
+                                         iterations);
         },
         node.cfg().cm_cpu);
 
