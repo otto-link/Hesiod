@@ -11457,13 +11457,13 @@
             "iterations": {
                 "description": "Number of mid-point displacement iterations.",
                 "key": "iterations",
-                "label": "iterations",
+                "label": "Iterations",
                 "type": "Integer"
             },
             "orientation": {
                 "description": "Displacement orientation (0 for random inward/outward displacement, 1 to inflate the path and -1 to deflate the path).",
                 "key": "orientation",
-                "label": "orientation",
+                "label": "Orientation",
                 "type": "Integer"
             },
             "persistence": {
@@ -11472,16 +11472,22 @@
                 "label": "Persistence",
                 "type": "Float"
             },
+            "remove_loops": {
+                "description": "No description",
+                "key": "remove_loops",
+                "label": "Remove Geometric Loops",
+                "type": "Bool"
+            },
             "seed": {
                 "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
-                "label": "Seed",
+                "label": "Random Seed",
                 "type": "Random seed number"
             },
             "sigma": {
                 "description": "Half-width of the random Gaussian displacement, normalized by the distance between points.",
                 "key": "sigma",
-                "label": "sigma",
+                "label": "Sigma",
                 "type": "Float"
             }
         },
@@ -11529,26 +11535,32 @@
             "edge_divisions": {
                 "description": "Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.",
                 "key": "edge_divisions",
-                "label": "edge_divisions",
+                "label": "Edge Divisions",
                 "type": "Integer"
             },
             "iterations": {
                 "description": "Number of meandering iterations.",
                 "key": "iterations",
-                "label": "iterations",
+                "label": "Solver Iterations",
                 "type": "Integer"
             },
             "noise_ratio": {
                 "description": "Randomness ratio.",
                 "key": "noise_ratio",
-                "label": "noise_ratio",
+                "label": "Noise Ratio",
                 "type": "Float"
             },
             "ratio": {
                 "description": "Meander amplitude ratio.",
                 "key": "ratio",
-                "label": "ratio",
+                "label": "Meander Ratio",
                 "type": "Float"
+            },
+            "remove_loops": {
+                "description": "No description",
+                "key": "remove_loops",
+                "label": "Remove Geometric Loops",
+                "type": "Bool"
             },
             "seed": {
                 "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",

@@ -30,11 +30,12 @@ Geometry/Path
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|iterations|Integer|Number of mid-point displacement iterations.|
-|orientation|Integer|Displacement orientation (0 for random inward/outward displacement, 1 to inflate the path and -1 to deflate the path).|
+|Iterations|Integer|Number of mid-point displacement iterations.|
+|Orientation|Integer|Displacement orientation (0 for random inward/outward displacement, 1 to inflate the path and -1 to deflate the path).|
 |Persistence|Float|The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.|
-|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
-|sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
+|Remove Geometric Loops|Bool|No description|
+|Random Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
+|Sigma|Float|Half-width of the random Gaussian displacement, normalized by the distance between points.|
 
 # Example
 

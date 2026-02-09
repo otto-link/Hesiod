@@ -30,10 +30,11 @@ Geometry/Path
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|edge_divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
-|iterations|Integer|Number of meandering iterations.|
-|noise_ratio|Float|Randomness ratio.|
-|ratio|Float|Meander amplitude ratio.|
+|Edge Divisions|Integer|Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.|
+|Solver Iterations|Integer|Number of meandering iterations.|
+|Noise Ratio|Float|Randomness ratio.|
+|Meander Ratio|Float|Meander amplitude ratio.|
+|Remove Geometric Loops|Bool|No description|
 |Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example
