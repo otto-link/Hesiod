@@ -14,6 +14,12 @@ ColorizeSolid generates an uniform texture based on an input color.
 
 
 Texture
+# Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|alpha|VirtualArray|No description|
+
 # Outputs
 
 |Name|Type|Description|
@@ -24,8 +30,8 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|alpha|Float|Transparency as a scalar value|
-|color|Color|Solid color.|
+|Transparency|Float|Transparency as a scalar value|
+|Solid Color|Color|Solid color.|
 
 # Example
 

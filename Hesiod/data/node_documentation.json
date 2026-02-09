@@ -2521,17 +2521,23 @@
             "alpha": {
                 "description": "Transparency as a scalar value",
                 "key": "alpha",
-                "label": "alpha",
+                "label": "Transparency",
                 "type": "Float"
             },
             "color": {
                 "description": "Solid color.",
                 "key": "color",
-                "label": "color",
+                "label": "Solid Color",
                 "type": "Color"
             }
         },
         "ports": {
+            "alpha": {
+                "caption": "alpha",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
             "texture": {
                 "caption": "texture",
                 "data_type": "VirtualTexture",
