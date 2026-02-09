@@ -16642,6 +16642,75 @@
             }
         }
     },
+    "SnowMeltingMap": {
+        "category": "Hydrology",
+        "description": "No description available",
+        "label": "SnowMeltingMap",
+        "parameters": {
+            "aspect_strength": {
+                "description": "No description",
+                "key": "aspect_strength",
+                "label": "Aspect Strength",
+                "type": "Float"
+            },
+            "elevation_exp": {
+                "description": "No description",
+                "key": "elevation_exp",
+                "label": "Elevation Exponent",
+                "type": "Float"
+            },
+            "elevation_strength": {
+                "description": "No description",
+                "key": "elevation_strength",
+                "label": "Elevation Strength",
+                "type": "Float"
+            },
+            "melt_range": {
+                "description": "No description",
+                "key": "melt_range",
+                "label": "Melt Elevation Range",
+                "type": "Value range"
+            },
+            "slope_exp": {
+                "description": "No description",
+                "key": "slope_exp",
+                "label": "Slope Exponent",
+                "type": "Float"
+            },
+            "slope_strength": {
+                "description": "No description",
+                "key": "slope_strength",
+                "label": "Slope Strength",
+                "type": "Float"
+            },
+            "sun_azimuth": {
+                "description": "No description",
+                "key": "sun_azimuth",
+                "label": "Sun Azimuth",
+                "type": "Float"
+            },
+            "sun_zenith": {
+                "description": "No description",
+                "key": "sun_zenith",
+                "label": "Sun Zenith",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "melting_map": {
+                "caption": "melting_map",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "SnowSimulation": {
         "category": "Hydrology",
         "description": "No description available",

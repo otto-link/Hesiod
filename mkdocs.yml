@@ -241,6 +241,7 @@ nav:
     - 'node_reference/nodes/SmoothFillHoles.md'
     - 'node_reference/nodes/SmoothFillSmearPeaks.md'
     - 'node_reference/nodes/Smoothstep.md'
+    - 'node_reference/nodes/SnowMeltingMap.md'
     - 'node_reference/nodes/SnowSimulation.md'
     - 'node_reference/nodes/Stamping.md'
     - 'node_reference/nodes/StdLocal.md'
