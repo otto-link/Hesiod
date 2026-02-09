@@ -2,14 +2,11 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/hydrology.hpp"
-#include "highmap/primitives.hpp"
-#include "highmap/range.hpp"
 
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
-#include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
 
