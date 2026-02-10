@@ -5076,6 +5076,87 @@
             }
         }
     },
+    "FlowSimulationViscous": {
+        "category": "Hydrology",
+        "description": "No description available",
+        "label": "FlowSimulationViscous",
+        "parameters": {
+            "filter_radius": {
+                "description": "No description",
+                "key": "filter_radius",
+                "label": "Filter Radius",
+                "type": "Float"
+            },
+            "flow_power": {
+                "description": "No description",
+                "key": "flow_power",
+                "label": "Flow Power",
+                "type": "Float"
+            },
+            "initial_depth": {
+                "description": "No description",
+                "key": "initial_depth",
+                "label": "Initial Material Depth",
+                "type": "Float"
+            },
+            "post_filter": {
+                "description": "No description",
+                "key": "post_filter",
+                "label": "Enable Post Filtering",
+                "type": "Bool"
+            },
+            "shift_to_zero": {
+                "description": "No description",
+                "key": "shift_to_zero",
+                "label": "Rebase Depth to Zero",
+                "type": "Bool"
+            },
+            "simulation_duration": {
+                "description": "No description",
+                "key": "simulation_duration",
+                "label": "Simulation Duration",
+                "type": "Float"
+            },
+            "solver_stride": {
+                "description": "No description",
+                "key": "solver_stride",
+                "label": "Solver Iteration Stride",
+                "type": "Integer"
+            }
+        },
+        "ports": {
+            "depth": {
+                "caption": "depth",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            },
+            "depth_in": {
+                "caption": "depth_in",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "depth_map": {
+                "caption": "depth_map",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            },
+            "elevation_in": {
+                "caption": "elevation_in",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            }
+        }
+    },
     "FlowStream": {
         "category": "WIP",
         "description": "TODO",
