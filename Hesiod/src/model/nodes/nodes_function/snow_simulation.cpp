@@ -127,9 +127,7 @@ void compute_snow_simulation_node(BaseNode &node)
     struct P
     {
       int   solver_stride;
-      float talus_global;
       float snow_depth;
-      float duration;
       float k_snow, k_visc, k_melt_factor;
       float k_depth_ratio, k_depth_slope_ratio;
       float thermal_talus_ratio;
@@ -141,15 +139,15 @@ void compute_snow_simulation_node(BaseNode &node)
       float talus;
     };
 
+    const int   nx = p_z->shape.x;
     const int   stride = node.get_attr<IntAttribute>(A_SOLVER_STRIDE);
-    const int   nx_strided = int(float(p_z->shape.x) / stride);
-    const int   iterations = int(node.get_attr<FloatAttribute>(A_DURATION) * nx_strided);
+    const float duration = node.get_attr<FloatAttribute>(A_DURATION);
+    const int   nx_strided = int(float(nx) / stride);
+    const int   iterations = int(duration * nx_strided);
     const float talus = node.get_attr<FloatAttribute>(A_TALUS_GLOBAL) / nx_strided;
 
     return P{.solver_stride = stride,
-             .talus_global = node.get_attr<FloatAttribute>(A_TALUS_GLOBAL),
              .snow_depth = node.get_attr<FloatAttribute>(A_SNOW_DEPTH),
-             .duration = node.get_attr<FloatAttribute>(A_DURATION),
              .k_snow = node.get_attr<FloatAttribute>(A_K_SNOW),
              .k_visc = node.get_attr<FloatAttribute>(A_K_VISC),
              .k_melt_factor = node.get_attr<FloatAttribute>(A_K_MELT_FACTOR),

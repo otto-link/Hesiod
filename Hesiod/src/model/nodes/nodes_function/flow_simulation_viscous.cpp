@@ -207,7 +207,7 @@ void compute_flow_simulation_viscous_node(BaseNode &node)
                                                            /* viscosity */ 1.f,
                                                            params.power);
 
-	*pa_z_out = *pa_z + *pa_depth_out;
+        *pa_z_out = *pa_z + *pa_depth_out;
       },
       cm);
 
