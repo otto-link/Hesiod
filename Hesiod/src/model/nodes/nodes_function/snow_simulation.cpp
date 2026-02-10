@@ -166,7 +166,6 @@ void compute_snow_simulation_node(BaseNode &node)
 
   // override compute mode (but keep storage mode)
   hmap::ComputeMode cm = node.cfg().cm_gpu;
-  cm.mode = hmap::ForEachMode::VA_SINGLE_ARRAY_STRIDED;
   cm.stride = params.solver_stride;
 
   // --- Create talus virtual array

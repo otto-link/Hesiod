@@ -93,7 +93,6 @@ void compute_flow_simulation_node(BaseNode &node)
 
     // override compute mode (but keep storage mode)
     hmap::ComputeMode cm = node.cfg().cm_gpu;
-    cm.mode = hmap::ForEachMode::VA_SINGLE_ARRAY_STRIDED;
     cm.stride = node.get_attr<IntAttribute>("solver_stride");
 
     int iterations = int(node.get_attr<FloatAttribute>("duration") * p_z->shape.x /
