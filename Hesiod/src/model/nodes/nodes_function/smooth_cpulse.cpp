@@ -15,58 +15,80 @@ using namespace attr;
 namespace hesiod
 {
 
+// -----------------------------------------------------------------------------
+// Ports & Attributes
+// -----------------------------------------------------------------------------
+
+constexpr const char *P_INPUT = "input";
+constexpr const char *P_MASK = "mask";
+constexpr const char *P_OUTPUT = "output";
+
+constexpr const char *A_RADIUS = "radius";
+
+// -----------------------------------------------------------------------------
+// Setup
+// -----------------------------------------------------------------------------
+
 void setup_smooth_cpulse_node(BaseNode &node)
 {
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_INPUT);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_MASK);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_OUTPUT, CONFIG(node));
 
   // attribute(s)
-  node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
+  node.add_attr<FloatAttribute>(A_RADIUS, "Radius", 0.05f, 0.f, 0.2f);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"radius"});
+  node.set_attr_ordered_key({A_RADIUS});
 
   setup_pre_process_mask_attributes(node);
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = false});
 }
 
+// -----------------------------------------------------------------------------
+// Compute
+// -----------------------------------------------------------------------------
+
 void compute_smooth_cpulse_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
+  auto *p_in = node.get_value_ref<hmap::VirtualArray>(P_INPUT);
+  auto *p_out = node.get_value_ref<hmap::VirtualArray>(P_OUTPUT);
 
-  if (p_in)
-  {
-    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
-    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+  if (!p_in || !p_out)
+    return;
 
-    // prepare mask
-    std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
+  auto *p_mask = node.get_value_ref<hmap::VirtualArray>(P_MASK);
 
-    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
+  // prepare mask
+  std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
 
-    hmap::for_each_tile(
-        {p_out, p_in, p_mask},
-        [&ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
-        {
-          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
-          *pa_out = *pa_in;
+  int ir = std::max(1, (int)(node.get_attr<FloatAttribute>(A_RADIUS) * p_out->shape.x));
 
-          hmap::gpu::smooth_cpulse(*pa_out, ir, pa_mask);
-        },
-        node.cfg().cm_gpu);
+  hmap::for_each_tile(
+      {p_in, p_mask},
+      {p_out},
+      [&ir](std::vector<const hmap::Array *> p_arrays_in,
+            std::vector<hmap::Array *>       p_arrays_out,
+            const hmap::TileRegion &)
+      {
+        const auto [pa_in, pa_mask] = unpack<2>(p_arrays_in);
+        auto [pa_out] = unpack<1>(p_arrays_out);
+        *pa_out = *pa_in;
 
-    p_out->smooth_overlap_buffers();
+        hmap::gpu::smooth_cpulse(*pa_out, ir, pa_mask);
+      },
+      node.cfg().cm_gpu);
 
-    // post-process
-    post_process_heightmap(node, *p_out, p_in);
-  }
+  p_out->smooth_overlap_buffers();
+
+  // post-process
+  post_process_heightmap(node, *p_out, p_in);
 }
 
 } // namespace hesiod
