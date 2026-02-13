@@ -48,11 +48,9 @@ void setup_flow_simulation_node(BaseNode &node)
                                 0.1f);
   node.add_attr<IntAttribute>("solver_stride", "Solver Iteration Stride", 8, 1, 32);
 
-  std::vector<std::string> choices = {"Uniform", "Pulse"};
-  node.add_attr<ChoiceAttribute>("predefined_depth_map",
-                                 "Predefined Depth Map",
-                                 choices,
-                                 "Pulse");
+  node.add_attr<EnumAttribute>("depth_map_type",
+                               "Predefined Depth Map",
+                               DefaultMapOptions::type_map());
 
   node.add_attr<BoolAttribute>("post_filter", "Enable Filtering", false);
   node.add_attr<FloatAttribute>("radius", "Filter Radius", 0.05f, 0.f, 0.2f);
@@ -60,7 +58,7 @@ void setup_flow_simulation_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Water Setup",
                              "water_depth",
-                             "predefined_depth_map",
+                             "depth_map_type",
                              "duration",
                              "dry_out_ratio",
                              "_GROUPBOX_END_",
@@ -101,6 +99,8 @@ void compute_flow_simulation_node(BaseNode &node)
     // may be overriden when tne water depth is set as an input
     float water_depth = node.get_attr<FloatAttribute>("water_depth");
 
+    // --- Resolve depth map source
+
     hmap::VirtualArray dmap(CONFIG(node));
 
     // provided input water depth has priority
@@ -112,37 +112,18 @@ void compute_flow_simulation_node(BaseNode &node)
     }
     else if (!p_depth_map)
     {
-      // use the predefined depth map only if the dpeth map input is
-      // not set
-      p_depth_map = &dmap;
+      auto map_type = DefaultMapOptions::Type(
+          node.get_attr<EnumAttribute>("depth_map_type"));
+      auto options = DefaultMapOptions{.map_type = map_type};
 
-      hmap::for_each_tile(
-          {p_depth_map},
-          [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
-          {
-            auto [pa_depth_map] = unpack<1>(p_arrays);
-            const std::string type = node.get_attr<ChoiceAttribute>(
-                "predefined_depth_map");
-
-            if (type == "Uniform")
-            {
-              *pa_depth_map = 1.f;
-            }
-            else if (type == "Pulse")
-            {
-              *pa_depth_map = hmap::cubic_pulse(region.shape,
-                                                /* p_noise_x */ nullptr,
-                                                /* p_noise_y */ nullptr,
-                                                /* center */ {0.5f, 0.5f},
-                                                region.bbox);
-            }
-          },
-          node.cfg().cm_cpu);
+      generate_map(node, p_depth_map, dmap, options);
     }
 
     // inputs
     float dmin = p_depth_map->min(node.cfg().cm_cpu);
     float dmax = p_depth_map->max(node.cfg().cm_cpu);
+
+    LOG_DEBUG("%f %f", dmin, dmax);
 
     if (dmin == dmax)
     {

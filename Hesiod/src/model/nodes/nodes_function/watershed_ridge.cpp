@@ -126,20 +126,9 @@ void compute_watershed_ridge_node(BaseNode &node)
 
   if (!p_scaling && params.default_scaling)
   {
-    p_scaling = &default_scaling;
-
-    hmap::for_each_tile(
-        {p_scaling},
-        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
-        {
-          auto [pa_scaling] = unpack<1>(p_arrays);
-          *pa_scaling = 1.f - hmap::cubic_pulse(region.shape,
-                                                /* p_noise_x */ nullptr,
-                                                /* p_noise_y */ nullptr,
-                                                /* center */ {0.5f, 0.5f},
-                                                region.bbox);
-        },
-        node.cfg().cm_cpu);
+    auto options = DefaultMapOptions{.map_type = DefaultMapOptions::Type::DMT_PULSE,
+                                     .inverse_output = true};
+    generate_map(node, p_scaling, default_scaling, options);
   }
 
   // --- prepare default noise

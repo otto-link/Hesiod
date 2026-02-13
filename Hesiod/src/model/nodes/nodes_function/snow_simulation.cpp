@@ -8,6 +8,7 @@
 
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/post_process.hpp"
 
 using namespace attr;
 
@@ -29,6 +30,7 @@ constexpr const char *A_SNOW_DEPTH = "snow_depth";
 constexpr const char *A_TALUS_GLOBAL = "talus_global";
 constexpr const char *A_DURATION = "duration";
 constexpr const char *A_SOLVER_STRIDE = "solver_stride";
+constexpr const char *A_DMAP_TYPE = "depth_map_type";
 constexpr const char *A_POST_FILTER = "post_filter";
 constexpr const char *A_THERMAL_TALUS_RATIO = "thermal_talus_ratio";
 constexpr const char *A_K_SNOW = "k_snow";
@@ -60,6 +62,7 @@ void setup_snow_simulation_node(BaseNode &node)
   node.add_attr<FloatAttribute>(A_TALUS_GLOBAL, "Base Repose Slope", 1.5f, 0.f, FLT_MAX);
   node.add_attr<FloatAttribute>(A_DURATION, "Simulation Duration", 1.f, 0.f, 2.f);
   node.add_attr<IntAttribute>(A_SOLVER_STRIDE, "Solver Stride", 4, 1, 32);
+  node.add_attr<EnumAttribute>(A_DMAP_TYPE, "Predefined Depth Map", DefaultMapOptions::type_map(), "Uniform");
   node.add_attr<BoolAttribute>(A_POST_FILTER, "Enable Thermal Relaxation", true);
   node.add_attr<FloatAttribute>(A_THERMAL_TALUS_RATIO, "Thermal Repose Ratio", 0.2f, 0.01f, 1.f);
   node.add_attr<FloatAttribute>(A_K_SNOW, "Avalanche Strength", 0.5f, 0.f, 1.f);
@@ -73,6 +76,7 @@ void setup_snow_simulation_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Snow Deposition",
                              A_SNOW_DEPTH,
+                             A_DMAP_TYPE,
                              A_TALUS_GLOBAL,
                              A_DURATION,
                              "_GROUPBOX_END_",
@@ -127,6 +131,7 @@ void compute_snow_simulation_node(BaseNode &node)
     struct P
     {
       int   solver_stride;
+      int   dmap_type;
       float snow_depth;
       float k_snow, k_visc, k_melt_factor;
       float k_depth_ratio, k_depth_slope_ratio;
@@ -147,6 +152,7 @@ void compute_snow_simulation_node(BaseNode &node)
     const float talus = node.get_attr<FloatAttribute>(A_TALUS_GLOBAL) / nx_strided;
 
     return P{.solver_stride = stride,
+             .dmap_type = node.get_attr<EnumAttribute>(A_DMAP_TYPE),
              .snow_depth = node.get_attr<FloatAttribute>(A_SNOW_DEPTH),
              .k_snow = node.get_attr<FloatAttribute>(A_K_SNOW),
              .k_visc = node.get_attr<FloatAttribute>(A_K_VISC),
@@ -200,8 +206,10 @@ void compute_snow_simulation_node(BaseNode &node)
   }
   else if (!p_depth_map)
   {
-    dmap.fill(1.f, node.cfg().cm_cpu);
-    p_depth_map = &dmap;
+    auto map_type = DefaultMapOptions::Type(params.dmap_type);
+    auto options = DefaultMapOptions{.map_type = map_type};
+
+    generate_map(node, p_depth_map, dmap, options);
   }
 
   // --- Snow simulation

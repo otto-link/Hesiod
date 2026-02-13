@@ -58,4 +58,28 @@ void generate_noise(BaseNode            &node,
                     uint                 seed_increment = 0);
 void setup_default_noise(BaseNode &node, const DefaultNoiseOptions &options);
 
+// --- default map
+
+struct DefaultMapOptions
+{
+  enum Type : int
+  {
+    DMT_UNIFORM_ONE,
+    DMT_PULSE
+  } map_type = Type::DMT_UNIFORM_ONE;
+
+  bool inverse_output = false;
+
+  static std::map<std::string, int> type_map()
+  {
+    return {{"Uniform", DefaultMapOptions::Type::DMT_UNIFORM_ONE},
+            {"Cubic Pulse", DefaultMapOptions::Type::DMT_PULSE}};
+  }
+};
+
+void generate_map(BaseNode            &node,
+                  hmap::VirtualArray *&p_map,
+                  hmap::VirtualArray  &map,
+                  DefaultMapOptions   &options);
+
 } // namespace hesiod

@@ -30,6 +30,7 @@ constexpr const char *A_INITIAL_DEPTH = "initial_depth";
 constexpr const char *A_DURATION = "simulation_duration";
 constexpr const char *A_POWER = "flow_power";
 constexpr const char *A_SOLVER_STRIDE = "solver_stride";
+constexpr const char *A_DMAP_TYPE = "depth_map_type";
 constexpr const char *A_POST_FILTER = "post_filter";
 constexpr const char *A_FILTER_RADIUS = "filter_radius";
 constexpr const char *A_SHIFT_TO_ZERO = "shift_to_zero";
@@ -55,6 +56,7 @@ void setup_flow_simulation_viscous_node(BaseNode &node)
   node.add_attr<FloatAttribute>(A_DURATION, "Simulation Duration", 1.f, 0.f, FLT_MAX);
   node.add_attr<FloatAttribute>(A_POWER, "Flow Power", 2.5f, 1.f, 4.f);
   node.add_attr<IntAttribute>(A_SOLVER_STRIDE, "Solver Iteration Stride", 8, 1, 32);
+  node.add_attr<EnumAttribute>(A_DMAP_TYPE, "Predefined Depth Map", DefaultMapOptions::type_map());
   node.add_attr<BoolAttribute>(A_POST_FILTER, "Enable Post Filtering", true);
   node.add_attr<FloatAttribute>(A_FILTER_RADIUS, "Filter Radius", 0.05f, 0.f, 0.2f);
   node.add_attr<BoolAttribute>(A_SHIFT_TO_ZERO, "Rebase Depth to Zero", true);
@@ -63,6 +65,7 @@ void setup_flow_simulation_viscous_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Material Setup",
                              A_INITIAL_DEPTH,
+                             A_DMAP_TYPE,
                              A_DURATION,
                              A_POWER,
                              "_GROUPBOX_END_",
@@ -108,6 +111,7 @@ void compute_flow_simulation_viscous_node(BaseNode &node)
       float initial_depth;
       float power;
       int   solver_stride;
+      int   dmap_type;
       bool  post_filter;
       bool  shift_to_zero;
       //
@@ -127,6 +131,7 @@ void compute_flow_simulation_viscous_node(BaseNode &node)
     return P{.initial_depth = node.get_attr<FloatAttribute>(A_INITIAL_DEPTH),
              .power = node.get_attr<FloatAttribute>(A_POWER),
              .solver_stride = stride,
+             .dmap_type = node.get_attr<EnumAttribute>(A_DMAP_TYPE),
              .post_filter = node.get_attr<BoolAttribute>(A_POST_FILTER),
              .shift_to_zero = node.get_attr<BoolAttribute>(A_SHIFT_TO_ZERO),
              //
@@ -156,19 +161,10 @@ void compute_flow_simulation_viscous_node(BaseNode &node)
   }
   else if (!p_depth_map)
   {
-    p_depth_map = &dmap;
-    hmap::for_each_tile(
-        {p_depth_map},
-        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
-        {
-          auto [pa_depth_map] = unpack<1>(p_arrays);
-          *pa_depth_map = hmap::cubic_pulse(region.shape,
-                                            /* p_noise_x */ nullptr,
-                                            /* p_noise_y */ nullptr,
-                                            /* center */ {0.5f, 0.5f},
-                                            region.bbox);
-        },
-        node.cfg().cm_cpu);
+    auto map_type = DefaultMapOptions::Type(params.dmap_type);
+    auto options = DefaultMapOptions{.map_type = map_type};
+
+    generate_map(node, p_depth_map, dmap, options);
   }
 
   // --- Simulation
