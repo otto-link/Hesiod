@@ -54,7 +54,8 @@ struct DefaultNoiseOptions
 
 void generate_noise(BaseNode            &node,
                     hmap::VirtualArray *&p_noise,
-                    hmap::VirtualArray  &noise);
+                    hmap::VirtualArray  &noise,
+                    uint                 seed_increment = 0);
 void setup_default_noise(BaseNode &node, const DefaultNoiseOptions &options);
 
 } // namespace hesiod

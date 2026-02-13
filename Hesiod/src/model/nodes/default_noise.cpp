@@ -17,13 +17,15 @@ namespace hesiod
 
 void generate_noise(BaseNode            &node,
                     hmap::VirtualArray *&p_noise,
-                    hmap::VirtualArray  &noise)
+                    hmap::VirtualArray  &noise,
+                    uint                 seed_increment)
 {
   if (!p_noise && node.get_attr<BoolAttribute>("dn_add_default_noise"))
   {
     hmap::for_each_tile(
         {&noise},
-        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
+        [&node, seed_increment](std::vector<hmap::Array *> p_arrays,
+                                const hmap::TileRegion    &region)
         {
           auto [pa_noise_default] = unpack<1>(p_arrays);
 
@@ -31,12 +33,13 @@ void generate_noise(BaseNode            &node,
                           node.get_attr<FloatAttribute>("dn_kw")};
 
           auto ntype = (hmap::NoiseType)node.get_attr<EnumAttribute>("dn_noise_type");
+          uint seed = node.get_attr<SeedAttribute>("dn_seed") + seed_increment;
 
           *pa_noise_default = hmap::gpu::noise_fbm(
               ntype,
               region.shape,
               kw,
-              node.get_attr<SeedAttribute>("dn_seed"),
+              seed,
               8,
               node.get_attr<FloatAttribute>("dn_smoothness"),
               0.5f,

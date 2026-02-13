@@ -1,21 +1,16 @@
 import re
 
 cpp_function = """
-Array generate_riverbed(const Path &path,
-                        glm::ivec2  shape,
-                        glm::vec4   bbox = {0.f, 1.f, 0.f, 1.f},
-                        bool        bezier_smoothing = false,
-                        float       depth_start = 0.01f,
-                        float       depth_end = 1.f,
-                        float       slope_start = 64.f,
-                        float       slope_end = 32.f,
-                        float       shape_exponent_start = 1.f,
-                        float       shape_exponent_end = 10.f,
-                        float       k_smoothing = 0.5f,
-                        int         post_filter_ir = 0,
-                        Array      *p_noise_x = nullptr,
-                        Array      *p_noise_y = nullptr,
-                        Array      *p_noise_r = nullptr);
+Array watershed_ridge(
+    const Array        &z,
+    Array              *p_mask,
+    float               amplitude = 0.2f,
+    float               width = 32.f,
+    float               edt_exponent = 0.5f,
+    FlowDirectionMethod fd_method = FlowDirectionMethod::FDM_D8,
+    const Array        *p_noise_x = nullptr,
+    const Array        *p_noise_y = nullptr,
+    const Array        *p_scaling = nullptr);
 """
 
 # ---------------------------

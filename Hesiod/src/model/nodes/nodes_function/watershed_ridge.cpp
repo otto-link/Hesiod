@@ -17,86 +17,172 @@ using namespace attr;
 namespace hesiod
 {
 
+// -----------------------------------------------------------------------------
+// Ports & Attributes
+// -----------------------------------------------------------------------------
+
+constexpr const char *P_Z = "z";
+constexpr const char *P_SCALING = "scaling";
+constexpr const char *P_NOISE_X = "dx";
+constexpr const char *P_NOISE_Y = "dy";
+constexpr const char *P_MASK = "mask";
+constexpr const char *P_OUTPUT = "output";
+
+constexpr const char *A_AMPLITUDE = "amplitude";
+constexpr const char *A_WIDTH = "width";
+constexpr const char *A_EDT_EXPONENT = "edt_exponent";
+constexpr const char *A_RADIUS = "prefilter_radius";
+constexpr const char *A_DEFAULT_SCALING = "default_scaling";
+
+// -----------------------------------------------------------------------------
+// Setup
+// -----------------------------------------------------------------------------
+
 void setup_watershed_ridge_node(BaseNode &node)
 {
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dx");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "dy");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_Z);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_MASK);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_NOISE_X);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_NOISE_Y);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_SCALING);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_OUTPUT, CONFIG(node));
 
   // attribute(s)
-  node.add_attr<FloatAttribute>("amplitude", "Amplitude", 0.2f, 0.f, 2.f);
-  node.add_attr<FloatAttribute>("edt_exponent", "Profile Exponent", 0.5f, 0.01f, 4.f);
-  node.add_attr<EnumAttribute>("fd_method",
-                               "Flow Direction Method",
-                               enum_mappings.flow_direction_method_map);
-  node.add_attr<FloatAttribute>("radius", "Smoothing radius", 0.05f, 0.f, 0.2f);
+  node.add_attr<FloatAttribute>(A_AMPLITUDE, "amplitude", 0.05f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>(A_WIDTH, "width", 0.1f, 0.f, 0.5f);
+  node.add_attr<FloatAttribute>(A_EDT_EXPONENT, "edt_exponent", 0.5f, 0.01f, 2.f);
+  node.add_attr<FloatAttribute>(A_RADIUS, "Prefilter Radius", 0.2f, 0.f, 0.5f);
+  node.add_attr<BoolAttribute>(A_DEFAULT_SCALING, "Enable Default Scaling", true);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Parameters",
-                             "amplitude",
-                             "edt_exponent",
-                             "fd_method",
-                             "radius",
+                             A_AMPLITUDE,
+                             A_WIDTH,
+                             A_EDT_EXPONENT,
+                             A_RADIUS,
+                             A_DEFAULT_SCALING,
                              "_GROUPBOX_END_"});
 
+  setup_default_noise(node, {.noise_amp = 0.05f, .kw = 8.f, .smoothness = 0.2f});
   setup_pre_process_mask_attributes(node);
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = false});
 }
 
+// -----------------------------------------------------------------------------
+// Compute
+// -----------------------------------------------------------------------------
+
 void compute_watershed_ridge_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
+  auto *p_in = node.get_value_ref<hmap::VirtualArray>(P_Z);
 
-  if (p_in)
+  if (!p_in)
+    return;
+
+  auto *p_dx = node.get_value_ref<hmap::VirtualArray>(P_NOISE_X);
+  auto *p_dy = node.get_value_ref<hmap::VirtualArray>(P_NOISE_Y);
+  auto *p_mask = node.get_value_ref<hmap::VirtualArray>(P_MASK);
+  auto *p_scaling = node.get_value_ref<hmap::VirtualArray>(P_SCALING);
+  auto *p_out = node.get_value_ref<hmap::VirtualArray>(P_OUTPUT);
+
+  // --- Parameters wrapper
+
+  const auto params = [&node, p_out]()
   {
-    hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
-    hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
-    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
-    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+    struct P
+    {
+      float amplitude;
+      float width_pixels;
+      float edt_exponent;
+      int   ir;
+      bool  default_scaling;
+    };
 
-    // prepare mask
-    std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
+    const int   nx = p_out->shape.x;
+    const float width = node.get_attr<FloatAttribute>(A_WIDTH);
+    const float radius = node.get_attr<FloatAttribute>(A_RADIUS);
+    const int   ir = int(radius * nx);
 
-    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
+    return P{.amplitude = node.get_attr<FloatAttribute>(A_AMPLITUDE),
+             .width_pixels = nx * width,
+             .edt_exponent = node.get_attr<FloatAttribute>(A_EDT_EXPONENT),
+             .ir = ir,
+             .default_scaling = node.get_attr<BoolAttribute>(A_DEFAULT_SCALING)};
+  }();
 
-    float hmin = p_in->min(node.cfg().cm_cpu);
-    float hmax = p_in->max(node.cfg().cm_cpu);
+  // --- prepare mask
+
+  std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
+
+  // --- prepare default scaling
+
+  hmap::VirtualArray default_scaling(CONFIG(node));
+
+  if (!p_scaling && params.default_scaling)
+  {
+    p_scaling = &default_scaling;
 
     hmap::for_each_tile(
-        {p_out, p_in, p_dx, p_dy, p_mask},
-        [&node, ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {p_scaling},
+        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &region)
         {
-          auto [pa_out, pa_in, pa_dx, pa_dy, pa_mask] = unpack<5>(p_arrays);
-
-          auto fd_method = hmap::FlowDirectionMethod(
-              node.get_attr<EnumAttribute>("fd_method"));
-
-          *pa_out = hmap::gpu::watershed_ridge(
-              *pa_in,
-              pa_mask,
-              node.get_attr<FloatAttribute>("amplitude"),
-              ir,
-              node.get_attr<FloatAttribute>("edt_exponent"),
-              fd_method,
-              pa_dx,
-              pa_dy);
+          auto [pa_scaling] = unpack<1>(p_arrays);
+          *pa_scaling = 1.f - hmap::cubic_pulse(region.shape,
+                                                /* p_noise_x */ nullptr,
+                                                /* p_noise_y */ nullptr,
+                                                /* center */ {0.5f, 0.5f},
+                                                region.bbox);
         },
-        node.cfg().cm_single_array);
-
-    p_out->remap(hmin, hmax, node.cfg().cm_cpu);
-
-    // post-process
-    p_out->smooth_overlap_buffers();
-    post_process_heightmap(node, *p_out, p_in);
+        node.cfg().cm_cpu);
   }
+
+  // --- prepare default noise
+
+  hmap::VirtualArray noise_default_x(CONFIG(node));
+  hmap::VirtualArray noise_default_y(CONFIG(node));
+  uint               seed_increment = 0;
+  generate_noise(node, p_dx, noise_default_x, ++seed_increment);
+  generate_noise(node, p_dy, noise_default_y, ++seed_increment);
+
+  // --- compute
+
+  float hmin = p_in->min(node.cfg().cm_cpu);
+  float hmax = p_in->max(node.cfg().cm_cpu);
+
+  hmap::for_each_tile(
+      {p_in, p_dx, p_dy, p_mask, p_scaling},
+      {p_out},
+      [&node, &params](std::vector<const hmap::Array *> p_arrays_in,
+                       std::vector<hmap::Array *>       p_arrays_out,
+                       const hmap::TileRegion &)
+      {
+        const auto [pa_in, pa_dx, pa_dy, pa_mask, pa_scaling] = unpack<5>(p_arrays_in);
+        auto [pa_out] = unpack<1>(p_arrays_out);
+
+        *pa_out = hmap::gpu::watershed_ridge(*pa_in,
+                                             pa_mask,
+                                             params.amplitude,
+                                             params.width_pixels,
+                                             params.edt_exponent,
+                                             params.ir,
+                                             hmap::FlowDirectionMethod::FDM_D8,
+                                             pa_dx,
+                                             pa_dy,
+                                             pa_scaling);
+      },
+      node.cfg().cm_single_array);
+
+  p_out->remap(hmin, hmax, node.cfg().cm_cpu);
+
+  // post-process
+  p_out->smooth_overlap_buffers();
+  post_process_heightmap(node, *p_out, p_in);
 }
 
 } // namespace hesiod
