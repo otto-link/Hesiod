@@ -12,42 +12,50 @@ using namespace attr;
 
 namespace hesiod
 {
+// -----------------------------------------------------------------------------
+// Ports & Attributes
+// -----------------------------------------------------------------------------
+
+constexpr const char *P_IN = "input";
+constexpr const char *P_OUT = "ouput";
+
+constexpr const char *A_REMAP = "remap";
+
+// -----------------------------------------------------------------------------
+// Setup
+// -----------------------------------------------------------------------------
 
 void setup_remap_node(BaseNode &node)
 {
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_IN);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_OUT, CONFIG(node));
 
   // attribute(s)
-  node.add_attr<RangeAttribute>("remap", "remap");
+  node.add_attr<RangeAttribute>(A_REMAP, "remap");
 }
+
+// -----------------------------------------------------------------------------
+// Compute
+// -----------------------------------------------------------------------------
 
 void compute_remap_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
+  auto *p_in = node.get_value_ref<hmap::VirtualArray>(P_IN);
+  auto *p_out = node.get_value_ref<hmap::VirtualArray>(P_OUT);
 
-  if (p_in)
-  {
-    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+  if (!p_in)
+    return;
 
-    hmap::for_each_tile(
-        {p_out, p_in},
-        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
-        {
-          auto [pa_out, pa_in] = unpack<2>(p_arrays);
-          *pa_out = *pa_in;
+  hmap::copy_data(*p_in, *p_out, node.cfg().cm_cpu);
 
-          hmap::remap(*pa_out,
-                      node.get_attr<RangeAttribute>("remap")[0],
-                      node.get_attr<RangeAttribute>("remap")[1]);
-        },
-        node.cfg().cm_cpu);
-  }
+  p_out->remap(node.get_attr<RangeAttribute>(A_REMAP)[0],
+               node.get_attr<RangeAttribute>(A_REMAP)[1],
+               node.cfg().cm_cpu);
 }
 
 } // namespace hesiod
