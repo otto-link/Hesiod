@@ -16,8 +16,8 @@ namespace hesiod
 // Ports & Attributes
 // -----------------------------------------------------------------------------
 
-constexpr const char *P_IN = "input";
-constexpr const char *P_OUT = "ouput";
+constexpr const char *P_INPUT = "input";
+constexpr const char *P_OUTPUT = "output";
 
 constexpr const char *A_REMAP = "remap";
 
@@ -30,8 +30,8 @@ void setup_remap_node(BaseNode &node)
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_IN);
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_OUT, CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_INPUT);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_OUTPUT, CONFIG(node));
 
   // attribute(s)
   node.add_attr<RangeAttribute>(A_REMAP, "remap");
@@ -45,8 +45,8 @@ void compute_remap_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  auto *p_in = node.get_value_ref<hmap::VirtualArray>(P_IN);
-  auto *p_out = node.get_value_ref<hmap::VirtualArray>(P_OUT);
+  auto *p_in = node.get_value_ref<hmap::VirtualArray>(P_INPUT);
+  auto *p_out = node.get_value_ref<hmap::VirtualArray>(P_OUTPUT);
 
   if (!p_in)
     return;
@@ -57,5 +57,5 @@ void compute_remap_node(BaseNode &node)
                node.get_attr<RangeAttribute>(A_REMAP)[1],
                node.cfg().cm_cpu);
 }
-
+  
 } // namespace hesiod
