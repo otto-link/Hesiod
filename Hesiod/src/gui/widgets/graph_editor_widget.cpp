@@ -116,6 +116,7 @@ void GraphEditorWidget::setup_layout()
 
     this->graph_node_widget = new GraphNodeWidget(gno->get_shared());
     this->viewer = new Viewer3D(this->graph_node_widget);
+    this->viewer->setMinimumHeight(32);
 
     splitter->addWidget(this->viewer);
     splitter->addWidget(this->graph_node_widget);
