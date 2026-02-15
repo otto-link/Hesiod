@@ -57,5 +57,5 @@ void compute_remap_node(BaseNode &node)
                node.get_attr<RangeAttribute>(A_REMAP)[1],
                node.cfg().cm_cpu);
 }
-  
+
 } // namespace hesiod
