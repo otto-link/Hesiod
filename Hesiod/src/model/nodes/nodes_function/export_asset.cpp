@@ -118,7 +118,6 @@ void compute_export_asset_node(BaseNode &node)
     hmap::VirtualTexture normal_map(CONFIG_TEX(node));
 
     normal_map.from_arrays({&nx, &ny, &nz, &alpha}, node.cfg().cm_cpu);
-    // normal_map.fill(3, 1.f, node.cfg().cm_cpu); // alpha channel
 
     if (p_nmap)
     {

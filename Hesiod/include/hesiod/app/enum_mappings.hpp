@@ -66,14 +66,17 @@ static struct EnumMappings
   };
 
   const std::map<std::string, int> erosion_profile_map = {
-      {"Cosine", hmap::ErosionProfile::COSINE},
-      {"Saw sharp", hmap::ErosionProfile::SAW_SHARP},
-      {"Saw smooth", hmap::ErosionProfile::SAW_SMOOTH},
-      {"Sharp valleys", hmap::ErosionProfile::SHARP_VALLEYS},
-      {"Square smooth", hmap::ErosionProfile::SQUARE_SMOOTH},
-      {"Triangle Grenier", hmap::ErosionProfile::TRIANGLE_GRENIER},
-      {"Triangle sharp", hmap::ErosionProfile::TRIANGLE_SHARP},
-      {"Triangle smooth", hmap::ErosionProfile::TRIANGLE_SMOOTH}};
+      {"Cosine", hmap::ErosionProfile::EP_COSINE},
+      {"Cosine Bulk", hmap::ErosionProfile::EP_COSINE_BULK},
+      {"Cosine Peak", hmap::ErosionProfile::EP_COSINE_PEAK},
+      {"Parabol", hmap::ErosionProfile::EP_PARABOL},
+      {"Saw Sharp", hmap::ErosionProfile::EP_SAW_SHARP},
+      {"Saw Smooth", hmap::ErosionProfile::EP_SAW_SMOOTH},
+      {"Sharp Valleys", hmap::ErosionProfile::EP_SHARP_VALLEYS},
+      {"Square-root", hmap::ErosionProfile::EP_SQRT},
+      {"Triangle Grenier", hmap::ErosionProfile::EP_TRIANGLE_GRENIER},
+      {"Triangle Sharp", hmap::ErosionProfile::EP_TRIANGLE_SHARP},
+      {"Triangle Smooth", hmap::ErosionProfile::EP_TRIANGLE_SMOOTH}};
 
   const std::map<std::string, int> flow_direction_method_map = {
       {"D8", hmap::FlowDirectionMethod::FDM_D8},
