@@ -28,6 +28,7 @@ QWidget *node_widget_factory(const std::string        &node_type,
                                         "Recurve",
                                         "Rifts",
                                         "ShatteredPeak",
+                                        "StrataCells",
                                         "WaterDepthFromMask",
                                         "WatershedRidge"};
   std::vector<std::string> deprecated_nodes = {"TextureAdvectionWarp"};
