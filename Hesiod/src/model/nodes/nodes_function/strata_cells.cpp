@@ -140,6 +140,7 @@ void compute_strata_cells_node(BaseNode &node)
       float     persistence;
       float     lacunarity;
     };
+
     return P{
         .kw = node.get_attr<WaveNbAttribute>(A_KW),
         .amp = node.get_attr<FloatAttribute>(A_AMP),

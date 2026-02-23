@@ -1,16 +1,24 @@
 import re
 
 cpp_function = """
-Array watershed_ridge(
-    const Array        &z,
-    Array              *p_mask,
-    float               amplitude = 0.2f,
-    float               width = 32.f,
-    float               edt_exponent = 0.5f,
-    FlowDirectionMethod fd_method = FlowDirectionMethod::FDM_D8,
-    const Array        *p_noise_x = nullptr,
-    const Array        *p_noise_y = nullptr,
-    const Array        *p_scaling = nullptr);
+void hydraulic_particle(Array       &z,
+                        const Array *p_mask,
+                        int          nparticles,
+                        uint         seed,
+                        const Array *p_bedrock = nullptr,
+                        const Array *p_moisture_map = nullptr,
+                        const Array *p_elevation_shift = nullptr,
+                        Array       *p_erosion_map = nullptr,
+                        Array       *p_deposition_map = nullptr,
+                        float        c_capacity = 10.f,
+                        float        c_erosion = 0.05f,
+                        float        c_deposition = 0.05f,
+                        float        c_inertia = 0.1f,
+                        float        c_gravity = 1.f,
+                        float        drag_rate = 0.001f,
+                        float        evap_rate = 0.001f,
+                        bool         enable_directional_bias = false,
+                        float        angle_bias = 30.f);
 """
 
 # ---------------------------

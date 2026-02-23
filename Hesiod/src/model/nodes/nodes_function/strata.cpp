@@ -48,6 +48,8 @@ void setup_strata_node(BaseNode &node)
                                  32.f,
                                  true);
 
+  node.add_attr<BoolAttribute>("enable_ridge_noise", "enable_ridge_noise", true);
+
   kw_default = {4.f, 1.5f};
   node.add_attr<WaveNbAttribute>("ridge_noise_kw",
                                  "ridge_noise_kw",
@@ -83,6 +85,7 @@ void setup_strata_node(BaseNode &node)
                              "noise_amp",
                              "noise_kw",
                              "_TEXT_Ridges",
+                             "enable_ridge_noise",
                              "ridge_noise_kw",
                              "ridge_angle_shift",
                              "ridge_noise_amp",
@@ -139,6 +142,7 @@ void compute_strata_node(BaseNode &node)
                             node.get_attr<FloatAttribute>("gamma_noise_ratio"),
                             node.get_attr<FloatAttribute>("noise_amp"),
                             node.get_attr<WaveNbAttribute>("noise_kw"),
+                            node.get_attr<BoolAttribute>("enable_ridge_noise"),
                             node.get_attr<WaveNbAttribute>("ridge_noise_kw"),
                             node.get_attr<FloatAttribute>("ridge_angle_shift"),
                             node.get_attr<FloatAttribute>("ridge_noise_amp"),
