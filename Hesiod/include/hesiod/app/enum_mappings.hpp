@@ -136,6 +136,13 @@ static struct EnumMappings
       {"Y-only", hmap::PeriodicityType::PERIODICITY_Y},
       {"X and Y", hmap::PeriodicityType::PERIODICITY_XY}};
 
+  const std::map<std::string, int> phasor_profile_map = {
+      {"Cosine Bulky", hmap::PhasorProfile::PP_COSINE_BULKY},
+      {"Cosine Peaky", hmap::PhasorProfile::PP_COSINE_PEAKY},
+      {"Cosine Square", hmap::PhasorProfile::PP_COSINE_SQUARE},
+      {"Cosine", hmap::PhasorProfile::PP_COSINE_STD},
+      {"Triangle", hmap::PhasorProfile::PP_TRIANGLE}};
+
   const std::map<std::string, int> primitive_type_map = {
       {"Biquad Pulse", hmap::PrimitiveType::PRIM_BIQUAD_PULSE},
       {"Cone Smooth", hmap::PrimitiveType::PRIM_CONE_SMOOTH},

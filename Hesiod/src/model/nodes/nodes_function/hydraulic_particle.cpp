@@ -73,7 +73,7 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_attr<FloatAttribute>(A_C_CAPACITY, "Sediment Capacity", 10.f, 0.1f, 40.f);
   node.add_attr<FloatAttribute>(A_C_EROSION, "Erosion Rate", 0.05f, 0.f, 0.2f);
   node.add_attr<FloatAttribute>(A_C_DEPOSITION, "Deposition Rate", 0.1f, 0.f, 0.2f);
-  node.add_attr<FloatAttribute>(A_C_INERTIA, "Particle Inertia Factor", 0.05f, 0.f, 0.9f);
+  node.add_attr<FloatAttribute>(A_C_INERTIA, "Particle Inertia Factor", 0.15f, 0.f, 0.9f);
   node.add_attr<FloatAttribute>(A_DRAG_RATE, "Velocity Drag Rate", 0.001f, 0.f, 0.02f);
   node.add_attr<FloatAttribute>(A_EVAP_RATE, "Evaporation Rate", 0.001f, 0.f, 0.02f);
   node.add_attr<BoolAttribute>(A_ENABLE_DIRECTIONAL_BIAS, "Enable Directional Bias", false);
