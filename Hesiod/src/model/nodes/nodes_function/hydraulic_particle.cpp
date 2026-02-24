@@ -3,6 +3,7 @@
  * this software. */
 #include "highmap/erosion.hpp"
 #include "highmap/filters.hpp"
+#include "highmap/gradient.hpp"
 #include "highmap/math.hpp"
 #include "highmap/multiscale/downscaling.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
@@ -47,9 +48,12 @@ constexpr const char *A_ENABLE_DEFAULT_BEDROCK = "enable_default_bedrock";
 constexpr const char *A_BD_ELEVATION_STRENGTH = "bd_elevation_strength";
 constexpr const char *A_BD_SLOPE_STRENGTH = "bd_slope_strength";
 constexpr const char *A_BD_SLOPE = "bd_slope";
+constexpr const char *A_ENABLE_RIDGE_FORCING = "enable_ridge_forcing";
+constexpr const char *A_RIDGE_SPATIAL_FREQUENCY = "ridge_spatial_frequency";
+constexpr const char *A_RIDGE_ELEVATION_AMPLITUDE = "ridge_elevation_amplitude";
 
 // -----------------------------------------------------------------------------
-// Setup
+// setup
 // -----------------------------------------------------------------------------
 
 void setup_hydraulic_particle_node(BaseNode &node)
@@ -73,7 +77,7 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_attr<FloatAttribute>(A_C_CAPACITY, "Sediment Capacity", 10.f, 0.1f, 40.f);
   node.add_attr<FloatAttribute>(A_C_EROSION, "Erosion Rate", 0.05f, 0.f, 0.2f);
   node.add_attr<FloatAttribute>(A_C_DEPOSITION, "Deposition Rate", 0.1f, 0.f, 0.2f);
-  node.add_attr<FloatAttribute>(A_C_INERTIA, "Particle Inertia Factor", 0.15f, 0.f, 0.9f);
+  node.add_attr<FloatAttribute>(A_C_INERTIA, "Particle Inertia Factor", 0.2f, 0.f, 0.9f);
   node.add_attr<FloatAttribute>(A_DRAG_RATE, "Velocity Drag Rate", 0.001f, 0.f, 0.02f);
   node.add_attr<FloatAttribute>(A_EVAP_RATE, "Evaporation Rate", 0.001f, 0.f, 0.02f);
   node.add_attr<BoolAttribute>(A_ENABLE_DIRECTIONAL_BIAS, "Enable Directional Bias", false);
@@ -83,6 +87,9 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_attr<FloatAttribute>(A_BD_ELEVATION_STRENGTH, "Bedrock Elevation Gap", 0.1f, 0.f, 1.f);
   node.add_attr<FloatAttribute>(A_BD_SLOPE_STRENGTH, "Bedrock Slope Gap", 0.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>(A_BD_SLOPE, "Bedrock Slope Limit", 2.f, 0.f, FLT_MAX);
+  node.add_attr<BoolAttribute>(A_ENABLE_RIDGE_FORCING, "Enable Ridge Forcing", true);
+  node.add_attr<FloatAttribute>(A_RIDGE_SPATIAL_FREQUENCY, "Ridge Spatial Frequency", 32.f, 0.f, FLT_MAX);
+  node.add_attr<FloatAttribute>(A_RIDGE_ELEVATION_AMPLITUDE, "Ridge Height", 0.1, 0.f, 1.f);
   // clang-format on
 
   // attribute(s) order
@@ -99,14 +106,10 @@ void setup_hydraulic_particle_node(BaseNode &node)
                              A_C_INERTIA,
                              "_GROUPBOX_END_",
                              //
-                             "_GROUPBOX_BEGIN_Particle Behavior",
-                             A_DRAG_RATE,
-                             A_EVAP_RATE,
-                             "_GROUPBOX_END_",
-                             //
-                             "_GROUPBOX_BEGIN_Directional Control",
-                             A_ENABLE_DIRECTIONAL_BIAS,
-                             A_ANGLE_BIAS,
+                             "_GROUPBOX_BEGIN_Pre-Erosion Ridge Forcing",
+                             A_ENABLE_RIDGE_FORCING,
+                             A_RIDGE_SPATIAL_FREQUENCY,
+                             A_RIDGE_ELEVATION_AMPLITUDE,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Bedrock Resistance",
@@ -118,6 +121,16 @@ void setup_hydraulic_particle_node(BaseNode &node)
                              //
                              "_GROUPBOX_BEGIN_Deposition Mode",
                              A_DEPOSITION_ONLY,
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Particle Behavior",
+                             A_DRAG_RATE,
+                             A_EVAP_RATE,
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Directional Control",
+                             A_ENABLE_DIRECTIONAL_BIAS,
+                             A_ANGLE_BIAS,
                              "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(node,
@@ -166,6 +179,9 @@ void compute_hydraulic_particle_node(BaseNode &node)
       float bd_elevation_strength;
       float bd_slope_strength;
       float bd_talus;
+      bool  enable_ridge_forcing;
+      float ridge_spatial_frequency;
+      float ridge_elevation_amplitude;
     };
 
     const float scale = node.get_attr<FloatAttribute>(A_SCALE);
@@ -192,7 +208,12 @@ void compute_hydraulic_particle_node(BaseNode &node)
         .enable_default_bedrock = node.get_attr<BoolAttribute>(A_ENABLE_DEFAULT_BEDROCK),
         .bd_elevation_strength = node.get_attr<FloatAttribute>(A_BD_ELEVATION_STRENGTH),
         .bd_slope_strength = node.get_attr<FloatAttribute>(A_BD_SLOPE_STRENGTH),
-        .bd_talus = bd_talus};
+        .bd_talus = bd_talus,
+        .enable_ridge_forcing = node.get_attr<BoolAttribute>(A_ENABLE_RIDGE_FORCING),
+        .ridge_spatial_frequency = node.get_attr<FloatAttribute>(
+            A_RIDGE_SPATIAL_FREQUENCY),
+        .ridge_elevation_amplitude = node.get_attr<FloatAttribute>(
+            A_RIDGE_ELEVATION_AMPLITUDE)};
   }();
 
   // --- Resolve bedrock
@@ -224,11 +245,58 @@ void compute_hydraulic_particle_node(BaseNode &node)
       {p_out, p_erosion, p_deposition},
       [&node, &params, hmin, hmax](std::vector<const hmap::Array *> p_arrays_in,
                                    std::vector<hmap::Array *>       p_arrays_out,
-                                   const hmap::TileRegion &)
+                                   const hmap::TileRegion          &region)
       {
         auto [pa_bedrock, pa_moisture, pa_mask] = unpack<3>(p_arrays_in);
         auto [pa_out, pa_erosion, pa_deposition] = unpack<3>(p_arrays_out);
 
+        // add ridges
+        if (params.enable_ridge_forcing)
+        {
+          hmap::Array     angle = hmap::gradient_angle(*pa_out);
+          float           angle_shift = 0.5f * M_PI;
+          int             octaves = 3;
+          float           weight = 0.f;
+          float           persistence = 0.5f;
+          float           lacunarity = 2.f;
+          int             n_kernel_samples = 8;
+          const glm::vec2 jitter = {1.f, 1.f};
+          int             angle_filter_ir = 8;
+          float           delta = 0.f;
+          float           phase_smoothing = 1.f;
+
+          hmap::Array ridges = hmap::gpu::phasor_fbm(hmap::PhasorProfile::PP_COSINE_STD,
+                                                     region.shape,
+                                                     params.ridge_spatial_frequency,
+                                                     params.seed + 1,
+                                                     angle_shift,
+                                                     octaves,
+                                                     weight,
+                                                     persistence,
+                                                     lacunarity,
+                                                     n_kernel_samples,
+                                                     jitter,
+                                                     angle_filter_ir,
+                                                     delta,
+                                                     phase_smoothing,
+                                                     &angle,
+                                                     nullptr,
+                                                     nullptr,
+                                                     region.bbox);
+
+          ridges = 0.3f * ridges + 0.5f; // in [0..1]
+
+          // scale using gradient
+          const float talus_cut = 4.f / region.shape.x;
+          const float gradient_exp = 2.f;
+          hmap::Array gn = hmap::gradient_norm(*pa_out) / talus_cut;
+          hmap::clamp_max(gn, 1.f);
+          gn = hmap::pow(gn, gradient_exp);
+
+          *pa_out += params.ridge_elevation_amplitude * ridges * gn;
+        }
+
+        // define bedrock field
         hmap::Array bedrock;
 
         if (params.enable_default_bedrock && !pa_bedrock)
@@ -242,6 +310,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
           pa_bedrock = &bedrock;
         }
 
+        // eventually erode...
         hmap::gpu::hydraulic_particle(*pa_out,
                                       pa_mask,
                                       params.nparticles,
