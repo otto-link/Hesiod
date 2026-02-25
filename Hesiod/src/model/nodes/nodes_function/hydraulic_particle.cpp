@@ -90,7 +90,7 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_attr<FloatAttribute>(A_BD_SLOPE, "Bedrock Slope Limit", 2.f, 0.f, FLT_MAX);
   node.add_attr<BoolAttribute>(A_ENABLE_RIDGE_FORCING, "Enable Ridge Forcing", true);
   node.add_attr<FloatAttribute>(A_RIDGE_SPATIAL_FREQUENCY, "Ridge Spatial Frequency", 32.f, 0.f, FLT_MAX);
-  node.add_attr<FloatAttribute>(A_RIDGE_ELEVATION_AMPLITUDE, "Ridge Height", 0.35f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>(A_RIDGE_ELEVATION_AMPLITUDE, "Ridge Height", 0.1f, 0.f, 1.f);
   // clang-format on
 
   // attribute(s) order
@@ -278,11 +278,13 @@ void compute_hydraulic_particle_node(BaseNode &node)
 
           ridges = 0.5f * ridges - 0.5f; // in [-1..0]
 
-          // scale using gradient
+          const float talus_ref = 4.f / region.shape.x;
+          const int   ir = std::max(1,
+                                  int(region.shape.x / params.ridge_spatial_frequency));
           const float gradient_exp = 2.f;
-          const int   ir = std::max(1, int(4 * region.shape.x / 1024.f));
-          hmap::Array gn = hmap::gpu::morphological_gradient(*pa_out, ir);
-          hmap::remap(gn);
+          hmap::Array gn = hmap::gradient_norm(*pa_out) / talus_ref;
+          hmap::gpu::smooth_cpulse(gn, ir);
+          hmap::clamp_max(gn, 1.f);
           gn = hmap::pow(gn, gradient_exp);
 
           *pa_out += params.ridge_elevation_amplitude * ridges * gn;
