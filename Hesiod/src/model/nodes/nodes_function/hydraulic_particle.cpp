@@ -85,7 +85,7 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_attr<FloatAttribute>(A_ANGLE_BIAS, "Directional Bias Angle", 0.f, -180.f, 180.f, "{:.0f}°");
   node.add_attr<BoolAttribute>(A_DEPOSITION_ONLY, "Deposition Only Mode", false);
   node.add_attr<BoolAttribute>(A_ENABLE_DEFAULT_BEDROCK, "Enable Bedrock Resistance", true);
-  node.add_attr<FloatAttribute>(A_BD_ELEVATION_STRENGTH, "Bedrock Elevation Gap", 0.1f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>(A_BD_ELEVATION_STRENGTH, "Bedrock Elevation Gap", 0.05f, 0.f, 1.f);
   node.add_attr<FloatAttribute>(A_BD_SLOPE_STRENGTH, "Bedrock Slope Gap", 0.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>(A_BD_SLOPE, "Bedrock Slope Limit", 2.f, 0.f, FLT_MAX);
   node.add_attr<BoolAttribute>(A_ENABLE_RIDGE_FORCING, "Enable Ridge Forcing", true);
@@ -282,8 +282,8 @@ void compute_hydraulic_particle_node(BaseNode &node)
           const float gradient_exp = 2.f;
           const int   ir = std::max(1, int(4 * region.shape.x / 1024.f));
           hmap::Array gn = hmap::gpu::morphological_gradient(*pa_out, ir);
-	  hmap::remap(gn);
-	  gn = hmap::pow(gn, gradient_exp);
+          hmap::remap(gn);
+          gn = hmap::pow(gn, gradient_exp);
 
           *pa_out += params.ridge_elevation_amplitude * ridges * gn;
         }
