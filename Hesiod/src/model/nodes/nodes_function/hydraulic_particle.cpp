@@ -5,6 +5,7 @@
 #include "highmap/filters.hpp"
 #include "highmap/gradient.hpp"
 #include "highmap/math.hpp"
+#include "highmap/morphology.hpp"
 #include "highmap/multiscale/downscaling.hpp"
 #include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/range.hpp"
@@ -75,8 +76,8 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_attr<SeedAttribute>(A_SEED, "Seed");
   node.add_attr<FloatAttribute>(A_PARTICLE_DENSITY, "Particle Density", 0.5f, 0.f, 4.f);
   node.add_attr<FloatAttribute>(A_C_CAPACITY, "Sediment Capacity", 10.f, 0.1f, 40.f);
-  node.add_attr<FloatAttribute>(A_C_EROSION, "Erosion Rate", 0.05f, 0.f, 0.2f);
-  node.add_attr<FloatAttribute>(A_C_DEPOSITION, "Deposition Rate", 0.1f, 0.f, 0.2f);
+  node.add_attr<FloatAttribute>(A_C_EROSION, "Erosion Rate", 0.05f, 0.f, 0.3f);
+  node.add_attr<FloatAttribute>(A_C_DEPOSITION, "Deposition Rate", 0.2f, 0.f, 0.3f);
   node.add_attr<FloatAttribute>(A_C_INERTIA, "Particle Inertia Factor", 0.2f, 0.f, 0.9f);
   node.add_attr<FloatAttribute>(A_DRAG_RATE, "Velocity Drag Rate", 0.001f, 0.f, 0.02f);
   node.add_attr<FloatAttribute>(A_EVAP_RATE, "Evaporation Rate", 0.001f, 0.f, 0.02f);
@@ -89,14 +90,14 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.add_attr<FloatAttribute>(A_BD_SLOPE, "Bedrock Slope Limit", 2.f, 0.f, FLT_MAX);
   node.add_attr<BoolAttribute>(A_ENABLE_RIDGE_FORCING, "Enable Ridge Forcing", true);
   node.add_attr<FloatAttribute>(A_RIDGE_SPATIAL_FREQUENCY, "Ridge Spatial Frequency", 32.f, 0.f, FLT_MAX);
-  node.add_attr<FloatAttribute>(A_RIDGE_ELEVATION_AMPLITUDE, "Ridge Height", 0.1, 0.f, 1.f);
+  node.add_attr<FloatAttribute>(A_RIDGE_ELEVATION_AMPLITUDE, "Ridge Height", 0.35f, 0.f, 1.f);
   // clang-format on
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Simulation",
-                             A_SCALE,
-                             A_SEED,
                              A_PARTICLE_DENSITY,
+                             A_SEED,
+                             A_SCALE,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Sediment Dynamics",
@@ -253,45 +254,36 @@ void compute_hydraulic_particle_node(BaseNode &node)
         // add ridges
         if (params.enable_ridge_forcing)
         {
-          hmap::Array     angle = hmap::gradient_angle(*pa_out);
-          float           angle_shift = 0.5f * M_PI;
-          int             octaves = 3;
-          float           weight = 0.f;
-          float           persistence = 0.5f;
-          float           lacunarity = 2.f;
-          int             n_kernel_samples = 8;
-          const glm::vec2 jitter = {1.f, 1.f};
-          int             angle_filter_ir = 8;
-          float           delta = 0.f;
-          float           phase_smoothing = 1.f;
+          hmap::Array angle = hmap::gradient_angle(*pa_out);
+          int         octaves = 4;
+          float       weight = 0.7f;
+          float       persistence = 0.5f;
+          float       lacunarity = 2.f;
 
-          hmap::Array ridges = hmap::gpu::phasor_fbm(hmap::PhasorProfile::PP_COSINE_STD,
-                                                     region.shape,
-                                                     params.ridge_spatial_frequency,
-                                                     params.seed + 1,
-                                                     angle_shift,
-                                                     octaves,
-                                                     weight,
-                                                     persistence,
-                                                     lacunarity,
-                                                     n_kernel_samples,
-                                                     jitter,
-                                                     angle_filter_ir,
-                                                     delta,
-                                                     phase_smoothing,
-                                                     &angle,
-                                                     nullptr,
-                                                     nullptr,
-                                                     region.bbox);
+          glm::vec2 kr = {params.ridge_spatial_frequency, params.ridge_spatial_frequency};
 
-          ridges = 0.3f * ridges + 0.5f; // in [0..1]
+          hmap::Array ridges = hmap::gpu::gabor_wave_fbm(region.shape,
+                                                         kr,
+                                                         params.seed + 1,
+                                                         angle * 180.f / M_PI + 90.f,
+                                                         0.f,
+                                                         octaves,
+                                                         weight,
+                                                         persistence,
+                                                         lacunarity,
+                                                         nullptr,
+                                                         nullptr,
+                                                         nullptr,
+                                                         region.bbox);
+
+          ridges = 0.5f * ridges - 0.5f; // in [-1..0]
 
           // scale using gradient
-          const float talus_cut = 4.f / region.shape.x;
           const float gradient_exp = 2.f;
-          hmap::Array gn = hmap::gradient_norm(*pa_out) / talus_cut;
-          hmap::clamp_max(gn, 1.f);
-          gn = hmap::pow(gn, gradient_exp);
+          const int   ir = std::max(1, int(4 * region.shape.x / 1024.f));
+          hmap::Array gn = hmap::gpu::morphological_gradient(*pa_out, ir);
+	  hmap::remap(gn);
+	  gn = hmap::pow(gn, gradient_exp);
 
           *pa_out += params.ridge_elevation_amplitude * ridges * gn;
         }
