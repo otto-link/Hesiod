@@ -233,8 +233,7 @@ void compute_snow_simulation_node(BaseNode &node)
           std::vector<hmap::Array *>       p_arrays_out,
           const hmap::TileRegion &)
       {
-        const auto [pa_z, pa_depth_map, pa_melting_map, pa_talus_map] = unpack<4>(
-            p_arrays_in);
+        auto [pa_z, pa_depth_map, pa_melting_map, pa_talus_map] = unpack<4>(p_arrays_in);
         auto [pa_z_out, pa_snow_depth] = unpack<2>(p_arrays_out);
 
         hmap::Array depth_map_scaled = *pa_depth_map;

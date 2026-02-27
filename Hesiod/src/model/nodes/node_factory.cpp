@@ -382,7 +382,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"Step", "Primitive/Function"},
       {"Strata", "Erosion/Stratify"},
       {"StrataCells", "Erosion/Stratify"},
-      {"Terrace", "Filter/Recurve"},
+      {"StrataTerrace", "Erosion/Stratify"},
+      {"Terrace", "WIP/DEPRECATED"},
       {"TextureAdvectionParticle", "Texture"},
       {"TextureAdvectionWarp", "WIP/DEPRECATED"},
       {"TextureQuiltingExpand", "Texture"},
@@ -701,6 +702,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Step, step);
     SETUP_NODE(Strata, strata);
     SETUP_NODE(StrataCells, strata_cells);
+    SETUP_NODE(StrataTerrace, strata_terrace);
     SETUP_NODE(Terrace, terrace);
     SETUP_NODE(TextureAdvectionParticle, texture_advection_particle);
     SETUP_NODE(TextureAdvectionWarp, texture_advection_warp);

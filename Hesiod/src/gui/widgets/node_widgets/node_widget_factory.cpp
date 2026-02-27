@@ -31,7 +31,7 @@ QWidget *node_widget_factory(const std::string        &node_type,
                                         "StrataCells",
                                         "WaterDepthFromMask",
                                         "WatershedRidge"};
-  std::vector<std::string> deprecated_nodes = {"TextureAdvectionWarp"};
+  std::vector<std::string> deprecated_nodes = {"Terrace", "TextureAdvectionWarp"};
 
   if (contains<std::string>(wip_nodes, node_type))
     msg = "Work in progress\nNode subject to change";
