@@ -87,6 +87,11 @@ static struct EnumMappings
       {"png (16 bit)", ExportFormat::PNG16BIT},
       {"raw (16 bit, Unity)", ExportFormat::RAW16BIT}};
 
+  const std::map<std::string, int> interpolation_method2d_map = {
+      {"Delaunay", hmap::InterpolationMethod2D::DELAUNAY},
+      {"Inverse Weighting Distance", hmap::InterpolationMethod2D::IDW},
+      {"Nearest", hmap::InterpolationMethod2D::NEAREST}};
+
   const std::map<std::string, int> kernel_type_map = {
       {"biweight", hmap::KernelType::BIWEIGHT},
       {"cone", hmap::KernelType::CONE},
