@@ -1,24 +1,14 @@
 import re
 
 cpp_function = """
-void hydraulic_particle(Array       &z,
-                        const Array *p_mask,
-                        int          nparticles,
-                        uint         seed,
-                        const Array *p_bedrock = nullptr,
-                        const Array *p_moisture_map = nullptr,
-                        const Array *p_elevation_shift = nullptr,
-                        Array       *p_erosion_map = nullptr,
-                        Array       *p_deposition_map = nullptr,
-                        float        c_capacity = 10.f,
-                        float        c_erosion = 0.05f,
-                        float        c_deposition = 0.05f,
-                        float        c_inertia = 0.1f,
-                        float        c_gravity = 1.f,
-                        float        drag_rate = 0.001f,
-                        float        evap_rate = 0.001f,
-                        bool         enable_directional_bias = false,
-                        float        angle_bias = 30.f);
+void mudslide(Array       &z,
+              const Array &landslide_mask,
+              float        depth,
+              int          iterations,
+              float        depth_map_exponent,
+              float  talus_limit,
+              float        viscosity_law_power,
+              Array       *p_depth)
 """
 
 # ---------------------------
