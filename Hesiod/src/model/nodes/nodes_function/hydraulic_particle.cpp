@@ -72,7 +72,6 @@ void setup_hydraulic_particle_node(BaseNode &node)
 
   // attribute(s)
   // clang-format off
-  node.add_attr<FloatAttribute>(A_SCALE, "Simulation Scale", 1.f, 0.1f, 1.f);
   node.add_attr<SeedAttribute>(A_SEED, "Seed");
   node.add_attr<FloatAttribute>(A_PARTICLE_DENSITY, "Particle Density", 0.5f, 0.f, 4.f);
   node.add_attr<FloatAttribute>(A_C_CAPACITY, "Sediment Capacity", 10.f, 0.1f, 40.f);
@@ -97,7 +96,6 @@ void setup_hydraulic_particle_node(BaseNode &node)
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Simulation",
                              A_PARTICLE_DENSITY,
                              A_SEED,
-                             A_SCALE,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Sediment Dynamics",
@@ -163,7 +161,6 @@ void compute_hydraulic_particle_node(BaseNode &node)
   {
     struct P
     {
-      float scale;
       uint  seed;
       int   nparticles;
       float c_capacity;
@@ -185,14 +182,12 @@ void compute_hydraulic_particle_node(BaseNode &node)
       float ridge_elevation_amplitude;
     };
 
-    const float scale = node.get_attr<FloatAttribute>(A_SCALE);
-    const int   ncells = p_out->shape.x * p_out->shape.y * scale;
+    const int   ncells = p_out->shape.x * p_out->shape.y;
     const float density = node.get_attr<FloatAttribute>(A_PARTICLE_DENSITY);
     const int   nparticles = (int)(density * ncells);
     const float bd_talus = node.get_attr<FloatAttribute>(A_BD_SLOPE) / p_out->shape.x;
 
     return P{
-        .scale = scale,
         .seed = node.get_attr<SeedAttribute>(A_SEED),
         .nparticles = nparticles,
         .c_capacity = node.get_attr<FloatAttribute>(A_C_CAPACITY),
@@ -224,32 +219,22 @@ void compute_hydraulic_particle_node(BaseNode &node)
   if (params.deposition_only)
     p_bedrock = p_in;
 
-  // --- Override compute mode (but keep storage mode)
-
-  hmap::ComputeMode cm = node.cfg().cm_gpu;
-
-  if (params.scale != 1.f)
-  {
-    cm.mode = hmap::ForEachMode::VA_SINGLE_ARRAY_DOWNSCALED;
-    cm.k_cutoff = params.scale;
-  }
-
-  hmap::copy_data(*p_in, *p_out, node.cfg().cm_cpu);
-  p_erosion->fill(0.f, node.cfg().cm_cpu);
-  p_deposition->fill(0.f, node.cfg().cm_cpu);
+  // --- Compute
 
   float hmin = p_in->min(node.cfg().cm_cpu);
   float hmax = p_in->max(node.cfg().cm_cpu);
 
   hmap::for_each_tile(
-      {p_bedrock, p_moisture, p_mask},
+      {p_in, p_bedrock, p_moisture, p_mask},
       {p_out, p_erosion, p_deposition},
       [&node, &params, hmin, hmax](std::vector<const hmap::Array *> p_arrays_in,
                                    std::vector<hmap::Array *>       p_arrays_out,
                                    const hmap::TileRegion          &region)
       {
-        auto [pa_bedrock, pa_moisture, pa_mask] = unpack<3>(p_arrays_in);
+        auto [pa_in, pa_bedrock, pa_moisture, pa_mask] = unpack<4>(p_arrays_in);
         auto [pa_out, pa_erosion, pa_deposition] = unpack<3>(p_arrays_out);
+
+        *pa_out = *pa_in;
 
         // add ridges
         if (params.enable_ridge_forcing)
@@ -324,7 +309,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
                                       params.enable_directional_bias,
                                       params.angle_bias);
       },
-      cm);
+      node.cfg().cm_gpu);
 
   // --- post-treatments
 
