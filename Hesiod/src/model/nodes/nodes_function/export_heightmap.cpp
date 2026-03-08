@@ -25,18 +25,19 @@ void setup_export_heightmap_node(BaseNode &node)
 
   // attribute(s)
   node.add_attr<FilenameAttribute>("fname",
-                                   "fname",
+                                   "Filename",
                                    std::filesystem::path("hmap.png"),
                                    "*",
                                    true);
   node.add_attr<EnumAttribute>("format",
-                               "format",
+                               "File Format",
                                enum_mappings.heightmap_export_format_map,
                                "png (16 bit)");
-  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
+  node.add_attr<BoolAttribute>("auto_export", "Auto Export on Node Update", false);
+  node.add_attr<BoolAttribute>("add_prefix", "Add Project Name as Prefix", false);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"fname", "format", "auto_export"});
+  node.set_attr_ordered_key({"fname", "format", "auto_export", "add_prefix"});
 }
 
 void compute_export_heightmap_node(BaseNode &node)
@@ -48,6 +49,9 @@ void compute_export_heightmap_node(BaseNode &node)
   if (p_in && node.get_attr<BoolAttribute>("auto_export"))
   {
     std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
+
+    if (node.get_attr<BoolAttribute>("add_prefix"))
+      fname = prepend_project_name_to_path(fname);
 
     switch (node.get_attr<EnumAttribute>("format"))
     {

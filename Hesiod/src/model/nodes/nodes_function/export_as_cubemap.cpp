@@ -37,7 +37,8 @@ void setup_export_as_cubemap_node(BaseNode &node)
   node.add_attr<FloatAttribute>("overlap", "overlap", 0.25f, 0.1f, 5.f);
   node.add_attr<IntAttribute>("ir", "ir", 16, 1, INT_MAX);
   node.add_attr<BoolAttribute>("splitted", "splitted", false);
-  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
+  node.add_attr<BoolAttribute>("auto_export", "Auto Export on Node Update", false);
+  node.add_attr<BoolAttribute>("add_prefix", "Add Project Name as Prefix", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname",
@@ -46,7 +47,8 @@ void setup_export_as_cubemap_node(BaseNode &node)
                              "ir",
                              "splitted",
                              "_SEPARATOR_",
-                             "auto_export"});
+                             "auto_export",
+                             "add_prefix"});
 
   // specialized GUI
 }
@@ -63,6 +65,9 @@ void compute_export_as_cubemap_node(BaseNode &node)
 
     std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
     fname = ensure_extension(fname, ".png");
+
+    if (node.get_attr<BoolAttribute>("add_prefix"))
+      fname = prepend_project_name_to_path(fname);
 
     hmap::export_as_cubemap(fname.string(),
                             z,

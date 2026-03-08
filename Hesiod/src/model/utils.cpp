@@ -8,6 +8,7 @@
 
 #include "nlohmann/json.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 
 namespace hesiod
@@ -71,6 +72,16 @@ std::filesystem::path ensure_extension(std::filesystem::path fname,
     fname.replace_extension(ext);
 
   return fname;
+}
+
+std::filesystem::path insert_before_basename(const std::filesystem::path &original_path,
+                                             const std::string           &insert_str)
+{
+  std::filesystem::path dir = original_path.parent_path();
+  std::string           stem = original_path.stem().string();
+  std::string           ext = original_path.extension().string();
+  std::filesystem::path new_name = insert_str + stem + ext;
+  return dir / new_name;
 }
 
 std::filesystem::path insert_before_extension(const std::filesystem::path &original_path,
@@ -170,6 +181,18 @@ void json_to_file(const nlohmann::json &json,
   {
     Logger::log()->error("json_to_file: Could not open file {} to save JSON", fname);
   }
+}
+
+std::filesystem::path prepend_project_name_to_path(
+    const std::filesystem::path &original_path)
+{
+  // preprend project name if any and if requested
+  std::string project_name = HSD_CTX.project_model->get_name();
+
+  if (project_name.empty())
+    return original_path;
+
+  return insert_before_basename(original_path, project_name + "_");
 }
 
 std::string ptr_as_string(void *ptr)

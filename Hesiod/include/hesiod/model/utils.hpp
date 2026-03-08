@@ -63,8 +63,14 @@ template <typename T> void remove_all_occurrences(std::vector<T> &vec, const T &
 std::filesystem::path ensure_extension(std::filesystem::path fname,
                                        const std::string    &extension);
 
+std::filesystem::path insert_before_basename(const std::filesystem::path &original_path,
+                                             const std::string           &insert_str);
+
 std::filesystem::path insert_before_extension(const std::filesystem::path &original_path,
                                               const std::string           &insert_str);
+
+std::filesystem::path prepend_project_name_to_path(
+    const std::filesystem::path &original_path);
 
 // --- json
 

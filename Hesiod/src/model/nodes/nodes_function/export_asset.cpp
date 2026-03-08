@@ -13,6 +13,7 @@
 #include "hesiod/model/nodes/base_node.hpp"
 #include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/model/nodes/post_process.hpp"
+#include "hesiod/model/utils.hpp"
 
 using namespace attr;
 
@@ -34,7 +35,8 @@ void setup_export_asset_node(BaseNode &node)
                                    std::filesystem::path("export"),
                                    "*",
                                    true);
-  node.add_attr<BoolAttribute>("auto_export", "Automatic Export", false);
+  node.add_attr<BoolAttribute>("auto_export", "Auto Export on Node Update", false);
+  node.add_attr<BoolAttribute>("add_prefix", "Add Project Name as Prefix", false);
 
   {
     // generate enumerate mappings
@@ -69,6 +71,7 @@ void setup_export_asset_node(BaseNode &node)
   node.set_attr_ordered_key({"auto_export",
                              "fname",
                              "export_format",
+                             "add_prefix",
                              "mesh_type",
                              "max_error",
                              "elevation_scaling",
@@ -91,8 +94,13 @@ void compute_export_asset_node(BaseNode &node)
     hmap::VirtualTexture *p_nmap = node.get_value_ref<hmap::VirtualTexture>(
         "normal map details");
 
-    hmap::Array array = p_elev->to_array(node.cfg().cm_cpu);
-    std::string fname = node.get_attr<FilenameAttribute>("fname").string();
+    hmap::Array           array = p_elev->to_array(node.cfg().cm_cpu);
+    std::filesystem::path fpath = node.get_attr<FilenameAttribute>("fname");
+
+    if (node.get_attr<BoolAttribute>("add_prefix"))
+      fpath = prepend_project_name_to_path(fpath);
+
+    std::string fname = fpath.string();
 
     // --- if available export RGBA to an image file
 

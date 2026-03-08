@@ -30,10 +30,11 @@ void setup_export_normal_map_node(BaseNode &node)
                                    "PNG (*.png)",
                                    true);
   node.add_attr<BoolAttribute>("16bit", "16bit", false);
-  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
+  node.add_attr<BoolAttribute>("auto_export", "Auto Export on Node Update", false);
+  node.add_attr<BoolAttribute>("add_prefix", "Add Project Name as Prefix", false);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"fname", "16bit", "auto_export"});
+  node.set_attr_ordered_key({"fname", "16bit", "auto_export", "add_prefix"});
 
   // specialized GUI
 }
@@ -48,6 +49,9 @@ void compute_export_normal_map_node(BaseNode &node)
   {
     std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
     fname = ensure_extension(fname, ".png");
+
+    if (node.get_attr<BoolAttribute>("add_prefix"))
+      fname = prepend_project_name_to_path(fname);
 
     if (node.get_attr<BoolAttribute>("16bit"))
       hmap::export_normal_map_png(fname.string(),

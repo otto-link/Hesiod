@@ -34,7 +34,8 @@ void setup_export_cloud_to_ply_node(BaseNode &node)
                                    std::filesystem::path("points.ply"),
                                    "Stanford PLY (*.ply)",
                                    true);
-  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
+  node.add_attr<BoolAttribute>("auto_export", "Auto Export on Node Update", false);
+  node.add_attr<BoolAttribute>("add_prefix", "Add Project Name as Prefix", false);
   node.add_attr<StringAttribute>("label1", "", "data1");
   node.add_attr<StringAttribute>("label2", "", "data2");
   node.add_attr<StringAttribute>("label3", "", "data3");
@@ -49,6 +50,7 @@ void setup_export_cloud_to_ply_node(BaseNode &node)
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
                              "fname",
                              "auto_export",
+                             "add_prefix",
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Custom data labels",
@@ -79,6 +81,9 @@ void compute_export_cloud_to_ply_node(BaseNode &node)
   {
     std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
     fname = ensure_extension(fname, ".ply");
+
+    if (node.get_attr<BoolAttribute>("add_prefix"))
+      fname = prepend_project_name_to_path(fname);
 
     // --- create custom fields
 

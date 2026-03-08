@@ -37,7 +37,8 @@ void setup_export_tiled_node(BaseNode &node)
   node.add_attr<IntAttribute>("leading_zeros", "Leading Zeroes", 3, 1, 6);
   node.add_attr<BoolAttribute>("overlapping_edges", "Overlapping Edges", false);
   node.add_attr<BoolAttribute>("reverse_tile_y_indexing", "Reverse y-indexing", false);
-  node.add_attr<BoolAttribute>("auto_export", "auto_export", false);
+  node.add_attr<BoolAttribute>("auto_export", "Auto Export on Node Update", false);
+  node.add_attr<BoolAttribute>("add_prefix", "Add Project Name as Prefix", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"fname",
@@ -47,7 +48,8 @@ void setup_export_tiled_node(BaseNode &node)
                              "leading_zeros",
                              "overlapping_edges",
                              "reverse_tile_y_indexing",
-                             "auto_export"});
+                             "auto_export",
+                             "add_prefix"});
 }
 
 void compute_export_tiled_node(BaseNode &node)
@@ -60,6 +62,9 @@ void compute_export_tiled_node(BaseNode &node)
   {
     // prepare parameters
     std::filesystem::path fname = node.get_attr<FilenameAttribute>("fname");
+
+    if (node.get_attr<BoolAttribute>("add_prefix"))
+      fname = prepend_project_name_to_path(fname);
 
     int bit_depth;
     if (node.get_attr<ChoiceAttribute>("bit_depth") == "8 bit")
