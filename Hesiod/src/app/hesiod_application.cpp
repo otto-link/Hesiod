@@ -463,8 +463,14 @@ void HesiodApplication::on_save_as()
 
   if (!new_fname.isNull() && !new_fname.isEmpty())
   {
-    this->save_project_model_and_ui(new_fname.toStdString());
-    this->context.project_model->set_path(new_fname.toStdString());
+    fs::path clean_path = fs::path(new_fname.toStdString());
+    clean_path = ensure_extension(clean_path, ".hsd");
+
+    Logger::log()->trace("HesiodApplication::on_save_as: clean_path: {}",
+                         clean_path.string());
+
+    this->save_project_model_and_ui(clean_path.string());
+    this->context.project_model->set_path(clean_path.string());
   }
 }
 
