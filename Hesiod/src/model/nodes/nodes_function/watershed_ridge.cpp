@@ -151,7 +151,7 @@ void compute_watershed_ridge_node(BaseNode &node)
                        std::vector<hmap::Array *>       p_arrays_out,
                        const hmap::TileRegion &)
       {
-        const auto [pa_in, pa_dx, pa_dy, pa_mask, pa_scaling] = unpack<5>(p_arrays_in);
+        auto [pa_in, pa_dx, pa_dy, pa_mask, pa_scaling] = unpack<5>(p_arrays_in);
         auto [pa_out] = unpack<1>(p_arrays_out);
 
         *pa_out = hmap::gpu::watershed_ridge(*pa_in,
