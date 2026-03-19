@@ -3,6 +3,8 @@
  * this software. */
 #include <fstream>
 
+#include "highmap/range.hpp"
+
 #include "attributes.hpp"
 
 #include "hesiod/logger.hpp"
@@ -30,8 +32,13 @@ void setup_import_heightmap_node(BaseNode &node)
                                    false);
   node.add_attr<BoolAttribute>("flip_y", "flip_y", true);
 
+  node.add_attr<BoolAttribute>("clip_range", "clip_range", true);
+
+  std::vector<std::string> choices = {"Bicubic", "Nearest"};
+  node.add_attr<ChoiceAttribute>("sampling_method", "Sampling Method", choices);
+
   // attribute(s) order
-  node.set_attr_ordered_key({"fname", "flip_y"});
+  node.set_attr_ordered_key({"fname", "flip_y", "clip_range", "sampling_method"});
 
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = false, .remap_active_state = true});
@@ -44,23 +51,48 @@ void compute_import_heightmap_node(BaseNode &node)
   hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
   const std::string fname = node.get_attr<FilenameAttribute>("fname").string();
-  std::ifstream     f(fname.c_str());
 
-  if (f.good())
+  // sanity check
   {
-    hmap::Array z = hmap::Array(node.get_attr<FilenameAttribute>("fname").string(),
-                                node.get_attr<BoolAttribute>("flip_y"));
+    std::ifstream f(fname.c_str());
 
-    p_out->from_array(z.resample_to_shape_bicubic(p_out->shape), node.cfg().cm_cpu);
-
-    // post-process
-    post_process_heightmap(node, *p_out);
+    if (!f.good())
+    {
+      Logger::log()->error("compute_import_heightmap_node: could not load image file {}",
+                           fname);
+      return;
+    }
   }
-  else
+
+  // raw import
+  hmap::Array z = hmap::Array(fname, node.get_attr<BoolAttribute>("flip_y"));
+
+  // resample to current shape
+  const std::string sampling_method = node.get_attr<ChoiceAttribute>("sampling_method");
+
+  if (sampling_method == "Bicubic")
+    z = z.resample_to_shape_bicubic(p_out->shape);
+  else if (sampling_method == "Nearest")
+    z = z.resample_to_shape_nearest(p_out->shape);
+
+  p_out->from_array(z, node.cfg().cm_cpu);
+
+  // make sure value range remains within [0, 1] to avoid overshoots
+  // due to interpolation
+  if (node.get_attr<BoolAttribute>("clip_range"))
   {
-    Logger::log()->error("compute_import_heightmap_node: could not load image file {}",
-                         fname);
+    hmap::for_each_tile(
+        {p_out},
+        [](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out] = unpack<1>(p_arrays);
+          hmap::clamp(*pa_out, 0.f, 1.f);
+        },
+        node.cfg().cm_cpu);
   }
+
+  // post-process
+  post_process_heightmap(node, *p_out);
 }
 
 } // namespace hesiod
