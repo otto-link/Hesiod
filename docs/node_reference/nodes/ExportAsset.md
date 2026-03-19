@@ -26,7 +26,8 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|Automatic Export|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
+|Add Project Name as Prefix|Bool|No description|
+|Auto Export on Node Update|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
 |Blending Method:|Enumeration|Defines the method used to blend the normal map for small details.|
 |Normal Map Scale|Float|Scaling factor applied to the detail normal map.|
 |Elevation Scale|Float|Factor used to scale elevation values.|

@@ -24,7 +24,8 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|No description|
+|Add Project Name as Prefix|Bool|No description|
+|Auto Export on Node Update|Bool|No description|
 |PNG Bit Depth|Choice|No description|
 |fname|Filename|No description|
 |Leading Zeroes|Integer|No description|

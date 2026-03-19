@@ -35,17 +35,21 @@ Erosion/Hydraulic
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|c_capacity|Float|Particle capacity.|
-|c_deposition|Float|Particle deposition coefficient.|
-|c_erosion|Float|Particle erosion cofficient.|
-|c_gravity|Float|No description|
-|c_inertia|Float|TODO|
-|deposition_only|Bool|TODO|
-|drag_rate|Float|Particle drag rate.|
-|evap_rate|Float|Particle water evaporation rate.|
-|particle_density|Float|TODO|
-|post_filtering|Bool|TODO|
-|post_filtering_local|Bool|TODO|
+|Directional Bias Angle|Float|No description|
+|Bedrock Elevation Gap|Float|No description|
+|Bedrock Slope Limit|Float|No description|
+|Bedrock Slope Gap|Float|No description|
+|Sediment Capacity|Float|Particle capacity.|
+|Deposition Rate|Float|Particle deposition coefficient.|
+|Erosion Rate|Float|Particle erosion cofficient.|
+|Particle Inertia Factor|Float|TODO|
+|Deposition Only Mode|Bool|TODO|
+|Velocity Drag Rate|Float|Particle drag rate.|
+|Enable Bedrock Resistance|Bool|No description|
+|Enable Directional Bias|Bool|No description|
+|Enable Ridge Forcing|Bool|No description|
+|Evaporation Rate|Float|Particle water evaporation rate.|
+|Particle Density|Float|TODO|
 |Gain|Float|Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.|
 |Gamma|Float|Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.|
 |Invert Output|Bool|Inverts the output values after processing, flipping low and high values across the midrange.|
@@ -54,8 +58,8 @@ Erosion/Hydraulic
 |Remap Range|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
 |Saturation Range|Value range|Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.|
 |Smoothing Radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
-|radius|Integer|No description|
-|scale|Float|No description|
+|Ridge Height|Float|No description|
+|Ridge Spatial Frequency|Float|No description|
 |Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 
 # Example

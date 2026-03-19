@@ -622,12 +622,6 @@
                 "label": "input3_weight",
                 "type": "Float"
             },
-            "inverse": {
-                "description": "No description",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "k1": {
                 "description": "No description",
                 "key": "k1",
@@ -687,12 +681,6 @@
                 "key": "radius2",
                 "label": "radius2",
                 "type": "Float"
-            },
-            "remap": {
-                "description": "No description",
-                "key": "remap",
-                "label": "remap",
-                "type": "Value range"
             },
             "swap_inputs_12": {
                 "description": "No description",
@@ -2156,7 +2144,14 @@
         "category": "Geometry/Cloud",
         "description": "CloudToArrayInterp generates a smooth and continuous 2D elevation map from a set of scattered points using Delaunay linear interpolation.",
         "label": "CloudToArrayInterp",
-        "parameters": null,
+        "parameters": {
+            "itp_method": {
+                "description": "No description",
+                "key": "itp_method",
+                "label": "Interpolation Method",
+                "type": "Enumeration"
+            }
+        },
         "ports": {
             "cloud": {
                 "caption": "cloud",
@@ -4103,10 +4098,16 @@
         "description": "TODO",
         "label": "ExportAsCubemap",
         "parameters": {
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "cubemap_resolution": {
@@ -4154,10 +4155,16 @@
         "description": "Exports both the heightmap and texture as a single asset. The mesh can either be used as is or retriangulated using an optimization algorithm. Additionally, a normal map can be provided to model light effects of small details not represented by the mesh.",
         "label": "ExportAsset",
         "parameters": {
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
-                "label": "Automatic Export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "blending_method": {
@@ -4229,10 +4236,16 @@
         "description": "ExportCloud is an operator for exporting cloud data to a csv file.",
         "label": "ExportCloud",
         "parameters": {
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "fname": {
@@ -4256,10 +4269,16 @@
         "description": "No description available",
         "label": "ExportCloudToPly",
         "parameters": {
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "No description",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "fname": {
@@ -4355,22 +4374,28 @@
         "description": "ExportHeightmap is an operator for exporting a heightmap in various file formats.",
         "label": "ExportHeightmap",
         "parameters": {
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "fname": {
                 "description": "Export file name.",
                 "key": "fname",
-                "label": "fname",
+                "label": "Filename",
                 "type": "Filename"
             },
             "format": {
                 "description": "Export format. Available values: png (16 bit), png (8 bit), raw (16 bit, Unity).",
                 "key": "format",
-                "label": "format",
+                "label": "File Format",
                 "type": "Enumeration"
             }
         },
@@ -4394,10 +4419,16 @@
                 "label": "16bit",
                 "type": "Bool"
             },
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "fname": {
@@ -4421,10 +4452,16 @@
         "description": "ExportPath is an operator for exporting path data to a csv file.",
         "label": "ExportPath",
         "parameters": {
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "fname": {
@@ -4448,10 +4485,16 @@
         "description": "No description available",
         "label": "ExportPointsToPly",
         "parameters": {
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "No description",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "fname": {
@@ -4565,10 +4608,16 @@
                 "label": "16 bit",
                 "type": "Bool"
             },
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "fname": {
@@ -4592,10 +4641,16 @@
         "description": "No description available",
         "label": "ExportTiled",
         "parameters": {
+            "add_prefix": {
+                "description": "No description",
+                "key": "add_prefix",
+                "label": "Add Project Name as Prefix",
+                "type": "Bool"
+            },
             "auto_export": {
                 "description": "No description",
                 "key": "auto_export",
-                "label": "auto_export",
+                "label": "Auto Export on Node Update",
                 "type": "Bool"
             },
             "bit_depth": {
@@ -4994,6 +5049,12 @@
         "description": "No description available",
         "label": "FlowSimulation",
         "parameters": {
+            "depth_map_type": {
+                "description": "No description",
+                "key": "depth_map_type",
+                "label": "Predefined Depth Map",
+                "type": "Enumeration"
+            },
             "dry_out_ratio": {
                 "description": "No description",
                 "key": "dry_out_ratio",
@@ -5023,12 +5084,6 @@
                 "key": "post_filter",
                 "label": "Enable Filtering",
                 "type": "Bool"
-            },
-            "predefined_depth_map": {
-                "description": "No description",
-                "key": "predefined_depth_map",
-                "label": "Predefined Depth Map",
-                "type": "Choice"
             },
             "radius": {
                 "description": "No description",
@@ -5081,6 +5136,12 @@
         "description": "No description available",
         "label": "FlowSimulationViscous",
         "parameters": {
+            "depth_map_type": {
+                "description": "No description",
+                "key": "depth_map_type",
+                "label": "Predefined Depth Map",
+                "type": "Enumeration"
+            },
             "filter_radius": {
                 "description": "No description",
                 "key": "filter_radius",
@@ -6792,71 +6853,95 @@
         "description": "HydraulicParticle is a particle-based hydraulic erosion operator that simulates the erosion and sediment transport processes that occur due to the flow of water over a terrain represented by the input heightmap. This type of operator models erosion by tracking the movement of virtual particles (or sediment particles) as they are transported by water flow and interact with the terrain.",
         "label": "HydraulicParticle",
         "parameters": {
+            "angle_bias": {
+                "description": "No description",
+                "key": "angle_bias",
+                "label": "Directional Bias Angle",
+                "type": "Float"
+            },
+            "bd_elevation_strength": {
+                "description": "No description",
+                "key": "bd_elevation_strength",
+                "label": "Bedrock Elevation Gap",
+                "type": "Float"
+            },
+            "bd_slope": {
+                "description": "No description",
+                "key": "bd_slope",
+                "label": "Bedrock Slope Limit",
+                "type": "Float"
+            },
+            "bd_slope_strength": {
+                "description": "No description",
+                "key": "bd_slope_strength",
+                "label": "Bedrock Slope Gap",
+                "type": "Float"
+            },
             "c_capacity": {
                 "description": "Particle capacity.",
                 "key": "c_capacity",
-                "label": "c_capacity",
+                "label": "Sediment Capacity",
                 "type": "Float"
             },
             "c_deposition": {
                 "description": "Particle deposition coefficient.",
                 "key": "c_deposition",
-                "label": "c_deposition",
+                "label": "Deposition Rate",
                 "type": "Float"
             },
             "c_erosion": {
                 "description": "Particle erosion cofficient.",
                 "key": "c_erosion",
-                "label": "c_erosion",
-                "type": "Float"
-            },
-            "c_gravity": {
-                "description": "No description",
-                "key": "c_gravity",
-                "label": "c_gravity",
+                "label": "Erosion Rate",
                 "type": "Float"
             },
             "c_inertia": {
                 "description": "TODO",
                 "key": "c_inertia",
-                "label": "c_inertia",
+                "label": "Particle Inertia Factor",
                 "type": "Float"
             },
             "deposition_only": {
                 "description": "TODO",
                 "key": "deposition_only",
-                "label": "deposition_only",
+                "label": "Deposition Only Mode",
                 "type": "Bool"
             },
             "drag_rate": {
                 "description": "Particle drag rate.",
                 "key": "drag_rate",
-                "label": "drag_rate",
+                "label": "Velocity Drag Rate",
                 "type": "Float"
+            },
+            "enable_default_bedrock": {
+                "description": "No description",
+                "key": "enable_default_bedrock",
+                "label": "Enable Bedrock Resistance",
+                "type": "Bool"
+            },
+            "enable_directional_bias": {
+                "description": "No description",
+                "key": "enable_directional_bias",
+                "label": "Enable Directional Bias",
+                "type": "Bool"
+            },
+            "enable_ridge_forcing": {
+                "description": "No description",
+                "key": "enable_ridge_forcing",
+                "label": "Enable Ridge Forcing",
+                "type": "Bool"
             },
             "evap_rate": {
                 "description": "Particle water evaporation rate.",
                 "key": "evap_rate",
-                "label": "evap_rate",
+                "label": "Evaporation Rate",
                 "type": "Float"
             },
             "particle_density": {
                 "description": "TODO",
                 "key": "particle_density",
-                "label": "particle_density",
+                "label": "Particle Density",
                 "type": "Float"
-            },
-            "post_filtering": {
-                "description": "TODO",
-                "key": "post_filtering",
-                "label": "post_filtering",
-                "type": "Bool"
-            },
-            "post_filtering_local": {
-                "description": "TODO",
-                "key": "post_filtering_local",
-                "label": "post_filtering_local",
-                "type": "Bool"
             },
             "post_gain": {
                 "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
@@ -6906,16 +6991,16 @@
                 "label": "Smoothing Radius",
                 "type": "Float"
             },
-            "radius": {
+            "ridge_elevation_amplitude": {
                 "description": "No description",
-                "key": "radius",
-                "label": "radius",
-                "type": "Integer"
+                "key": "ridge_elevation_amplitude",
+                "label": "Ridge Height",
+                "type": "Float"
             },
-            "scale": {
+            "ridge_spatial_frequency": {
                 "description": "No description",
-                "key": "scale",
-                "label": "scale",
+                "key": "ridge_spatial_frequency",
+                "label": "Ridge Spatial Frequency",
                 "type": "Float"
             },
             "seed": {
@@ -6971,75 +7056,183 @@
         }
     },
     "HydraulicProcedural": {
-        "category": "WIP",
+        "category": "Erosion/Hydraulic",
         "description": "TODO",
         "label": "HydraulicProcedural",
         "parameters": {
-            "delta": {
-                "description": "TODO",
-                "key": "delta",
-                "label": "delta",
+            "angle_shift": {
+                "description": "No description",
+                "key": "angle_shift",
+                "label": "Slope Angle Shift",
                 "type": "Float"
             },
-            "density_factor": {
-                "description": "TODO",
-                "key": "density_factor",
-                "label": "density_factor",
+            "apply_deposition": {
+                "description": "No description",
+                "key": "apply_deposition",
+                "label": "Enable Sediment Deposition",
+                "type": "Bool"
+            },
+            "c_erosion": {
+                "description": "No description",
+                "key": "c_erosion",
+                "label": "Erosion Strength",
                 "type": "Float"
+            },
+            "deposition_strength": {
+                "description": "No description",
+                "key": "deposition_strength",
+                "label": "Deposition Strength",
+                "type": "Float"
+            },
+            "enable_default_noise": {
+                "description": "No description",
+                "key": "enable_default_noise",
+                "label": "Enable Base Noise",
+                "type": "Bool"
             },
             "erosion_profile": {
                 "description": "TODO",
                 "key": "erosion_profile",
-                "label": "erosion_profile",
+                "label": "Erosion Profile Type",
                 "type": "Enumeration"
             },
-            "kernel_width_ratio": {
-                "description": "TODO",
-                "key": "kernel_width_ratio",
-                "label": "kernel_width_ratio",
+            "erosion_profile_parameter": {
+                "description": "No description",
+                "key": "erosion_profile_parameter",
+                "label": "Erosion Profile Sharpness",
                 "type": "Float"
             },
-            "noise_ratio": {
-                "description": "TODO",
-                "key": "noise_ratio",
-                "label": "noise_ratio",
+            "exclude_ridges": {
+                "description": "No description",
+                "key": "exclude_ridges",
+                "label": "Exclude Ridge Erosion",
+                "type": "Bool"
+            },
+            "gradient_power": {
+                "description": "No description",
+                "key": "gradient_power",
+                "label": "Gradient Response Exponent",
                 "type": "Float"
             },
-            "phase_noise_amp": {
-                "description": "TODO",
-                "key": "phase_noise_amp",
-                "label": "phase_noise_amp",
+            "gradient_scaling_ratio": {
+                "description": "No description",
+                "key": "gradient_scaling_ratio",
+                "label": "Gradient Scaling Ratio",
+                "type": "Float"
+            },
+            "kp_global": {
+                "description": "No description",
+                "key": "kp_global",
+                "label": "Spatial Frequency",
+                "type": "Float"
+            },
+            "lacunarity": {
+                "description": "No description",
+                "key": "lacunarity",
+                "label": "Lacunarity",
+                "type": "Float"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "noise_amp": {
+                "description": "No description",
+                "key": "noise_amp",
+                "label": "Noise Amplitude",
+                "type": "Float"
+            },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "Octaves",
+                "type": "Integer"
+            },
+            "persistence": {
+                "description": "No description",
+                "key": "persistence",
+                "label": "Persistence",
                 "type": "Float"
             },
             "phase_smoothing": {
                 "description": "TODO",
                 "key": "phase_smoothing",
-                "label": "phase_smoothing",
+                "label": "Phase Smoothing Factor",
                 "type": "Float"
             },
-            "reverse_phase": {
-                "description": "TODO",
-                "key": "reverse_phase",
-                "label": "reverse_phase",
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
                 "type": "Bool"
             },
-            "ridge_scaling": {
-                "description": "TODO",
-                "key": "ridge_scaling",
-                "label": "ridge_scaling",
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "Mix Factor",
                 "type": "Float"
             },
-            "ridge_wavelength": {
-                "description": "TODO",
-                "key": "ridge_wavelength",
-                "label": "ridge_wavelength",
-                "type": "Float"
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
             },
-            "rotate90": {
-                "description": "TODO",
-                "key": "rotate90",
-                "label": "rotate90",
-                "type": "Bool"
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
             },
             "seed": {
                 "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
@@ -7047,30 +7240,48 @@
                 "label": "Seed",
                 "type": "Random seed number"
             },
-            "slope_mask": {
-                "description": "TODO",
-                "key": "slope_mask",
-                "label": "slope_mask",
+            "talus_ref": {
+                "description": "No description",
+                "key": "talus_ref",
+                "label": "Reference Talus",
                 "type": "Float"
-            },
-            "use_default_mask": {
-                "description": "TODO",
-                "key": "use_default_mask",
-                "label": "use_default_mask",
-                "type": "Bool"
             }
         },
         "ports": {
+            "angle_shift": {
+                "caption": "angle_shift",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
             "input": {
                 "caption": "input",
                 "data_type": "VirtualArray",
                 "description": "TODO",
                 "type": "input"
             },
+            "kp_multiplier": {
+                "caption": "kp_multiplier",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
             "mask": {
                 "caption": "mask",
                 "data_type": "VirtualArray",
                 "description": "Mask defining the filtering intensity (expected in [0, 1]).",
+                "type": "input"
+            },
+            "noise_x": {
+                "caption": "noise_x",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "noise_y": {
+                "caption": "noise_y",
+                "data_type": "VirtualArray",
+                "description": "No description",
                 "type": "input"
             },
             "output": {
@@ -7521,6 +7732,12 @@
         "description": "ImportHeightmap imports an heighmap from a grayscale PNG 8bit file.",
         "label": "ImportHeightmap",
         "parameters": {
+            "clip_range": {
+                "description": "No description",
+                "key": "clip_range",
+                "label": "clip_range",
+                "type": "Bool"
+            },
             "flip_y": {
                 "description": "No description",
                 "key": "flip_y",
@@ -7568,6 +7785,12 @@
                 "key": "post_smoothing_radius",
                 "label": "Smoothing Radius",
                 "type": "Float"
+            },
+            "sampling_method": {
+                "description": "No description",
+                "key": "sampling_method",
+                "label": "Sampling Method",
+                "type": "Choice"
             }
         },
         "ports": {
@@ -8388,10 +8611,16 @@
         "description": "The Lerp operator, short for linear interpolation, is a method for smoothly transitioning between two values over a specified range or interval.",
         "label": "Lerp",
         "parameters": {
+            "swap_inputs": {
+                "description": "No description",
+                "key": "swap_inputs",
+                "label": "Swap Inputs",
+                "type": "Bool"
+            },
             "t": {
                 "description": "Lerp factor (in [0, 1]). Used only if the node input 't' is not set.",
                 "key": "t",
-                "label": "t",
+                "label": "Blend Factor 't' (a -> b)",
                 "type": "Float"
             }
         },
@@ -9859,6 +10088,123 @@
             },
             "out": {
                 "caption": "out",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
+    "Mudslide": {
+        "category": "WIP",
+        "description": "No description available",
+        "label": "Mudslide",
+        "parameters": {
+            "depth": {
+                "description": "No description",
+                "key": "depth",
+                "label": "depth",
+                "type": "Float"
+            },
+            "depth_map_exponent": {
+                "description": "No description",
+                "key": "depth_map_exponent",
+                "label": "depth_map_exponent",
+                "type": "Float"
+            },
+            "duration": {
+                "description": "No description",
+                "key": "duration",
+                "label": "Simulation Duration",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "slope_limit": {
+                "description": "No description",
+                "key": "slope_limit",
+                "label": "slope_limit",
+                "type": "Float"
+            },
+            "solver_stride": {
+                "description": "No description",
+                "key": "solver_stride",
+                "label": "Solver Iteration Stride",
+                "type": "Integer"
+            },
+            "viscosity_law_power": {
+                "description": "No description",
+                "key": "viscosity_law_power",
+                "label": "viscosity_law_power",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "depth": {
+                "caption": "depth",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            },
+            "input": {
+                "caption": "input",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "landslide_mask": {
+                "caption": "landslide_mask",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
                 "data_type": "VirtualArray",
                 "description": "No description",
                 "type": "output"
@@ -11925,6 +12271,135 @@
                 "data_type": "Path",
                 "description": "Input path.",
                 "type": "input"
+            }
+        }
+    },
+    "Phasor": {
+        "category": "Primitive/Coherent",
+        "description": "No description available",
+        "label": "Phasor",
+        "parameters": {
+            "angle_shift": {
+                "description": "No description",
+                "key": "angle_shift",
+                "label": "angle_shift",
+                "type": "Float"
+            },
+            "delta": {
+                "description": "No description",
+                "key": "delta",
+                "label": "delta",
+                "type": "Float"
+            },
+            "kp_global": {
+                "description": "No description",
+                "key": "kp_global",
+                "label": "kp_global",
+                "type": "Float"
+            },
+            "lacunarity": {
+                "description": "No description",
+                "key": "lacunarity",
+                "label": "Lacunarity",
+                "type": "Float"
+            },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "Octaves",
+                "type": "Integer"
+            },
+            "persistence": {
+                "description": "No description",
+                "key": "persistence",
+                "label": "Persistence",
+                "type": "Float"
+            },
+            "phase_smoothing": {
+                "description": "No description",
+                "key": "phase_smoothing",
+                "label": "phase_smoothing",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "profile": {
+                "description": "No description",
+                "key": "profile",
+                "label": "Profile Type",
+                "type": "Enumeration"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "Seed",
+                "type": "Random seed number"
+            },
+            "weight": {
+                "description": "No description",
+                "key": "weight",
+                "label": "Weight",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "angle": {
+                "caption": "angle",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "noise_x": {
+                "caption": "noise_x",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "noise_y": {
+                "caption": "noise_y",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "phasor_fbm": {
+                "caption": "phasor_fbm",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
             }
         }
     },
@@ -16338,7 +16813,7 @@
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
                 "key": "radius",
-                "label": "radius",
+                "label": "Radius",
                 "type": "Float"
             }
         },
@@ -16815,6 +17290,12 @@
         "description": "No description available",
         "label": "SnowSimulation",
         "parameters": {
+            "depth_map_type": {
+                "description": "No description",
+                "key": "depth_map_type",
+                "label": "Predefined Depth Map",
+                "type": "Enumeration"
+            },
             "duration": {
                 "description": "Total simulated time. Higher values allow snow to settle, creep, and stabilize more.",
                 "key": "duration",
@@ -17268,6 +17749,12 @@
                 "label": "apply_ridge_mask",
                 "type": "Bool"
             },
+            "enable_ridge_noise": {
+                "description": "No description",
+                "key": "enable_ridge_noise",
+                "label": "enable_ridge_noise",
+                "type": "Bool"
+            },
             "gamma": {
                 "description": "No description",
                 "key": "gamma",
@@ -17464,8 +17951,344 @@
             }
         }
     },
+    "StrataCells": {
+        "category": "Erosion/Stratify",
+        "description": "No description available",
+        "label": "StrataCells",
+        "parameters": {
+            "absolute_displacement": {
+                "description": "No description",
+                "key": "absolute_displacement",
+                "label": "Use Absolute Displacement",
+                "type": "Bool"
+            },
+            "amp": {
+                "description": "No description",
+                "key": "amp",
+                "label": "Strata Strength",
+                "type": "Float"
+            },
+            "angle": {
+                "description": "No description",
+                "key": "angle",
+                "label": "Orientation Angle",
+                "type": "Float"
+            },
+            "enable_default_noise": {
+                "description": "No description",
+                "key": "enable_default_noise",
+                "label": "Enable Base Noise",
+                "type": "Bool"
+            },
+            "gamma": {
+                "description": "No description",
+                "key": "gamma",
+                "label": "Longitudinal Sharpness",
+                "type": "Float"
+            },
+            "gamma_lateral": {
+                "description": "No description",
+                "key": "gamma_lateral",
+                "label": "Lateral Sharpness",
+                "type": "Float"
+            },
+            "kw": {
+                "description": "No description",
+                "key": "kw",
+                "label": "Spatial Frequency",
+                "type": "Wavenumber"
+            },
+            "lacunarity": {
+                "description": "No description",
+                "key": "lacunarity",
+                "label": "Lacunarity",
+                "type": "Float"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "noise_amp": {
+                "description": "No description",
+                "key": "noise_amp",
+                "label": "Base Noise Amplitude",
+                "type": "Float"
+            },
+            "occurence_probability": {
+                "description": "No description",
+                "key": "occurence_probability",
+                "label": "Feature Occurrence Probability",
+                "type": "Float"
+            },
+            "octaves": {
+                "description": "No description",
+                "key": "octaves",
+                "label": "Octaves",
+                "type": "Integer"
+            },
+            "persistence": {
+                "description": "No description",
+                "key": "persistence",
+                "label": "Persistence",
+                "type": "Float"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "Seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "noise_x": {
+                "caption": "noise_x",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "noise_y": {
+                "caption": "noise_y",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
+    "StrataTerrace": {
+        "category": "Erosion/Stratify",
+        "description": "No description available",
+        "label": "StrataTerrace",
+        "parameters": {
+            "gamma": {
+                "description": "No description",
+                "key": "gamma",
+                "label": "Profile Gamma",
+                "type": "Float"
+            },
+            "gamma_noise_ratio": {
+                "description": "No description",
+                "key": "gamma_noise_ratio",
+                "label": "Gamma Noise Influence",
+                "type": "Float"
+            },
+            "kz": {
+                "description": "No description",
+                "key": "kz",
+                "label": "Number of Strata",
+                "type": "Float"
+            },
+            "linear_gamma": {
+                "description": "No description",
+                "key": "linear_gamma",
+                "label": "Use Linear Terrace Profile",
+                "type": "Bool"
+            },
+            "mask_activate": {
+                "description": "No description",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "No description",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "No description",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "No description",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "No description",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "No description",
+                "key": "seed",
+                "label": "Seed",
+                "type": "Random seed number"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "noise": {
+                "caption": "noise",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "Terrace": {
-        "category": "Filter/Recurve",
+        "category": "WIP/DEPRECATED",
         "description": "Applies a terracing effect to the input heightmap by quantizing elevation levels into discrete steps, optionally modulated by noise.",
         "label": "Terrace",
         "parameters": {
@@ -20036,20 +20859,56 @@
             "amplitude": {
                 "description": "No description",
                 "key": "amplitude",
+                "label": "amplitude",
+                "type": "Float"
+            },
+            "default_scaling": {
+                "description": "No description",
+                "key": "default_scaling",
+                "label": "Enable Default Scaling",
+                "type": "Bool"
+            },
+            "dn_add_default_noise": {
+                "description": "No description",
+                "key": "dn_add_default_noise",
+                "label": "Activate",
+                "type": "Bool"
+            },
+            "dn_kw": {
+                "description": "No description",
+                "key": "dn_kw",
+                "label": "Spatial Frequency",
+                "type": "Float"
+            },
+            "dn_noise_amp": {
+                "description": "No description",
+                "key": "dn_noise_amp",
                 "label": "Amplitude",
+                "type": "Float"
+            },
+            "dn_noise_type": {
+                "description": "No description",
+                "key": "dn_noise_type",
+                "label": "Type",
+                "type": "Enumeration"
+            },
+            "dn_seed": {
+                "description": "No description",
+                "key": "dn_seed",
+                "label": "Seed",
+                "type": "Random seed number"
+            },
+            "dn_smoothness": {
+                "description": "No description",
+                "key": "dn_smoothness",
+                "label": "Smoothness",
                 "type": "Float"
             },
             "edt_exponent": {
                 "description": "No description",
                 "key": "edt_exponent",
-                "label": "Profile Exponent",
+                "label": "edt_exponent",
                 "type": "Float"
-            },
-            "fd_method": {
-                "description": "No description",
-                "key": "fd_method",
-                "label": "Flow Direction Method",
-                "type": "Enumeration"
             },
             "mask_activate": {
                 "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
@@ -20129,10 +20988,16 @@
                 "label": "Smoothing Radius",
                 "type": "Float"
             },
-            "radius": {
+            "prefilter_radius": {
                 "description": "No description",
-                "key": "radius",
-                "label": "Smoothing radius",
+                "key": "prefilter_radius",
+                "label": "Prefilter Radius",
+                "type": "Float"
+            },
+            "width": {
+                "description": "No description",
+                "key": "width",
+                "label": "width",
                 "type": "Float"
             }
         },
@@ -20149,12 +21014,6 @@
                 "description": "Displacement with respect to the domain size (y-direction).",
                 "type": "input"
             },
-            "input": {
-                "caption": "input",
-                "data_type": "VirtualArray",
-                "description": "No description",
-                "type": "input"
-            },
             "mask": {
                 "caption": "mask",
                 "data_type": "VirtualArray",
@@ -20166,6 +21025,18 @@
                 "data_type": "VirtualArray",
                 "description": "No description",
                 "type": "output"
+            },
+            "scaling": {
+                "caption": "scaling",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "z": {
+                "caption": "z",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
             }
         }
     },

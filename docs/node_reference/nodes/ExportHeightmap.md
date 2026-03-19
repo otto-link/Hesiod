@@ -24,9 +24,10 @@ IO/Files
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|auto_export|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
-|fname|Filename|Export file name.|
-|format|Enumeration|Export format. Available values: png (16 bit), png (8 bit), raw (16 bit, Unity).|
+|Add Project Name as Prefix|Bool|No description|
+|Auto Export on Node Update|Bool|Controls whether the output file is automatically written when the node is updated. Default is false. When set to true, the file is saved automatically on updates. If false, use the 'Force Reload' button on the node to manually trigger the export.|
+|Filename|Filename|Export file name.|
+|File Format|Enumeration|Export format. Available values: png (16 bit), png (8 bit), raw (16 bit, Unity).|
 
 # Example
 

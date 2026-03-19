@@ -20,8 +20,9 @@ Erosion/Hydraulic
 | :--- | :--- | :--- |
 |dx|VirtualArray|Displacement with respect to the domain size (x-direction).|
 |dy|VirtualArray|Displacement with respect to the domain size (y-direction).|
-|input|VirtualArray|No description|
 |mask|VirtualArray|No description|
+|scaling|VirtualArray|No description|
+|z|VirtualArray|No description|
 
 # Outputs
 
@@ -33,9 +34,15 @@ Erosion/Hydraulic
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|amplitude|Float|No description|
+|Enable Default Scaling|Bool|No description|
+|Activate|Bool|No description|
+|Spatial Frequency|Float|No description|
 |Amplitude|Float|No description|
-|Profile Exponent|Float|No description|
-|Flow Direction Method|Enumeration|No description|
+|Type|Enumeration|No description|
+|Seed|Random seed number|No description|
+|Smoothness|Float|No description|
+|edt_exponent|Float|No description|
 |mask_activate|Bool|Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.|
 |mask_gain|Float|Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.|
 |mask_inverse|Bool|Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.|
@@ -49,9 +56,16 @@ Erosion/Hydraulic
 |Remap Range|Value range|Linearly remaps the output values to a specified target range (default is [0, 1]).|
 |Saturation Range|Value range|Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.|
 |Smoothing Radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
-|Smoothing radius|Float|No description|
+|Prefilter Radius|Float|No description|
+|width|Float|No description|
 
 # Example
 
 
-No example available.
+![img](../../images/nodes/WatershedRidge_hsd_example.png)
+
+Corresponding Hesiod file: [WatershedRidge.hsd](../../examples/WatershedRidge.hsd). Use [Ctrl+I] in the node editor to import a hsd file within your current project. 
+
+> **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
+> If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
+

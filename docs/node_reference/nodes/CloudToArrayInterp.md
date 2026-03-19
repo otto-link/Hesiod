@@ -28,6 +28,12 @@ Geometry/Cloud
 | :--- | :--- | :--- |
 |heightmap|VirtualArray|Interpolated heightmap.|
 
+# Parameters
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|Interpolation Method|Enumeration|No description|
+
 # Example
 
 

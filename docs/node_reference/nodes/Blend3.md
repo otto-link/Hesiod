@@ -37,7 +37,6 @@ Operator/Blend
 |input1_weight|Float|No description|
 |input2_weight|Float|No description|
 |input3_weight|Float|No description|
-|inverse|Bool|No description|
 |k1|Float|No description|
 |k2|Float|No description|
 |Gain|Float|Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.|
@@ -48,7 +47,6 @@ Operator/Blend
 |Smoothing Radius|Float|Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.|
 |radius1|Float|No description|
 |radius2|Float|No description|
-|remap|Value range|No description|
 |swap_inputs_12|Bool|No description|
 |swap_inputs_23|Bool|No description|
 

@@ -33,6 +33,7 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|Predefined Depth Map|Enumeration|No description|
 |Filter Radius|Float|No description|
 |Flow Power|Float|No description|
 |Initial Material Depth|Float|No description|

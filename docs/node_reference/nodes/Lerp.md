@@ -32,7 +32,8 @@ Math/Base
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|t|Float|Lerp factor (in [0, 1]). Used only if the node input 't' is not set.|
+|Swap Inputs|Bool|No description|
+|Blend Factor 't' (a -> b)|Float|Lerp factor (in [0, 1]). Used only if the node input 't' is not set.|
 
 # Example
 

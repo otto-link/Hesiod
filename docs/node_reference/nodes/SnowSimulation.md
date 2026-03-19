@@ -34,6 +34,7 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|Predefined Depth Map|Enumeration|No description|
 |Simulation Duration|Float|Total simulated time. Higher values allow snow to settle, creep, and stabilize more.|
 |Depth Stiffening|Float|Controls how much snow becomes resistant to motion as depth increases. Higher values make thick snow more stable.|
 |Depth Repose Boost|Float|Increases the effective repose angle with snow depth, allowing deep snow to maintain steeper slopes.|

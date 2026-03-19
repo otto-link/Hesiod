@@ -13,7 +13,7 @@ Applies a terracing effect to the input heightmap by quantizing elevation levels
 # Category
 
 
-Filter/Recurve
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|
