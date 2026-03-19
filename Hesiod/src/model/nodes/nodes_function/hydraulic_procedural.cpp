@@ -82,7 +82,7 @@ void setup_hydraulic_procedural_node(BaseNode &node)
   node.add_attr<FloatAttribute>(A_GRADIENT_POWER, "Gradient Response Exponent", 0.8f, 0.01f, 4.f);
   node.add_attr<BoolAttribute>(A_EXCLUDE_RIDGES, "Exclude Ridge Erosion", true);
   node.add_attr<BoolAttribute>(A_APPLY_DEPOSITION, "Enable Sediment Deposition", true);
-  node.add_attr<FloatAttribute>(A_DEPOSITION_STRENGTH, "Deposition Strength", 0.5f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>(A_DEPOSITION_STRENGTH, "Deposition Strength", 1.f, 0.f, 1.f);
   node.add_attr<BoolAttribute>(A_ENABLE_DEFAULT_NOISE, "Enable Base Noise", true);
   node.add_attr<FloatAttribute>(A_NOISE_AMP, "Noise Amplitude", 0.005f, 0.0001f, 0.1f, "{:.2e}", true);
   // clang-format on
