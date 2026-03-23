@@ -74,7 +74,7 @@ void setup_hydraulic_particle_node(BaseNode &node)
   // clang-format off
   node.add_attr<SeedAttribute>(A_SEED, "Seed");
   node.add_attr<FloatAttribute>(A_PARTICLE_DENSITY, "Particle Density", 0.5f, 0.f, 4.f);
-  node.add_attr<FloatAttribute>(A_C_CAPACITY, "Sediment Capacity", 10.f, 0.1f, 40.f);
+  node.add_attr<FloatAttribute>(A_C_CAPACITY, "Sediment Capacity", 5.f, 0.1f, 40.f);
   node.add_attr<FloatAttribute>(A_C_EROSION, "Erosion Rate", 0.05f, 0.f, 0.3f);
   node.add_attr<FloatAttribute>(A_C_DEPOSITION, "Deposition Rate", 0.2f, 0.f, 0.3f);
   node.add_attr<FloatAttribute>(A_C_INERTIA, "Particle Inertia Factor", 0.2f, 0.f, 0.9f);
