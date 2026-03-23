@@ -31,38 +31,42 @@ void setup_hydraulic_blur_node(BaseNode &node)
   node.set_attr_ordered_key({"radius", "vmax", "k_smoothing"});
 
   setup_post_process_heightmap_attributes(node,
-                                          {.add_mix = true, .remap_active_state = true});
+                                          {.add_mix = true, .remap_active_state = false});
 }
 
 void compute_hydraulic_blur_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
+  auto *p_in = node.get_value_ref<hmap::VirtualArray>("input");
+  auto *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-  if (p_in)
-  {
-    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+  if (!p_in)
+    return;
 
-    hmap::for_each_tile(
-        {p_out, p_in},
-        [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
-        {
-          auto [pa_out, pa_in] = unpack<2>(p_arrays);
-          *pa_out = *pa_in;
+  float zmin = p_in->min(node.cfg().cm_cpu);
+  float zmax = p_in->max(node.cfg().cm_cpu);
 
-          hmap::hydraulic_blur(*pa_out,
-                               node.get_attr<FloatAttribute>("radius"),
-                               node.get_attr<FloatAttribute>("vmax"),
-                               node.get_attr<FloatAttribute>("k_smoothing"));
-        },
-        node.cfg().cm_cpu);
+  hmap::for_each_tile(
+      {p_out, p_in},
+      [&node](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+      {
+        auto [pa_out, pa_in] = unpack<2>(p_arrays);
+        *pa_out = *pa_in;
 
-    p_out->smooth_overlap_buffers();
+        hmap::hydraulic_blur(*pa_out,
+                             node.get_attr<FloatAttribute>("radius"),
+                             node.get_attr<FloatAttribute>("vmax"),
+                             node.get_attr<FloatAttribute>("k_smoothing"));
+      },
+      node.cfg().cm_cpu);
 
-    // post-process
-    post_process_heightmap(node, *p_out, p_in);
-  }
+  // preverse input elevation range
+  p_out->remap(zmin, zmax, node.cfg().cm_cpu);
+
+  // post-process
+  p_out->smooth_overlap_buffers();
+  post_process_heightmap(node, *p_out, p_in);
 }
 
 } // namespace hesiod
