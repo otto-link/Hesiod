@@ -40,7 +40,7 @@ Hydrology
 |Enable Post Filtering|Bool|No description|
 |Rebase Depth to Zero|Bool|No description|
 |Simulation Duration|Float|No description|
-|Solver Iteration Stride|Integer|No description|
+|Solver Iteration Stride|Integer|Grid sampling stride used by the solver. Higher values process the snow field at a lower spatial resolution, reducing computation time at the cost of fine detail.|
 
 # Example
 

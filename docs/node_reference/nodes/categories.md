@@ -9,7 +9,7 @@ Node Categories
 |Boundaries||Bulkify, Falloff, SetBorders, ZeroedEdges|
 |Converter||HeightmapToKernel, HeightmapToMask, HeightmapToNormalMap, HeightmapToRGBA, NormalMapToHeightmap|
 |Debug||Debug, Preview|
-|Erosion|Hydraulic|HydraulicParticle, HydraulicProcedural, HydraulicStreamLog, Rifts, WatershedRidge|
+|Erosion|Hydraulic|HydraulicParticle, HydraulicProcedural, HydraulicSaleve, HydraulicStreamLog, Rifts, WatershedRidge|
 |Erosion|Stratify|Strata, StrataCells, StrataTerrace|
 |Erosion|Thermal|Thermal, ThermalScree, ValleyFill|
 |Erosion|Water|CoastalErosionDiffusion, CoastalErosionProfile|

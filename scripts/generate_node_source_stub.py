@@ -1,14 +1,20 @@
 import re
 
 cpp_function = """
-void mudslide(Array       &z,
-              const Array &landslide_mask,
-              float        depth,
-              int          iterations,
-              float        depth_map_exponent,
-              float  talus_limit,
-              float        viscosity_law_power,
-              Array       *p_depth)
+Array hydraulic_saleve(const Array &z,
+                       uint         seed,
+                       size_t       control_points_count,
+                       float        m_exp,
+                       float        uplift_rate,
+                       float        tolerance,
+                       int          max_iterations,
+                       float        smin,
+                       float        smax,
+                       float        strength,
+                       bool         scale_erodibility_with_z,
+                       float        erodibility_distrib_exp,
+                       const Array *p_noise_x,
+                       const Array *p_noise_y)
 """
 
 # ---------------------------

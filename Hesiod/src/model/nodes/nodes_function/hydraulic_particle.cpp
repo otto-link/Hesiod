@@ -132,6 +132,7 @@ void setup_hydraulic_particle_node(BaseNode &node)
                              A_ANGLE_BIAS,
                              "_GROUPBOX_END_"});
 
+  setup_pre_process_mask_attributes(node);
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = false});
 }
@@ -187,6 +188,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
     const int   nparticles = (int)(density * ncells);
     const float bd_talus = node.get_attr<FloatAttribute>(A_BD_SLOPE) / p_out->shape.x;
 
+    // clang-format off
     return P{
         .seed = node.get_attr<SeedAttribute>(A_SEED),
         .nparticles = nparticles,
@@ -197,8 +199,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
         .c_gravity = 1.f,
         .drag_rate = node.get_attr<FloatAttribute>(A_DRAG_RATE),
         .evap_rate = node.get_attr<FloatAttribute>(A_EVAP_RATE),
-        .enable_directional_bias = node.get_attr<BoolAttribute>(
-            A_ENABLE_DIRECTIONAL_BIAS),
+        .enable_directional_bias = node.get_attr<BoolAttribute>(A_ENABLE_DIRECTIONAL_BIAS),
         .angle_bias = node.get_attr<FloatAttribute>(A_ANGLE_BIAS),
         .deposition_only = node.get_attr<BoolAttribute>(A_DEPOSITION_ONLY),
         .enable_default_bedrock = node.get_attr<BoolAttribute>(A_ENABLE_DEFAULT_BEDROCK),
@@ -206,10 +207,9 @@ void compute_hydraulic_particle_node(BaseNode &node)
         .bd_slope_strength = node.get_attr<FloatAttribute>(A_BD_SLOPE_STRENGTH),
         .bd_talus = bd_talus,
         .enable_ridge_forcing = node.get_attr<BoolAttribute>(A_ENABLE_RIDGE_FORCING),
-        .ridge_spatial_frequency = node.get_attr<FloatAttribute>(
-            A_RIDGE_SPATIAL_FREQUENCY),
-        .ridge_elevation_amplitude = node.get_attr<FloatAttribute>(
-            A_RIDGE_ELEVATION_AMPLITUDE)};
+        .ridge_spatial_frequency = node.get_attr<FloatAttribute>(A_RIDGE_SPATIAL_FREQUENCY),
+        .ridge_elevation_amplitude = node.get_attr<FloatAttribute>(A_RIDGE_ELEVATION_AMPLITUDE)};
+    // clang-format on
   }();
 
   // --- Resolve bedrock
@@ -218,6 +218,10 @@ void compute_hydraulic_particle_node(BaseNode &node)
   // requested
   if (params.deposition_only)
     p_bedrock = p_in;
+
+  // --- Prepare mask
+
+  std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
 
   // --- Compute
 
@@ -263,6 +267,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
 
           ridges = 0.5f * ridges - 0.5f; // in [-1..0]
 
+          // TODO move this to params lambda
           const float talus_ref = 4.f / region.shape.x;
           const int   ir = std::max(1,
                                   int(region.shape.x / params.ridge_spatial_frequency));

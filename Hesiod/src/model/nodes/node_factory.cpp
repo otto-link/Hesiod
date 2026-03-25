@@ -241,6 +241,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"HydraulicMusgrave", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicParticle", "Erosion/Hydraulic"},
       {"HydraulicProcedural", "Erosion/Hydraulic"},
+      {"HydraulicSaleve", "Erosion/Hydraulic"},
       {"HydraulicSchott", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicStream", "WIP"}, // "Erosion/Hydraulic"
       {"HydraulicStreamLog", "Erosion/Hydraulic"},
@@ -566,6 +567,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(HydraulicMusgrave, hydraulic_musgrave);
     SETUP_NODE(HydraulicParticle, hydraulic_particle);
     SETUP_NODE(HydraulicProcedural, hydraulic_procedural);
+    SETUP_NODE(HydraulicSaleve, hydraulic_saleve);
     SETUP_NODE(HydraulicSchott, hydraulic_schott);
     SETUP_NODE(HydraulicStream, hydraulic_stream);
     SETUP_NODE(HydraulicStreamUpscaleAmplification,

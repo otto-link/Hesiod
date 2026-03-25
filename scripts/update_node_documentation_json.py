@@ -17,6 +17,19 @@ STD_PARAM = {
     "weight":
     "Controls how much higher FBM octaves contribute to the noise based on local elevation. A higher weight suppresses high-frequency octaves at low elevations and increases their influence at higher elevations, producing terrain where fine details appear mainly near peaks while lower areas remain smoother.",
     #
+    "dn_add_default_noise":
+    "Enables or disables the built-in drainage noise. If an external noise input is provided, it overrides this default noise.",
+    "dn_kw":
+    "Base spatial frequencies in the X and Y directions.",
+    "dn_noise_amp":
+    "Noise amplitude.",
+    "dn_noise_type":
+    "Noise type.",
+    "dn_seed":
+    "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
+    "dn_smoothness":
+    "Controls the resulting smoothness of the fractal layering process.",
+    #
     "post_gamma":
     "Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.",
     "post_gain":

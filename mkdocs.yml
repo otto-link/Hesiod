@@ -111,6 +111,7 @@ nav:
     - 'node_reference/nodes/HydraulicMusgrave.md'
     - 'node_reference/nodes/HydraulicParticle.md'
     - 'node_reference/nodes/HydraulicProcedural.md'
+    - 'node_reference/nodes/HydraulicSaleve.md'
     - 'node_reference/nodes/HydraulicSchott.md'
     - 'node_reference/nodes/HydraulicStream.md'
     - 'node_reference/nodes/HydraulicStreamLog.md'
