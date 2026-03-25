@@ -414,7 +414,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"WaterDepthDryOut", "Hydrology"},
       {"WaterDepthFromMask", "Hydrology"},
       {"WaterMask", "Hydrology"},
-      {"WatershedRidge", "Erosion/Hydraulic"},
+      {"WatershedRidge", "WIP"}, // , "Erosion/Hydraulic"},
       {"WaveDune", "Primitive/Function"},
       {"WaveletNoise", "Primitive/Coherent"},
       {"WaveSine", "Primitive/Function"},
