@@ -234,6 +234,10 @@ void compute_hydraulic_saleve_node(BaseNode &node)
                                          params.scale_erodibility_with_z,
                                          params.erodibility_distrib_exp,
                                          params.drainage_noise_strength,
+                                         /* enable_post_slope_limiter */ false,
+                                         /* post_slope_limit */ 0.f,
+                                         /* enable_post_smoothing */ true,
+                                         hmap::InterpolationMethod2D::ITP2D_DELAUNAY,
                                          pa_dx,
                                          pa_dy);
       },
