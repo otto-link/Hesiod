@@ -13,7 +13,7 @@ No description available
 # Category
 
 
-Erosion/Hydraulic
+WIP
 # Inputs
 
 |Name|Type|Description|
@@ -36,12 +36,12 @@ Erosion/Hydraulic
 | :--- | :--- | :--- |
 |amplitude|Float|No description|
 |Enable Default Scaling|Bool|No description|
-|Activate|Bool|No description|
-|Spatial Frequency|Float|No description|
-|Amplitude|Float|No description|
-|Type|Enumeration|No description|
-|Seed|Random seed number|No description|
-|Smoothness|Float|No description|
+|Activate|Bool|Enables or disables the built-in drainage noise. If an external noise input is provided, it overrides this default noise.|
+|Spatial Frequency|Float|Base spatial frequencies in the X and Y directions.|
+|Amplitude|Float|Noise amplitude.|
+|Type|Enumeration|Noise type.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
+|Smoothness|Float|Controls the resulting smoothness of the fractal layering process.|
 |edt_exponent|Float|No description|
 |mask_activate|Bool|Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.|
 |mask_gain|Float|Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.|

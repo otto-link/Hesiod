@@ -2552,6 +2552,42 @@
                 "label": "method",
                 "type": "Enumeration"
             },
+            "post_gain": {
+                "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
             "swap_inputs": {
                 "description": "No description",
                 "key": "swap_inputs",
@@ -4819,6 +4855,75 @@
             }
         }
     },
+    "FindCutPath": {
+        "category": "Geometry/Path",
+        "description": "Generates a path between two domain boundaries by selecting start and end points using weighted sampling and connecting them with a midpoint-based subdivision.",
+        "label": "FindCutPath",
+        "parameters": {
+            "end": {
+                "description": "Boundary where the path ends.",
+                "key": "end",
+                "label": "End Boundary",
+                "type": "Enumeration"
+            },
+            "favor_boundary_center": {
+                "description": "Biases selection toward the center of the boundary when randomly picking the start and end points.",
+                "key": "favor_boundary_center",
+                "label": "Favor Boundary Center",
+                "type": "Bool"
+            },
+            "favor_lower_elevation": {
+                "description": "Biases selection toward lower values in the input field when randomly picking the start and end points.",
+                "key": "favor_lower_elevation",
+                "label": "Favor Lower Elevation",
+                "type": "Bool"
+            },
+            "favor_sinks": {
+                "description": "Biases selection toward local minima (cells lower than or equal to their neighbors) when randomly picking the start and end points.",
+                "key": "favor_sinks",
+                "label": "Favor Sinks (Local Minima)",
+                "type": "Bool"
+            },
+            "midp_iterations": {
+                "description": "Number of midpoint subdivision steps used to refine the path.",
+                "key": "midp_iterations",
+                "label": "Midpoint Iterations",
+                "type": "Integer"
+            },
+            "midp_sigma": {
+                "description": "Controls the amplitude of midpoint displacement (path deviation).",
+                "key": "midp_sigma",
+                "label": "Midpoint Radius",
+                "type": "Float"
+            },
+            "seed": {
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
+                "key": "seed",
+                "label": "Seed",
+                "type": "Random seed number"
+            },
+            "start": {
+                "description": "Boundary where the path starts (e.g., West, East, North, South).",
+                "key": "start",
+                "label": "Start Boundary",
+                "type": "Enumeration"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "VirtualArray",
+                "description": "Input scalar field used to guide boundary point selection (e.g., elevation map).",
+                "type": "input"
+            },
+            "path": {
+                "caption": "path",
+                "data_type": "Path",
+                "description": "Generated path connecting the selected boundary points.",
+                "type": "output"
+            }
+        }
+    },
     "FlatbedCarve": {
         "category": "Hydrology",
         "description": "Carves and blends a flatbed shape along a path into an existing heightmap using a smooth radial falloff. The operator is typically used to create river beds, channels, or flattened corridors that follow a user-defined path.",
@@ -6936,6 +7041,36 @@
                 "key": "evap_rate",
                 "label": "Evaporation Rate",
                 "type": "Float"
+            },
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
             },
             "particle_density": {
                 "description": "TODO",
@@ -21077,7 +21212,7 @@
         }
     },
     "WatershedRidge": {
-        "category": "Erosion/Hydraulic",
+        "category": "WIP",
         "description": "No description available",
         "label": "WatershedRidge",
         "parameters": {

@@ -38,12 +38,12 @@ Erosion/Hydraulic
 |apply_mask|Bool|No description|
 |center|Vec2Float|No description|
 |clamp_vmin|Float|No description|
-|Activate|Bool|No description|
-|Spatial Frequency|Float|No description|
-|Amplitude|Float|No description|
-|Type|Enumeration|No description|
-|Seed|Random seed number|No description|
-|Smoothness|Float|No description|
+|Activate|Bool|Enables or disables the built-in drainage noise. If an external noise input is provided, it overrides this default noise.|
+|Spatial Frequency|Float|Base spatial frequencies in the X and Y directions.|
+|Amplitude|Float|Noise amplitude.|
+|Type|Enumeration|Noise type.|
+|Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
+|Smoothness|Float|Controls the resulting smoothness of the fractal layering process.|
 |elevation_noise_amp|Float|No description|
 |elevation_noise_shift|Float|No description|
 |k_smooth_bottom|Float|No description|
