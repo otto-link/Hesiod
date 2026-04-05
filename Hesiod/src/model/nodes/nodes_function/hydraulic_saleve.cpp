@@ -93,6 +93,11 @@ void setup_hydraulic_saleve_node(BaseNode &node)
                              A_SMIN,
                              "_GROUPBOX_END_",
                              //
+                             "_GROUPBOX_BEGIN_Sediment Deposition",
+                             A_DEPOSITION_RADIUS,
+                             A_DEPOSITION_STRENGTH,
+                             "_GROUPBOX_END_",
+                             //
                              "_GROUPBOX_BEGIN_Secondary Flow Erosion",
                              A_STREAM_STRENGTH,
                              A_STREAM_EXP,
@@ -101,11 +106,6 @@ void setup_hydraulic_saleve_node(BaseNode &node)
                              "_GROUPBOX_BEGIN_Terrain Shape Preservation",
                              A_SCALE_ERODIBILITY_WITH_Z,
                              A_ERODIBILITY_DISTRIB_EXP,
-                             "_GROUPBOX_END_",
-                             //
-                             "_GROUPBOX_BEGIN_Sediment Deposition",
-                             A_DEPOSITION_RADIUS,
-                             A_DEPOSITION_STRENGTH,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Simulation & Solver",
@@ -237,7 +237,7 @@ void compute_hydraulic_saleve_node(BaseNode &node)
                                          /* enable_post_slope_limiter */ false,
                                          /* post_slope_limit */ 0.f,
                                          /* enable_post_smoothing */ true,
-                                         hmap::InterpolationMethod2D::ITP2D_DELAUNAY,
+                                         hmap::InterpolationMethod2D::ITP2D_NNI,
                                          pa_dx,
                                          pa_dy);
       },

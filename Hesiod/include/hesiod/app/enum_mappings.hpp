@@ -36,6 +36,13 @@ static struct EnumMappings
       {"soft", BlendingMethod::SOFT},
       {"substract", BlendingMethod::SUBSTRACT}};
 
+  const std::map<std::string, int> domain_boundary_map = {
+      {"West", hmap::DomainBoundary::BOUNDARY_LEFT},
+      {"East", hmap::DomainBoundary::BOUNDARY_RIGHT},
+      {"North", hmap::DomainBoundary::BOUNDARY_TOP},
+      {"South", hmap::DomainBoundary::BOUNDARY_BOTTOM},
+  };
+
   const std::map<std::string, int> clamping_mode_map = {
       {"Keep positive & clamp", hmap::ClampMode::POSITIVE_ONLY},
       {"Keep negative & clamp", hmap::ClampMode::NEGATIVE_ONLY},

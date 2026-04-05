@@ -212,6 +212,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ExportTiled", "IO/Files"},
       {"Falloff", "Boundaries"},
       {"FillTalus", "WIP"}, // Operator/Transform
+      {"FindCutPath", "Geometry/Path"},
       {"FlatbedCarve", "Hydrology"},
       {"FloodingFromBoundaries", "Hydrology"},
       {"FloodingFromPoint", "Hydrology"},
@@ -541,6 +542,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(ExportTiled, export_tiled);
     SETUP_NODE(Falloff, falloff);
     SETUP_NODE(FillTalus, fill_talus);
+    SETUP_NODE(FindCutPath, find_cut_path);
     SETUP_NODE(FlatbedCarve, flatbed_carve);
     SETUP_NODE(FloodingFromBoundaries, flooding_from_boundaries);
     SETUP_NODE(FloodingFromPoint, flooding_from_point);
