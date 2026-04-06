@@ -42,6 +42,8 @@ constexpr const char *A_DEPOSITION_RADIUS = "deposition_radius";
 constexpr const char *A_DEPOSITION_STRENGTH = "eposition_strength";
 constexpr const char *A_STREAM_STRENGTH = "stream_strength";
 constexpr const char *A_STREAM_EXP = "stream_exp";
+constexpr const char *A_ITP_METHOD = "itp_method";
+constexpr const char *A_ENABLE_POST_SMOOTHING = "enable_post_smoothing";
 
 // -----------------------------------------------------------------------------
 // Setup
@@ -77,6 +79,10 @@ void setup_hydraulic_saleve_node(BaseNode &node)
   node.add_attr<IntAttribute>(A_CONTROL_POINTS_COUNT, "Control Points Count", 15000, 500, 100000);
   node.add_attr<FloatAttribute>(A_TOLERANCE, "Convergence Tolerance", 1e-3f, 1e-5f, 1e-1f, "{:.2e}", /* log */ true);
   node.add_attr<IntAttribute>(A_MAX_ITERATIONS, "Max. Iterations", 500, 1, 1000);
+
+  std::vector<std::string> choices = {"Natural Neighbors", "Delaunay + Gradients"};
+  node.add_attr<ChoiceAttribute>(A_ITP_METHOD, "Interpolation Method", choices, "Delaunay + Gradients");
+  node.add_attr<BoolAttribute>(A_ENABLE_POST_SMOOTHING, "Enable Smoothing", false);
   // clang-format on
 
   // attribute(s) order
@@ -113,9 +119,11 @@ void setup_hydraulic_saleve_node(BaseNode &node)
                              A_TOLERANCE,
                              A_MAX_ITERATIONS,
                              A_SEED,
+                             A_ENABLE_POST_SMOOTHING,
+                             A_ITP_METHOD,
                              "_GROUPBOX_END_"});
 
-  setup_default_noise(node, {.noise_amp = 0.05f, .kw = 4.f, .smoothness = 0.3f});
+  setup_default_noise(node, {.noise_amp = 0.05f, .kw = 4.f, .smoothness = 0.15f});
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = false});
 }
@@ -143,23 +151,25 @@ void compute_hydraulic_saleve_node(BaseNode &node)
   {
     struct P
     {
-      uint   seed;
-      size_t count;
-      float  m_exp;
-      float  drainage_noise_strength;
-      float  uplift_rate;
-      float  tolerance;
-      int    max_iterations;
-      bool   uniform_smax;
-      float  smin;
-      float  smax;
-      float  strength;
-      bool   scale_erodibility_with_z;
-      float  erodibility_distrib_exp;
-      int    deposition_ir;
-      float  deposition_strength;
-      float  stream_strength;
-      float  stream_exp;
+      uint                        seed;
+      size_t                      count;
+      float                       m_exp;
+      float                       drainage_noise_strength;
+      float                       uplift_rate;
+      float                       tolerance;
+      int                         max_iterations;
+      bool                        uniform_smax;
+      float                       smin;
+      float                       smax;
+      float                       strength;
+      bool                        scale_erodibility_with_z;
+      float                       erodibility_distrib_exp;
+      int                         deposition_ir;
+      float                       deposition_strength;
+      float                       stream_strength;
+      float                       stream_exp;
+      hmap::InterpolationMethod2D itp_method;
+      bool                        enable_post_smoothing;
     };
 
     int   nx = p_out->shape.x;
@@ -167,6 +177,13 @@ void compute_hydraulic_saleve_node(BaseNode &node)
     bool  uniform_smax = node.get_attr<BoolAttribute>(A_UNIFORM_SMAX);
     float smax = node.get_attr<FloatAttribute>(A_SMAX);
     float smin = uniform_smax ? smax : node.get_attr<FloatAttribute>(A_SMIN);
+
+    std::string                 itp_choice = node.get_attr<ChoiceAttribute>(A_ITP_METHOD);
+    hmap::InterpolationMethod2D itp_method;
+    if (itp_choice == "Natural Neighbors")
+      itp_method = hmap::InterpolationMethod2D::ITP2D_NNI;
+    else
+      itp_method = hmap::InterpolationMethod2D::ITP2D_DELAUNAY_GRADIENT;
 
     // clang-format off
     return P{.seed = node.get_attr<SeedAttribute>(A_SEED),
@@ -185,7 +202,9 @@ void compute_hydraulic_saleve_node(BaseNode &node)
              .deposition_ir = deposition_ir,
              .deposition_strength = node.get_attr<FloatAttribute>(A_DEPOSITION_STRENGTH),
 	     .stream_strength = node.get_attr<FloatAttribute>(A_STREAM_STRENGTH),
-	     .stream_exp = node.get_attr<FloatAttribute>(A_STREAM_EXP)
+	     .stream_exp = node.get_attr<FloatAttribute>(A_STREAM_EXP),
+	     .itp_method = itp_method,
+	     .enable_post_smoothing = node.get_attr<BoolAttribute>(A_ENABLE_POST_SMOOTHING)
     };
     // clang-format on
   }();
@@ -236,8 +255,8 @@ void compute_hydraulic_saleve_node(BaseNode &node)
                                          params.drainage_noise_strength,
                                          /* enable_post_slope_limiter */ false,
                                          /* post_slope_limit */ 0.f,
-                                         /* enable_post_smoothing */ true,
-                                         hmap::InterpolationMethod2D::ITP2D_NNI,
+                                         params.enable_post_smoothing,
+                                         params.itp_method,
                                          pa_dx,
                                          pa_dy);
       },
