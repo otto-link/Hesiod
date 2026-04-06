@@ -25,8 +25,8 @@ constexpr const char *P_IN = "input";
 constexpr const char *A_SEED = "seed";
 constexpr const char *A_START = "start";
 constexpr const char *A_END = "end";
-constexpr const char *A_MIDP_ITERATIONS = "midp_iterations";
-constexpr const char *A_MIDP_SIGMA = "midp_sigma";
+constexpr const char *A_OFFSET_RATIO = "offset_ratio";
+constexpr const char *A_STEPS = "steps";
 constexpr const char *A_FAVOR_BOUNDARY_CENTER = "favor_boundary_center";
 constexpr const char *A_FAVOR_LOWER_ELEVATION = "favor_lower_elevation";
 constexpr const char *A_FAVOR_SINKS = "favor_sinks";
@@ -47,8 +47,8 @@ void setup_find_cut_path_node(BaseNode &node)
   // clang-format off
   node.add_attr<EnumAttribute>(A_START, "Start Boundary", enum_mappings.domain_boundary_map, "West");
   node.add_attr<EnumAttribute>(A_END, "End Boundary", enum_mappings.domain_boundary_map, "East");
-  node.add_attr<IntAttribute>(A_MIDP_ITERATIONS, "Midpoint Iterations", 4, 0, 8);
-  node.add_attr<FloatAttribute>(A_MIDP_SIGMA, "Midpoint Radius", 0.2f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>(A_OFFSET_RATIO, "Midpoint Radius", 0.2f, 0.f, 1.f);
+  node.add_attr<IntAttribute>(A_STEPS, "Search Steps", 16, 0, 32);
   node.add_attr<SeedAttribute>(A_SEED, "Seed");
   node.add_attr<BoolAttribute>(A_FAVOR_BOUNDARY_CENTER, "Favor Boundary Center", true);
   node.add_attr<BoolAttribute>(A_FAVOR_LOWER_ELEVATION, "Favor Lower Elevation", true);
@@ -62,8 +62,8 @@ void setup_find_cut_path_node(BaseNode &node)
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Midpoint",
-                             A_MIDP_ITERATIONS,
-                             A_MIDP_SIGMA,
+                             A_OFFSET_RATIO,
+                             A_STEPS,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Random",
@@ -100,8 +100,8 @@ void compute_find_cut_path_node(BaseNode &node)
       hmap::DomainBoundary start;
       hmap::DomainBoundary end;
       uint                 seed;
-      int                  midp_iterations;
-      float                midp_sigma;
+      float                offset_ratio;
+      int                  steps;
       bool                 favor_boundary_center;
       bool                 favor_lower_elevation;
       bool                 favor_sinks;
@@ -112,8 +112,8 @@ void compute_find_cut_path_node(BaseNode &node)
       .start = hmap::DomainBoundary(node.get_attr<EnumAttribute>(A_START)),
       .end = hmap::DomainBoundary(node.get_attr<EnumAttribute>(A_END)),
       .seed = node.get_attr<SeedAttribute>(A_SEED),
-      .midp_iterations = node.get_attr<IntAttribute>(A_MIDP_ITERATIONS),
-      .midp_sigma = node.get_attr<FloatAttribute>(A_MIDP_SIGMA),
+      .offset_ratio = node.get_attr<FloatAttribute>(A_OFFSET_RATIO),
+      .steps = node.get_attr<IntAttribute>(A_STEPS),
       .favor_boundary_center = node.get_attr<BoolAttribute>(A_FAVOR_BOUNDARY_CENTER),
       .favor_lower_elevation = node.get_attr<BoolAttribute>(A_FAVOR_LOWER_ELEVATION),
       .favor_sinks = node.get_attr<BoolAttribute>(A_FAVOR_SINKS)
@@ -134,8 +134,8 @@ void compute_find_cut_path_node(BaseNode &node)
                                                params.start,
                                                params.end,
                                                params.seed,
-                                               params.midp_iterations,
-                                               params.midp_sigma,
+                                               params.offset_ratio,
+                                               params.steps,
                                                params.favor_boundary_center,
                                                params.favor_lower_elevation,
                                                params.favor_sinks);
