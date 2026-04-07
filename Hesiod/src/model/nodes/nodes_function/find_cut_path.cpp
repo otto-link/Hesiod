@@ -30,6 +30,8 @@ constexpr const char *A_STEPS = "steps";
 constexpr const char *A_FAVOR_BOUNDARY_CENTER = "favor_boundary_center";
 constexpr const char *A_FAVOR_LOWER_ELEVATION = "favor_lower_elevation";
 constexpr const char *A_FAVOR_SINKS = "favor_sinks";
+constexpr const char *A_SMOOTH_PATH = "smooth_path";
+constexpr const char *A_SMOOTH_SAMPLING = "smooth_sampling";
 
 // -----------------------------------------------------------------------------
 // Setup
@@ -53,6 +55,8 @@ void setup_find_cut_path_node(BaseNode &node)
   node.add_attr<BoolAttribute>(A_FAVOR_BOUNDARY_CENTER, "Favor Boundary Center", true);
   node.add_attr<BoolAttribute>(A_FAVOR_LOWER_ELEVATION, "Favor Lower Elevation", true);
   node.add_attr<BoolAttribute>(A_FAVOR_SINKS, "Favor Sinks (Local Minima)", true);
+  node.add_attr<BoolAttribute>(A_SMOOTH_PATH, "Enable Path Smoothing", false);
+  node.add_attr<IntAttribute>(A_SMOOTH_SAMPLING, "Samples", 32, 2, INT_MAX);
   // clang-format on
 
   // attribute(s) order
@@ -68,6 +72,11 @@ void setup_find_cut_path_node(BaseNode &node)
                              //
                              "_GROUPBOX_BEGIN_Random",
                              A_SEED,
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Input Path Smoothing",
+                             A_SMOOTH_PATH,
+                             A_SMOOTH_SAMPLING,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Sampling Weights",
@@ -105,6 +114,8 @@ void compute_find_cut_path_node(BaseNode &node)
       bool                 favor_boundary_center;
       bool                 favor_lower_elevation;
       bool                 favor_sinks;
+      bool                 smooth_path;
+      int                  smooth_sampling;
     };
 
     // clang-format off
@@ -116,7 +127,9 @@ void compute_find_cut_path_node(BaseNode &node)
       .steps = node.get_attr<IntAttribute>(A_STEPS),
       .favor_boundary_center = node.get_attr<BoolAttribute>(A_FAVOR_BOUNDARY_CENTER),
       .favor_lower_elevation = node.get_attr<BoolAttribute>(A_FAVOR_LOWER_ELEVATION),
-      .favor_sinks = node.get_attr<BoolAttribute>(A_FAVOR_SINKS)
+      .favor_sinks = node.get_attr<BoolAttribute>(A_FAVOR_SINKS),
+      .smooth_path = node.get_attr<BoolAttribute>(A_SMOOTH_PATH),
+      .smooth_sampling = node.get_attr<IntAttribute>(A_SMOOTH_SAMPLING)
     };
     // clang-format on
   }();
@@ -139,6 +152,13 @@ void compute_find_cut_path_node(BaseNode &node)
                                                params.favor_boundary_center,
                                                params.favor_lower_elevation,
                                                params.favor_sinks);
+
+        if (params.smooth_path)
+        {
+          p_path->decimate_vw(params.smooth_sampling);
+          p_path->bspline();
+	  p_path->set_values_from_array(*pa_in);
+        }
       },
       node.cfg().cm_single_array); // forced, not tileable
 }
