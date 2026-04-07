@@ -34,7 +34,7 @@ void setup_flow_simulation_node(BaseNode &node)
                                 0.5f,
                                 "{:.2e}",
                                 /* log */ true);
-  node.add_attr<FloatAttribute>("duration", "Simulation Duration", 0.2f, 0.f, 2.f);
+  node.add_attr<FloatAttribute>("duration", "Simulation Duration", 0.2f, 0.f, 8.f);
   node.add_attr<FloatAttribute>("dry_out_ratio",
                                 "Dry-Out Threshold Ratio",
                                 0.01f,
