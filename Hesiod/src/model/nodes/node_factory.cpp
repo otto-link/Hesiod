@@ -426,7 +426,6 @@ std::map<std::string, std::string> get_node_inventory()
       {"Wrinkle", "WIP"}, // Filter/Recast
       {"ZeroedEdges", "Boundaries"},
       {"Zoom", "Operator/Transform"},
-      {"ZScore", "Features"},
   };
 
   return node_inventory;
@@ -746,7 +745,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Wrinkle, wrinkle);
     SETUP_NODE(ZeroedEdges, zeroed_edges);
     SETUP_NODE(Zoom, zoom);
-    SETUP_NODE(ZScore, z_score);
 #endif
   default:
     throw std::invalid_argument("Unknown node type in node_factory: " + node_type);
