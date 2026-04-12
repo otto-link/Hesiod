@@ -292,7 +292,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"NoiseRidged", "Primitive/Coherent"},
       {"NoiseSwiss", "Primitive/Coherent"},
       {"NormalDisplacement", "Filter/Recast"},
-      {"NormalMapToHeightmap", "Converter"},
+      {"NormalMapToHeightmap", "WIP"},
       {"Opening", "Operator/Morphology"},
       {"Paraboloid", "Primitive/Function"},
       {"Path", "Geometry/Path"},

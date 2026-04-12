@@ -121,7 +121,7 @@ static struct EnumMappings
       {"Relief", hmap::gpu::LocalMetrics::LM_LOCAL_RELIEF},
       {"Variance", hmap::gpu::LocalMetrics::LM_LOCAL_VARIANCE},
       {"Mean", hmap::gpu::LocalMetrics::LM_LOCAL_MEAN},
-      {"Skewness", hmap::gpu::LocalMetrics::LM_LOCAL_SKEWNESS},
+      // {"Skewness", hmap::gpu::LocalMetrics::LM_LOCAL_SKEWNESS},
       {"Z-Score", hmap::gpu::LocalMetrics::LM_LOCAL_Z_SCORE},
       {"Topographic Position Index",
        hmap::gpu::LocalMetrics::LM_TOPOGRAPHIC_POSITION_INDEX},

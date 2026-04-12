@@ -35,6 +35,8 @@ void setup_relative_elevation_node(BaseNode &node)
 
 void compute_relative_elevation_node(BaseNode &node)
 {
+  Logger::log()->error("RelativeElevation node is deprecated, use LocalMetrics node");
+
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");

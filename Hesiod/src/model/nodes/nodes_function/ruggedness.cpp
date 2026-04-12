@@ -36,6 +36,8 @@ void setup_ruggedness_node(BaseNode &node)
 
 void compute_ruggedness_node(BaseNode &node)
 {
+  Logger::log()->error("Ruggedness node is deprecated, use LocalMetrics node");
+
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");

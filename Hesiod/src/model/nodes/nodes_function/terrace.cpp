@@ -39,6 +39,8 @@ void setup_terrace_node(BaseNode &node)
 
 void compute_terrace_node(BaseNode &node)
 {
+  Logger::log()->error("Terrace node is deprecated, use StrataTerrace node");
+
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");

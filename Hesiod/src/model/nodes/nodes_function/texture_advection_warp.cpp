@@ -43,6 +43,9 @@ void setup_texture_advection_warp_node(BaseNode &node)
 
 void compute_texture_advection_warp_node(BaseNode &node)
 {
+  Logger::log()->error(
+      "TextureAdvectionWarp node is deprecated, use TextureAdvectionParticle node");
+
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::VirtualArray   *p_z = node.get_value_ref<hmap::VirtualArray>("elevation");

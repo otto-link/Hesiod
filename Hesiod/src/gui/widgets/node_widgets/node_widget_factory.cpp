@@ -15,7 +15,21 @@ QWidget *node_widget_factory(const std::string        &node_type,
 {
   std::string msg = "";
 
-  // adjust msg
+  // automatic msg for WIP and DEPRECATED categories
+  if (auto m = model.lock())
+  {
+    std::string cat = m->get_category();
+
+    Logger::log()->debug("cat: %s", cat);
+
+    if (cat.find("WIP") != std::string::npos)
+      msg = "Work in progress\nNode subject to change";
+
+    if (cat.find("DEPRECATED") != std::string::npos)
+      msg = "!!! Deprecated !!!";
+  }
+
+  // manually adjust msg for some
   std::vector<std::string> wip_nodes = {"CoastalErosionDiffusion",
                                         "HydraulicProcedural",
                                         "HydraulicSaleve",
@@ -24,21 +38,14 @@ QWidget *node_widget_factory(const std::string        &node_type,
                                         "MountainInselberg",
                                         "MountainStump",
                                         "MountainTibesti",
-                                        "NormalMapToHeightmap",
                                         "Strata",
                                         "Recurve",
                                         "Rifts",
                                         "ShatteredPeak",
-                                        "StrataCells",
-                                        "WaterDepthFromMask",
-                                        "WatershedRidge"};
-  std::vector<std::string> deprecated_nodes = {"Terrace", "TextureAdvectionWarp"};
+                                        "WaterDepthFromMask"};
 
   if (contains<std::string>(wip_nodes, node_type))
     msg = "Work in progress\nNode subject to change";
-
-  if (contains<std::string>(deprecated_nodes, node_type))
-    msg = "!!! Deprecated !!!";
 
   // create node
   if (node_type.starts_with("Export"))
