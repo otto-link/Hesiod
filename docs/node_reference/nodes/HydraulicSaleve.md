@@ -42,8 +42,10 @@ Erosion/Hydraulic
 |Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |Smoothness|Float|Controls the resulting smoothness of the fractal layering process.|
 |Drainage Noise Strength|Float|Adds spatial perturbation to flow directions. Breaks symmetry and produces more natural, irregular drainage patterns.|
+|Enable Smoothing|Bool|No description|
 |Sediment Deposition Strength|Float|Amount of material deposited during erosion. Higher => more filling of valleys and flatter basins.|
 |Shape Preservation Strength|Float|No description|
+|Interpolation Method|Choice|No description|
 |Drainage Exponent|Float|Controls how strongly water flow (drainage area) influences erosion. Higher values => channels concentrate more => sharper river networks.|
 |Max. Iterations|Integer|Hard cap on simulation steps.|
 |Gain|Float|Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.|

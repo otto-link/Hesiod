@@ -34,10 +34,12 @@ Geometry/Path
 |Favor Boundary Center|Bool|Biases selection toward the center of the boundary when randomly picking the start and end points.|
 |Favor Lower Elevation|Bool|Biases selection toward lower values in the input field when randomly picking the start and end points.|
 |Favor Sinks (Local Minima)|Bool|Biases selection toward local minima (cells lower than or equal to their neighbors) when randomly picking the start and end points.|
-|Midpoint Iterations|Integer|Number of midpoint subdivision steps used to refine the path.|
-|Midpoint Radius|Float|Controls the amplitude of midpoint displacement (path deviation).|
+|Midpoint Radius|Float|No description|
 |Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
+|Enable Path Smoothing|Bool|No description|
+|Samples|Integer|No description|
 |Start Boundary|Enumeration|Boundary where the path starts (e.g., West, East, North, South).|
+|Search Steps|Integer|No description|
 
 # Example
 

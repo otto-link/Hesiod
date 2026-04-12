@@ -1,6 +1,7 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <algorithm>
 #include <typeinfo>
 
 #include "highmap/geometry/cloud.hpp"
@@ -13,12 +14,18 @@
 namespace hesiod
 {
 
-std::string helper_get_preferred_port_inout(const BaseNode       &node,
-                                            const std::type_info &type,
-                                            const std::string    &exclude_name)
+std::string helper_get_preferred_port_inout(const BaseNode                 &node,
+                                            const std::type_info           &type,
+                                            const std::vector<std::string> &exclude_names)
 {
   std::string value;
   int         in_candidate = -1;
+
+  auto is_excluded = [&](const std::string &name)
+  {
+    return std::find(exclude_names.begin(), exclude_names.end(), name) !=
+           exclude_names.end();
+  };
 
   for (int k = 0; k < node.get_nports(); ++k)
   {
@@ -26,12 +33,13 @@ std::string helper_get_preferred_port_inout(const BaseNode       &node,
     {
       const std::string port_label = node.get_port_label(k);
 
-      if (node.get_port_type(k) == gngui::PortType::OUT && port_label != exclude_name)
+      if (node.get_port_type(k) == gngui::PortType::OUT && !is_excluded(port_label))
       {
         value = port_label;
         break; // OUT has priority
       }
-      else if (in_candidate == -1 && node.get_port_type(k) == gngui::PortType::IN)
+      else if (in_candidate == -1 && node.get_port_type(k) == gngui::PortType::IN &&
+               !is_excluded(port_label))
       {
         in_candidate = k;
       }
@@ -44,20 +52,21 @@ std::string helper_get_preferred_port_inout(const BaseNode       &node,
   return value;
 }
 
-std::string helper_get_preferred_port_label(const BaseNode       &node,
-                                            const std::type_info &type,
-                                            const std::string    &label)
+std::string helper_get_preferred_port_label(
+    const BaseNode                 &node,
+    const std::type_info           &type,
+    const std::vector<std::string> &preferred_labels)
 {
-  std::string value;
-
-  for (int k = 0; k < node.get_nports(); ++k)
-    if (node.get_port_label(k) == label && node.get_data_type(k) == type.name())
+  for (const std::string &label : preferred_labels)
+  {
+    for (int k = 0; k < node.get_nports(); ++k)
     {
-      value = node.get_port_label(k);
-      break;
+      if (node.get_port_label(k) == label && node.get_data_type(k) == type.name())
+        return label; // first preferred match
     }
+  }
 
-  return value;
+  return {};
 }
 
 void wild_guess_view_param(ViewerNodeParam &view_param,
@@ -70,38 +79,45 @@ void wild_guess_view_param(ViewerNodeParam &view_param,
     {
       value = helper_get_preferred_port_inout(node,
                                               typeid(hmap::VirtualArray),
-                                              "water_depth");
+                                              {"water_depth", "mask"});
     }
 
     if (key == "water_depth")
     {
       value = helper_get_preferred_port_label(node,
                                               typeid(hmap::VirtualArray),
-                                              "water_depth");
+                                              {"water_depth"});
     }
 
     if (key == "color")
     {
+      // try textures first
       value = helper_get_preferred_port_label(node,
                                               typeid(hmap::VirtualTexture),
-                                              "texture");
+                                              {"texture"});
+
+      // fallback to mask if any
+      if (value.empty())
+        value = helper_get_preferred_port_label(node,
+                                                typeid(hmap::VirtualArray),
+                                                {"mask"});
     }
 
     if (key == "normal_map")
     {
       value = helper_get_preferred_port_label(node,
                                               typeid(hmap::VirtualTexture),
-                                              "normal map");
+                                              {"normal map"});
     }
 
     if (key == "points")
     {
-      value = helper_get_preferred_port_inout(node, typeid(hmap::Cloud), "");
+      value = helper_get_preferred_port_inout(node, typeid(hmap::Cloud), {});
     }
 
     if (key == "path")
     {
-      value = helper_get_preferred_port_inout(node, typeid(hmap::Path), "");
+      value = helper_get_preferred_port_inout(node, typeid(hmap::Path), {});
     }
   }
 }

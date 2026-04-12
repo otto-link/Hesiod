@@ -7,6 +7,7 @@
 #include "highmap/colormaps.hpp"
 #include "highmap/erosion.hpp"
 #include "highmap/kernels.hpp"
+#include "highmap/local_metrics.hpp"
 #include "highmap/math.hpp"
 #include "highmap/morphology.hpp"
 #include "highmap/primitives.hpp"
@@ -111,6 +112,23 @@ static struct EnumMappings
       {"smooth_cosine", hmap::KernelType::SMOOTH_COSINE},
       {"square", hmap::KernelType::SQUARE},
       {"tricube", hmap::KernelType::TRICUBE}};
+
+  const std::map<std::string, int> local_metrics_map = {
+      {"Aspect Variance", hmap::gpu::LocalMetrics::LM_LOCAL_ASPECT_VARIANCE},
+      {"Maximum", hmap::gpu::LocalMetrics::LM_LOCAL_MAX},
+      {"Median Deviation", hmap::gpu::LocalMetrics::LM_LOCAL_MEDIAN_DEVIATION},
+      {"Minimum", hmap::gpu::LocalMetrics::LM_LOCAL_MIN},
+      {"Relief", hmap::gpu::LocalMetrics::LM_LOCAL_RELIEF},
+      {"Variance", hmap::gpu::LocalMetrics::LM_LOCAL_VARIANCE},
+      {"Mean", hmap::gpu::LocalMetrics::LM_LOCAL_MEAN},
+      {"Skewness", hmap::gpu::LocalMetrics::LM_LOCAL_SKEWNESS},
+      {"Z-Score", hmap::gpu::LocalMetrics::LM_LOCAL_Z_SCORE},
+      {"Topographic Position Index",
+       hmap::gpu::LocalMetrics::LM_TOPOGRAPHIC_POSITION_INDEX},
+      {"Relative Elevation", hmap::gpu::LocalMetrics::LM_RELATIVE_ELEVATION},
+      {"Ruggedness", hmap::gpu::LocalMetrics::LM_RUGGEDNESS},
+      {"Rugosity Concave", hmap::gpu::LocalMetrics::LM_RUGOSITY_CONCAVE},
+      {"Rugosity Convex", hmap::gpu::LocalMetrics::LM_RUGOSITY_CONVEX}};
 
   const std::map<std::string, int> mask_combine_method_map = {
       {"union", MaskCombineMethod::UNION},

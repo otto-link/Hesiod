@@ -157,7 +157,7 @@ void compute_find_cut_path_node(BaseNode &node)
         {
           p_path->decimate_vw(params.smooth_sampling);
           p_path->bspline();
-	  p_path->set_values_from_array(*pa_in);
+          p_path->set_values_from_array(*pa_in);
         }
       },
       node.cfg().cm_single_array); // forced, not tileable

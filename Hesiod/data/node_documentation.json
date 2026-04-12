@@ -4884,15 +4884,9 @@
                 "label": "Favor Sinks (Local Minima)",
                 "type": "Bool"
             },
-            "midp_iterations": {
-                "description": "Number of midpoint subdivision steps used to refine the path.",
-                "key": "midp_iterations",
-                "label": "Midpoint Iterations",
-                "type": "Integer"
-            },
-            "midp_sigma": {
-                "description": "Controls the amplitude of midpoint displacement (path deviation).",
-                "key": "midp_sigma",
+            "offset_ratio": {
+                "description": "No description",
+                "key": "offset_ratio",
                 "label": "Midpoint Radius",
                 "type": "Float"
             },
@@ -4902,11 +4896,29 @@
                 "label": "Seed",
                 "type": "Random seed number"
             },
+            "smooth_path": {
+                "description": "No description",
+                "key": "smooth_path",
+                "label": "Enable Path Smoothing",
+                "type": "Bool"
+            },
+            "smooth_sampling": {
+                "description": "No description",
+                "key": "smooth_sampling",
+                "label": "Samples",
+                "type": "Integer"
+            },
             "start": {
                 "description": "Boundary where the path starts (e.g., West, East, North, South).",
                 "key": "start",
                 "label": "Start Boundary",
                 "type": "Enumeration"
+            },
+            "steps": {
+                "description": "No description",
+                "key": "steps",
+                "label": "Search Steps",
+                "type": "Integer"
             }
         },
         "ports": {
@@ -7492,6 +7504,12 @@
                 "label": "Drainage Noise Strength",
                 "type": "Float"
             },
+            "enable_post_smoothing": {
+                "description": "No description",
+                "key": "enable_post_smoothing",
+                "label": "Enable Smoothing",
+                "type": "Bool"
+            },
             "eposition_strength": {
                 "description": "Amount of material deposited during erosion. Higher => more filling of valleys and flatter basins.",
                 "key": "eposition_strength",
@@ -7503,6 +7521,12 @@
                 "key": "erodibility_distrib_exp",
                 "label": "Shape Preservation Strength",
                 "type": "Float"
+            },
+            "itp_method": {
+                "description": "No description",
+                "key": "itp_method",
+                "label": "Interpolation Method",
+                "type": "Choice"
             },
             "m_exp": {
                 "description": "Controls how strongly water flow (drainage area) influences erosion. Higher values => channels concentrate more => sharper river networks.",
@@ -9011,13 +9035,100 @@
             }
         }
     },
+    "LocalMetrics": {
+        "category": "Features",
+        "description": "Computes local geometric metrics on a heightmap to characterize terrain features such as roughness, convexity, or other neighborhood-based properties. The result highlights spatial variations based on a selected metric and a given sampling radius, and can be further refined using percentile-based saturation and post-processing controls.",
+        "label": "LocalMetrics",
+        "parameters": {
+            "metric": {
+                "description": "Selects the type of local metric to compute. Each metric analyzes the neighborhood of a point (within the given radius) to extract features such as roughness (rugosity), convexity, or other shape descriptors.",
+                "key": "metric",
+                "label": "Local Metric",
+                "type": "Enumeration"
+            },
+            "post_gain": {
+                "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "radius": {
+                "description": "Defines the spatial radius used to compute the local metric. It controls the size of the neighborhood around each point, with larger values producing smoother, more global features and smaller values capturing fine details.",
+                "key": "radius",
+                "label": "Radius",
+                "type": "Float"
+            },
+            "satmax": {
+                "description": "Upper percentile used for adaptive saturation of the output values. Values above this percentile are progressively compressed to reduce the influence of extreme outliers, improving contrast in the majority of the data while preserving overall structure.",
+                "key": "satmax",
+                "label": "Saturation Ratio",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "VirtualArray",
+                "description": "Input heightmap on which the local metric is computed.",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "VirtualArray",
+                "description": "Output heightmap containing the computed local metric values after optional saturation and post-processing.",
+                "type": "output"
+            }
+        }
+    },
     "MakeBinary": {
         "category": "Operator/Morphology",
-        "description": "MakeBinary is a thresholding operator. It transforms an input heightmap into a binary heightmap, where each pixel is assigned either a value of 0 or 1, depending on whether its intensity value surpasses a specified threshold.",
+        "description": "No description available",
         "label": "MakeBinary",
         "parameters": {
             "threshold": {
-                "description": "Threshold value.",
+                "description": "No description",
                 "key": "threshold",
                 "label": "threshold",
                 "type": "Float"
@@ -9027,13 +9138,13 @@
             "input": {
                 "caption": "input",
                 "data_type": "VirtualArray",
-                "description": "Input heightmap.",
+                "description": "No description",
                 "type": "input"
             },
             "output": {
                 "caption": "output",
                 "data_type": "VirtualArray",
-                "description": "Binary heightmap.",
+                "description": "No description",
                 "type": "output"
             }
         }
@@ -17879,69 +17990,6 @@
             }
         }
     },
-    "StdLocal": {
-        "category": "Features",
-        "description": "No description available",
-        "label": "StdLocal",
-        "parameters": {
-            "post_gain": {
-                "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
-                "key": "post_gain",
-                "label": "Gain",
-                "type": "Float"
-            },
-            "post_gamma": {
-                "description": "Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.",
-                "key": "post_gamma",
-                "label": "Gamma",
-                "type": "Float"
-            },
-            "post_inverse": {
-                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
-                "key": "post_inverse",
-                "label": "Invert Output",
-                "type": "Bool"
-            },
-            "post_remap": {
-                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
-                "key": "post_remap",
-                "label": "Remap Range",
-                "type": "Value range"
-            },
-            "post_saturate": {
-                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
-                "key": "post_saturate",
-                "label": "Saturation Range",
-                "type": "Value range"
-            },
-            "post_smoothing_radius": {
-                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
-                "key": "post_smoothing_radius",
-                "label": "Smoothing Radius",
-                "type": "Float"
-            },
-            "radius": {
-                "description": "No description",
-                "key": "radius",
-                "label": "radius",
-                "type": "Float"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "VirtualArray",
-                "description": "No description",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "VirtualArray",
-                "description": "No description",
-                "type": "output"
-            }
-        }
-    },
     "SteepenConvective": {
         "category": "Filter/Recast",
         "description": "TODO",
@@ -22239,81 +22287,6 @@
                 "caption": "output",
                 "data_type": "VirtualArray",
                 "description": "TODO",
-                "type": "output"
-            }
-        }
-    },
-    "ZScore": {
-        "category": "Features",
-        "description": "No description available",
-        "label": "ZScore",
-        "parameters": {
-            "post_gain": {
-                "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
-                "key": "post_gain",
-                "label": "Gain",
-                "type": "Float"
-            },
-            "post_gamma": {
-                "description": "Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.",
-                "key": "post_gamma",
-                "label": "Gamma",
-                "type": "Float"
-            },
-            "post_inverse": {
-                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
-                "key": "post_inverse",
-                "label": "Invert Output",
-                "type": "Bool"
-            },
-            "post_mix": {
-                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
-                "key": "post_mix",
-                "label": "Mix Factor",
-                "type": "Float"
-            },
-            "post_mix_method": {
-                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
-                "key": "post_mix_method",
-                "label": "Mix Method",
-                "type": "Enumeration"
-            },
-            "post_remap": {
-                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
-                "key": "post_remap",
-                "label": "Remap Range",
-                "type": "Value range"
-            },
-            "post_saturate": {
-                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
-                "key": "post_saturate",
-                "label": "Saturation Range",
-                "type": "Value range"
-            },
-            "post_smoothing_radius": {
-                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
-                "key": "post_smoothing_radius",
-                "label": "Smoothing Radius",
-                "type": "Float"
-            },
-            "radius": {
-                "description": "No description",
-                "key": "radius",
-                "label": "radius",
-                "type": "Float"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "VirtualArray",
-                "description": "No description",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "VirtualArray",
-                "description": "No description",
                 "type": "output"
             }
         }

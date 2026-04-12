@@ -262,6 +262,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Kuwahara", "WIP"}, // Filter/Smoothing
       {"Laplace", "Filter/Smoothing"},
       {"Lerp", "Math/Base"},
+      {"LocalMetrics", "Features"},
       // {"LevelSetCurvature", "Features"},
       {"MakeBinary", "Operator/Morphology"},
       {"MakePeriodic", "Operator/Tiling"},
@@ -333,7 +334,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"RecurveKura", "Filter/Recurve"},
       {"RecurveS", "Filter/Recurve"},
       {"RelativeDistanceFromSkeleton", "Operator/Morphology"},
-      {"RelativeElevation", "Features/Landform"},
+      {"RelativeElevation", "WIP/DEPRECATED"},
       {"Remap", "Filter/Range"},
       {"Rescale", "Filter/Range"},
       {"ReverseAboveThreshold", "Filter/Recurve"},
@@ -343,8 +344,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"Rifts", "Erosion/Hydraulic"},
       {"Rotate", "Operator/Transform"},
       {"RotateDisplacement", "Math"},
-      {"Ruggedness", "Features"},
-      {"Rugosity", "Features"},
+      {"Ruggedness", "WIP/DEPRECATED"},
+      {"Rugosity", "Features/Advanced"},
       {"Saturate", "Filter/Recurve"},
       {"ScanMask", "Mask"},
       {"SedimentDeposition", "WIP"}, // "Erosion/Deposition"
@@ -588,6 +589,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Laplace, laplace);
     SETUP_NODE(Lerp, lerp);
     SETUP_NODE(LevelSetCurvature, level_set_curvature);
+    SETUP_NODE(LocalMetrics, local_metrics);
     SETUP_NODE(MakeBinary, make_binary);
     SETUP_NODE(MakePeriodic, make_periodic);
     SETUP_NODE(MakePeriodicStitching, make_periodic_stitching);
