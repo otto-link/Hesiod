@@ -42,6 +42,8 @@ void setup_accumulation_curvature_node(BaseNode &node)
 
 void compute_accumulation_curvature_node(BaseNode &node)
 {
+  Logger::log()->error("AccumulationCurvature node is deprecated, use Curvatures node");
+
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
@@ -59,7 +61,11 @@ void compute_accumulation_curvature_node(BaseNode &node)
         {
           auto [pa_out, pa_in] = unpack<2>(p_arrays);
           // nx^2 is gradient scaling...
-          *pa_out = nx * nx * hmap::gpu::accumulation_curvature(*pa_in, ir);
+          *pa_out = nx * nx *
+                    hmap::gpu::curvature_quadric(
+                        *pa_in,
+                        ir,
+                        hmap::gpu::CurvatureType::CT_ACCUMULATION);
 
           // truncate high values if requested
           if (node.get_attr<BoolAttribute>("clamp_max"))

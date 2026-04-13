@@ -39,6 +39,8 @@ void setup_curvature_mean_node(BaseNode &node)
 
 void compute_curvature_mean_node(BaseNode &node)
 {
+  Logger::log()->error("CurvatureMean node is deprecated, use Curvatures node");
+
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
@@ -55,7 +57,10 @@ void compute_curvature_mean_node(BaseNode &node)
         {
           auto [pa_out, pa_in] = unpack<2>(p_arrays);
           // compute mean curvature and scale it
-          *pa_out = hmap::curvature_mean(*pa_in) * nx;
+          *pa_out = hmap::gpu::curvature_quadric(*pa_in,
+                                                 0,
+                                                 hmap::gpu::CurvatureType::CT_MEAN) *
+                    nx;
 
           // determine curvature sign handling
           const std::string choice = node.get_attr<ChoiceAttribute>("values_kept");
@@ -78,7 +83,7 @@ void compute_curvature_mean_node(BaseNode &node)
           else
             hmap::clamp(*pa_out, -vc_max, vc_max);
         },
-        node.cfg().cm_cpu);
+        node.cfg().cm_gpu);
 
     p_out->smooth_overlap_buffers();
 

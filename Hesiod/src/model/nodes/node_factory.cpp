@@ -141,7 +141,7 @@ std::map<std::string, std::string> get_node_inventory()
   std::map<std::string, std::string> node_inventory = {
       {"Abs", "Math/Base"},
       {"AbsSmooth", "Math/Base"},
-      {"AccumulationCurvature", "Features/Landform"},
+      {"AccumulationCurvature", "WIP/DEPRECATED"},
       {"Badlands", "Primitive/Geological"},
       {"BasaltField", "Primitive/Geological"},
       {"Blend", "Operator/Blend"},
@@ -188,7 +188,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"ConvolveSVD", "Math/Convolution"},
       {"Cos", "Math/Base"},
       {"Crater", "Primitive/Geological"},
-      {"CurvatureMean", "Features"},
+      {"CurvatureMean", "WIP/DEPRECATED"},
+      {"Curvatures", "Features"},
       {"Debug", "Debug"},
       {"Dendry", "Primitive/Coherent"},
       {"DepressionFilling", "Erosion"},
@@ -367,7 +368,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SelectValley", "Mask/Selector"},
       {"SetAlpha", "Texture"},
       {"SetBorders", "Boundaries"},
-      {"ShapeIndex", "Filter/Smoothing"},
+      {"ShapeIndex", "WIP/DEPRECATED"},
       {"SharpenCone", "Filter/Smoothing"},
       {"ShatteredPeak", "Primitive/Geological"},
       {"ShiftElevation", "Filter/Range"},
@@ -401,7 +402,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Toggle", "Routing"},
       {"Transfer", "Operator/Blend"},
       {"Translate", "Operator/Transform"},
-      {"Unsphericity", "Features/Landform"},
+      {"Unsphericity", "WIP/DEPRECATED"},
       {"ValleyFill", "Erosion/Thermal"},
       {"ValleyWidth", "Features/Landform"},
       {"Vorolines", "Primitive/Coherent"},
@@ -520,6 +521,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(ConvolveSVD, convolve_svd);
     SETUP_NODE(Crater, crater);
     SETUP_NODE(CurvatureMean, curvature_mean);
+    SETUP_NODE(Curvatures, curvatures);
     SETUP_NODE(Dendry, dendry);
     SETUP_NODE(DepressionFilling, depression_filling);
     SETUP_NODE(Detrend, detrend);

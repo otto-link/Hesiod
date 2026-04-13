@@ -39,6 +39,8 @@ void setup_unsphericity_node(BaseNode &node)
 
 void compute_unsphericity_node(BaseNode &node)
 {
+  Logger::log()->error("Unsphericity node is deprecated, use Curvatures node");
+
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
@@ -55,7 +57,10 @@ void compute_unsphericity_node(BaseNode &node)
         [&ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           auto [pa_out, pa_in] = unpack<2>(p_arrays);
-          *pa_out = hmap::gpu::unsphericity(*pa_in, ir);
+          *pa_out = hmap::gpu::curvature_quadric(
+              *pa_in,
+              ir,
+              hmap::gpu::CurvatureType::CT_UNSPHERICITY);
         },
         node.cfg().cm_gpu);
 

@@ -5,6 +5,7 @@
 #include "highmap/authoring.hpp"
 #include "highmap/boundary.hpp"
 #include "highmap/colormaps.hpp"
+#include "highmap/curvature.hpp"
 #include "highmap/erosion.hpp"
 #include "highmap/kernels.hpp"
 #include "highmap/local_metrics.hpp"
@@ -58,6 +59,20 @@ static struct EnumMappings
       {"nipy_spectral", hmap::Cmap::NIPY_SPECTRAL},
       {"terrain", hmap::Cmap::TERRAIN},
       {"viridis", hmap::Cmap::VIRIDIS}};
+
+  const std::map<std::string, int> curvature_type_map = {
+      {"Min", hmap::gpu::CurvatureType::CT_MIN},
+      {"Max", hmap::gpu::CurvatureType::CT_MAX},
+      {"Mean", hmap::gpu::CurvatureType::CT_MEAN},
+      {"Gaussian", hmap::gpu::CurvatureType::CT_GAUSSIAN},
+      {"Profile", hmap::gpu::CurvatureType::CT_PROFILE},
+      {"Contour", hmap::gpu::CurvatureType::CT_CONTOUR},
+      {"Tangential", hmap::gpu::CurvatureType::CT_TANGENTIAL},
+      {"Accumulation", hmap::gpu::CurvatureType::CT_ACCUMULATION},
+      {"Shape Index", hmap::gpu::CurvatureType::CT_SHAPE_INDEX},
+      {"Unsphericity", hmap::gpu::CurvatureType::CT_UNSPHERICITY},
+      {"Ring", hmap::gpu::CurvatureType::CT_RING},
+      {"Rotor", hmap::gpu::CurvatureType::CT_ROTOR}};
 
   const std::map<std::string, int> distance_function_map = {
       {"Chebyshev", hmap::DistanceFunction::CHEBYSHEV},
