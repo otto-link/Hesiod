@@ -180,7 +180,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ColorAdjust", "Texture"},
       {"ColorizeGradient", "Texture"},
       {"ColorizeSolid", "Texture"},
-      {"CombineMask", "Terrain Features"},
+      {"CombineMask", "Terrain Features/Mask Operations"},
       {"Cone", "Primitive/Function"},
       {"ConeComplex", "Primitive/Function"},
       {"ConeSigmoid", "Primitive/Function"},
@@ -348,7 +348,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Ruggedness", "WIP/DEPRECATED"},
       {"Rugosity", "Terrain Features/Advanced"},
       {"Saturate", "Filter/Recurve"},
-      {"ScanMask", "Terrain Features"},
+      {"ScanMask", "Terrain Features/Mask Operations"},
       {"SedimentDeposition", "WIP"}, // "Erosion/Deposition"
       {"SelectAngle", "Terrain Features/Selector"},
       {"SelectBlobLog", "Terrain Features/Selector"},
