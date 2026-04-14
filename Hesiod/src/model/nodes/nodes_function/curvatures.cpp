@@ -27,6 +27,7 @@ constexpr const char *A_RADIUS = "radius";
 constexpr const char *A_CTYPE = "ctype";
 constexpr const char *A_CLAMPING = "clamping";
 constexpr const char *A_SATMAX = "satmax";
+constexpr const char *A_APPROX = "approx";
 
 // -----------------------------------------------------------------------------
 // Setup
@@ -49,6 +50,7 @@ void setup_curvatures_node(BaseNode &node)
   std::vector<std::string> choices = {"Positive", "Negative", "Both"};
   node.add_attr<ChoiceAttribute>(A_CLAMPING, "Values Kept", choices);
   node.add_attr<FloatAttribute>(A_SATMAX, "Saturation Ratio", 2.f, 0.f, 20.f, "{:.0f}%");
+  node.add_attr<BoolAttribute>(A_APPROX, "Approx. Algo.", false);
 
   // attribute(s) order
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Metric Choice",
@@ -56,6 +58,7 @@ void setup_curvatures_node(BaseNode &node)
                              A_CTYPE,
                              A_CLAMPING,
                              A_SATMAX,
+                             A_APPROX,
                              "_GROUPBOX_END_"});
 
   setup_post_process_heightmap_attributes(node,
@@ -88,6 +91,7 @@ void compute_curvatures_node(BaseNode &node)
       bool                keep_both;
       float               satmin;
       float               satmax;
+      bool                approx_algo;
     };
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>(A_RADIUS) * p_out->shape.x));
@@ -105,7 +109,8 @@ void compute_curvatures_node(BaseNode &node)
       .choice = choice,
       .keep_both = keep_both,
       .satmin = sat_perc,
-      .satmax = 1.f -  sat_perc
+      .satmax = 1.f -  sat_perc,
+      .approx_algo = node.get_attr<BoolAttribute>(A_APPROX)
     };
     // clang-format on
   }();
@@ -117,7 +122,10 @@ void compute_curvatures_node(BaseNode &node)
       [&params](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
       {
         auto [pa_out, pa_in] = unpack<2>(p_arrays);
-        *pa_out = hmap::gpu::curvature_quadric(*pa_in, params.ir, params.ctype);
+        *pa_out = hmap::gpu::curvature_quadric(*pa_in,
+                                               params.ir,
+                                               params.ctype,
+                                               params.approx_algo);
 
         // if only one curvature sign is kept
         if (!params.keep_both)
