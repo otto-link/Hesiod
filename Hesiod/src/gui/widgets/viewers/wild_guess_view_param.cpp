@@ -73,10 +73,18 @@ void wild_guess_view_param(ViewerNodeParam &view_param,
                            const ViewerType & /* viewer_type */,
                            const BaseNode &node)
 {
+  std::string cat = node.get_category();
+
   for (auto &[key, value] : view_param.port_ids)
   {
     if (key == "elevation")
     {
+      if (cat.find("Selector") != std::string::npos)
+      {
+        value = "input";
+        continue;
+      }
+
       value = helper_get_preferred_port_inout(node,
                                               typeid(hmap::VirtualArray),
                                               {"water_depth", "mask"});
@@ -91,6 +99,12 @@ void wild_guess_view_param(ViewerNodeParam &view_param,
 
     if (key == "color")
     {
+      if (cat.find("Selector") != std::string::npos)
+      {
+        value = "output";
+        continue;
+      }
+
       // try textures first
       value = helper_get_preferred_port_label(node,
                                               typeid(hmap::VirtualTexture),
