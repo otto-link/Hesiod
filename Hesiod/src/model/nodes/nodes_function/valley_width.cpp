@@ -29,9 +29,8 @@ void setup_valley_width_node(BaseNode &node)
   // attribute(s) order
   node.set_attr_ordered_key({"radius", "ridge_select"});
 
-  setup_post_process_heightmap_attributes(
-      node,
-      {.add_mix = false, .remap_active_state = false});
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = false, .remap_active_state = true});
 }
 
 void compute_valley_width_node(BaseNode &node)
@@ -51,11 +50,11 @@ void compute_valley_width_node(BaseNode &node)
         [&node, ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
         {
           auto [pa_out, pa_in] = unpack<2>(p_arrays);
-          *pa_out = hmap::valley_width(*pa_in,
-                                       ir,
-                                       node.get_attr<BoolAttribute>("ridge_select"));
+          *pa_out = hmap::gpu::valley_width(*pa_in,
+                                            ir,
+                                            node.get_attr<BoolAttribute>("ridge_select"));
         },
-        node.cfg().cm_cpu);
+        node.cfg().cm_gpu);
 
     p_out->smooth_overlap_buffers();
 

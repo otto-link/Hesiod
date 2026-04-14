@@ -59,7 +59,7 @@ void compute_curvature_mean_node(BaseNode &node)
           // compute mean curvature and scale it
           *pa_out = hmap::gpu::curvature_quadric(*pa_in,
                                                  0,
-                                                 hmap::gpu::CurvatureType::CT_MEAN) *
+                                                 hmap::CurvatureType::CT_MEAN) *
                     nx;
 
           // determine curvature sign handling

@@ -62,10 +62,9 @@ void compute_accumulation_curvature_node(BaseNode &node)
           auto [pa_out, pa_in] = unpack<2>(p_arrays);
           // nx^2 is gradient scaling...
           *pa_out = nx * nx *
-                    hmap::gpu::curvature_quadric(
-                        *pa_in,
-                        ir,
-                        hmap::gpu::CurvatureType::CT_ACCUMULATION);
+                    hmap::gpu::curvature_quadric(*pa_in,
+                                                 ir,
+                                                 hmap::CurvatureType::CT_ACCUMULATION);
 
           // truncate high values if requested
           if (node.get_attr<BoolAttribute>("clamp_max"))

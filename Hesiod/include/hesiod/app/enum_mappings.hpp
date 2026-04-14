@@ -61,18 +61,18 @@ static struct EnumMappings
       {"viridis", hmap::Cmap::VIRIDIS}};
 
   const std::map<std::string, int> curvature_type_map = {
-      {"Min", hmap::gpu::CurvatureType::CT_MIN},
-      {"Max", hmap::gpu::CurvatureType::CT_MAX},
-      {"Mean", hmap::gpu::CurvatureType::CT_MEAN},
-      {"Gaussian", hmap::gpu::CurvatureType::CT_GAUSSIAN},
-      {"Profile", hmap::gpu::CurvatureType::CT_PROFILE},
-      {"Contour", hmap::gpu::CurvatureType::CT_CONTOUR},
-      {"Tangential", hmap::gpu::CurvatureType::CT_TANGENTIAL},
-      {"Accumulation", hmap::gpu::CurvatureType::CT_ACCUMULATION},
-      {"Shape Index", hmap::gpu::CurvatureType::CT_SHAPE_INDEX},
-      {"Unsphericity", hmap::gpu::CurvatureType::CT_UNSPHERICITY},
-      {"Ring", hmap::gpu::CurvatureType::CT_RING},
-      {"Rotor", hmap::gpu::CurvatureType::CT_ROTOR}};
+      {"Min", hmap::CurvatureType::CT_MIN},
+      {"Max", hmap::CurvatureType::CT_MAX},
+      {"Mean", hmap::CurvatureType::CT_MEAN},
+      {"Gaussian", hmap::CurvatureType::CT_GAUSSIAN},
+      {"Profile", hmap::CurvatureType::CT_PROFILE},
+      {"Contour", hmap::CurvatureType::CT_CONTOUR},
+      {"Tangential", hmap::CurvatureType::CT_TANGENTIAL},
+      {"Accumulation", hmap::CurvatureType::CT_ACCUMULATION},
+      {"Shape Index", hmap::CurvatureType::CT_SHAPE_INDEX},
+      {"Unsphericity", hmap::CurvatureType::CT_UNSPHERICITY},
+      {"Ring", hmap::CurvatureType::CT_RING},
+      {"Rotor", hmap::CurvatureType::CT_ROTOR}};
 
   const std::map<std::string, int> distance_function_map = {
       {"Chebyshev", hmap::DistanceFunction::CHEBYSHEV},

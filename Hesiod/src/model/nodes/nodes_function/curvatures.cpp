@@ -82,16 +82,16 @@ void compute_curvatures_node(BaseNode &node)
   {
     struct P
     {
-      int                      ir;
-      hmap::gpu::CurvatureType ctype;
-      std::string              choice;
-      bool                     keep_both;
-      float                    satmin;
-      float                    satmax;
+      int                 ir;
+      hmap::CurvatureType ctype;
+      std::string         choice;
+      bool                keep_both;
+      float               satmin;
+      float               satmax;
     };
 
     int ir = std::max(1, (int)(node.get_attr<FloatAttribute>(A_RADIUS) * p_out->shape.x));
-    auto ctype = hmap::gpu::CurvatureType(node.get_attr<EnumAttribute>(A_CTYPE));
+    auto ctype = hmap::CurvatureType(node.get_attr<EnumAttribute>(A_CTYPE));
 
     std::string choice = node.get_attr<ChoiceAttribute>(A_CLAMPING);
     bool        keep_both = (choice == "Both");
