@@ -155,27 +155,29 @@ static struct EnumMappings
       {"Perlin (billow)", hmap::NoiseType::PERLIN_BILLOW},
       {"Perlin (half)", hmap::NoiseType::PERLIN_HALF},
       {"OpenSimplex2", hmap::NoiseType::SIMPLEX2},
-      {"OpenSimplex2S", hmap::NoiseType::SIMPLEX2S},
+      // {"OpenSimplex2S", hmap::NoiseType::SIMPLEX2S},
       {"Value", hmap::NoiseType::VALUE},
       {"Value (cubic)", hmap::NoiseType::VALUE_CUBIC},
-      {"Value (delaunay)", hmap::NoiseType::VALUE_DELAUNAY},
+      // {"Value (delaunay)", hmap::NoiseType::VALUE_DELAUNAY},
       {"Value (linear)", hmap::NoiseType::VALUE_LINEAR},
       {"Worley", hmap::NoiseType::WORLEY},
-      {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
-      {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
+      // {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
+      // {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}
+  };
 
   const std::map<std::string, int> noise_type_map_fbm = {
       {"Perlin", hmap::NoiseType::PERLIN},
       {"Perlin (billow)", hmap::NoiseType::PERLIN_BILLOW},
       {"Perlin (half)", hmap::NoiseType::PERLIN_HALF},
       {"OpenSimplex2", hmap::NoiseType::SIMPLEX2},
-      {"OpenSimplex2S", hmap::NoiseType::SIMPLEX2S},
+      // {"OpenSimplex2S", hmap::NoiseType::SIMPLEX2S},
       {"Value", hmap::NoiseType::VALUE},
       {"Value (cubic)", hmap::NoiseType::VALUE_CUBIC},
       {"Value (linear)", hmap::NoiseType::VALUE_LINEAR},
       {"Worley", hmap::NoiseType::WORLEY},
-      {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
-      {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}};
+      // {"Worley (doube)", hmap::NoiseType::WORLEY_DOUBLE},
+      // {"Worley (value)", hmap::NoiseType::WORLEY_VALUE}
+  };
 
   const std::map<std::string, int> periodicity_type_map = {
       {"X-only", hmap::PeriodicityType::PERIODICITY_X},
