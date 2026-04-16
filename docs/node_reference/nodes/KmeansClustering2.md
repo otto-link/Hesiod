@@ -13,7 +13,7 @@ KmeansClustering2 node groups the data into clusters based on the values of the 
 # Category
 
 
-Features/Clustering
+Terrain Features/Clustering
 # Inputs
 
 |Name|Type|Description|

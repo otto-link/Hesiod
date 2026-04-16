@@ -13,7 +13,7 @@ ExportPath is an operator for exporting path data to a csv file.
 # Category
 
 
-IO/Files
+Export
 # Inputs
 
 |Name|Type|Description|

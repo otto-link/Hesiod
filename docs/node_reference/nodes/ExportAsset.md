@@ -13,7 +13,7 @@ Exports both the heightmap and texture as a single asset. The mesh can either be
 # Category
 
 
-IO/Files
+Export
 # Inputs
 
 |Name|Type|Description|

@@ -13,7 +13,7 @@ TODO
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

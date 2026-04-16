@@ -13,7 +13,7 @@ RecurveS applied a curve adjustment filter using a smooth S-shape curve.
 # Category
 
 
-Filter/Recurve
+WIP
 # Inputs
 
 |Name|Type|Description|

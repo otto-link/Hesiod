@@ -13,7 +13,7 @@ ImportHeightmap imports an heighmap from a grayscale PNG 8bit file.
 # Category
 
 
-IO/Files
+Export
 # Outputs
 
 |Name|Type|Description|

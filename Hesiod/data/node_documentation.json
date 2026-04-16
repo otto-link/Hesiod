@@ -108,7 +108,7 @@
         }
     },
     "AccumulationCurvature": {
-        "category": "Features/Landform",
+        "category": "WIP/DEPRECATED",
         "description": "Computes the accumulation curvature of a heightmap, indicating how terrain shape influences water flow. Positive values suggest converging flow (e.g., channels or valleys), while negative values indicate diverging flow (e.g., ridges or hilltops).",
         "label": "AccumulationCurvature",
         "parameters": {
@@ -2542,7 +2542,7 @@
         }
     },
     "CombineMask": {
-        "category": "Mask",
+        "category": "Terrain Features/Mask Operations",
         "description": "CombineMask performs basic logical operations on a pair of heightmaps (assuming they are used as masks).",
         "label": "CombineMask",
         "parameters": {
@@ -3268,7 +3268,7 @@
         }
     },
     "CurvatureMean": {
-        "category": "Features",
+        "category": "WIP/DEPRECATED",
         "description": "No description available",
         "label": "CurvatureMean",
         "parameters": {
@@ -3354,6 +3354,105 @@
             }
         }
     },
+    "Curvatures": {
+        "category": "Terrain Features",
+        "description": "No description available",
+        "label": "Curvatures",
+        "parameters": {
+            "approx": {
+                "description": "No description",
+                "key": "approx",
+                "label": "Approx. Algo.",
+                "type": "Bool"
+            },
+            "clamping": {
+                "description": "No description",
+                "key": "clamping",
+                "label": "Values Kept",
+                "type": "Choice"
+            },
+            "ctype": {
+                "description": "No description",
+                "key": "ctype",
+                "label": "Curvature Type",
+                "type": "Enumeration"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "No description",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "No description",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "radius": {
+                "description": "No description",
+                "key": "radius",
+                "label": "Radius",
+                "type": "Float"
+            },
+            "satmax": {
+                "description": "No description",
+                "key": "satmax",
+                "label": "Saturation Ratio",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "Debug": {
         "category": "Debug",
         "description": "No description available",
@@ -3369,7 +3468,7 @@
         }
     },
     "Dendry": {
-        "category": "Primitive/Coherent",
+        "category": "WIP",
         "description": "Dendry is a procedural model for dendritic patterns generation.",
         "label": "Dendry",
         "parameters": {
@@ -4187,7 +4286,7 @@
         }
     },
     "ExportAsset": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "Exports both the heightmap and texture as a single asset. The mesh can either be used as is or retriangulated using an optimization algorithm. Additionally, a normal map can be provided to model light effects of small details not represented by the mesh.",
         "label": "ExportAsset",
         "parameters": {
@@ -4268,7 +4367,7 @@
         }
     },
     "ExportCloud": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "ExportCloud is an operator for exporting cloud data to a csv file.",
         "label": "ExportCloud",
         "parameters": {
@@ -4301,7 +4400,7 @@
         }
     },
     "ExportCloudToPly": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "No description available",
         "label": "ExportCloudToPly",
         "parameters": {
@@ -4406,7 +4505,7 @@
         }
     },
     "ExportHeightmap": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "ExportHeightmap is an operator for exporting a heightmap in various file formats.",
         "label": "ExportHeightmap",
         "parameters": {
@@ -4445,7 +4544,7 @@
         }
     },
     "ExportNormalMap": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "ExportNormalMap is an operator for exporting the normal map of an heightmap as a PNG image file.",
         "label": "ExportNormalMap",
         "parameters": {
@@ -4484,7 +4583,7 @@
         }
     },
     "ExportPath": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "ExportPath is an operator for exporting path data to a csv file.",
         "label": "ExportPath",
         "parameters": {
@@ -4517,7 +4616,7 @@
         }
     },
     "ExportPointsToPly": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "No description available",
         "label": "ExportPointsToPly",
         "parameters": {
@@ -4634,7 +4733,7 @@
         }
     },
     "ExportTexture": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "ExportTexture is a texture to a PNG image file.",
         "label": "ExportTexture",
         "parameters": {
@@ -4673,7 +4772,7 @@
         }
     },
     "ExportTiled": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "No description available",
         "label": "ExportTiled",
         "parameters": {
@@ -8112,7 +8211,7 @@
         }
     },
     "ImportHeightmap": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "ImportHeightmap imports an heighmap from a grayscale PNG 8bit file.",
         "label": "ImportHeightmap",
         "parameters": {
@@ -8187,7 +8286,7 @@
         }
     },
     "ImportTexture": {
-        "category": "IO/Files",
+        "category": "Export",
         "description": "TODO",
         "label": "ImportTexture",
         "parameters": {
@@ -8739,7 +8838,7 @@
         }
     },
     "KmeansClustering2": {
-        "category": "Features/Clustering",
+        "category": "Terrain Features/Clustering",
         "description": "KmeansClustering2 node groups the data into clusters based on the values of the two input features.",
         "label": "KmeansClustering2",
         "parameters": {
@@ -8796,7 +8895,7 @@
         }
     },
     "KmeansClustering3": {
-        "category": "Features/Clustering",
+        "category": "Terrain Features/Clustering",
         "description": "KmeansClustering2 node groups the data into clusters based on the values of the three input features.",
         "label": "KmeansClustering3",
         "parameters": {
@@ -9036,7 +9135,7 @@
         }
     },
     "LocalMetrics": {
-        "category": "Features",
+        "category": "Terrain Features",
         "description": "Computes local geometric metrics on a heightmap to characterize terrain features such as roughness, convexity, or other neighborhood-based properties. The result highlights spatial variations based on a selected metric and a given sampling radius, and can be further refined using percentile-based saturation and post-processing controls.",
         "label": "LocalMetrics",
         "parameters": {
@@ -11659,12 +11758,6 @@
         "description": "NoiseSwiss, variant of NoiseFbm.",
         "label": "NoiseSwiss",
         "parameters": {
-            "inverse": {
-                "description": "Toggle inversion of the output values.",
-                "key": "inverse",
-                "label": "inverse",
-                "type": "Bool"
-            },
             "kw": {
                 "description": "Base spatial frequencies in the X and Y directions. The frequencies are defined with respect to the entire domain: for example, kw = 2 produces two full oscillations across the domain width (and similarly for the Y direction).",
                 "key": "kw",
@@ -11731,12 +11824,6 @@
                 "label": "Smoothing Radius",
                 "type": "Float"
             },
-            "remap": {
-                "description": "Remap the operator's output to a specified range, defaulting to [0, 1].",
-                "key": "remap",
-                "label": "remap",
-                "type": "Value range"
-            },
             "seed": {
                 "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
                 "key": "seed",
@@ -11790,7 +11877,7 @@
         }
     },
     "NormalDisplacement": {
-        "category": "Filter/Recast",
+        "category": "WIP",
         "description": "NormalDisplacement applies a displacement to the terrain along the normal direction.",
         "label": "NormalDisplacement",
         "parameters": {
@@ -11841,7 +11928,7 @@
         }
     },
     "NormalMapToHeightmap": {
-        "category": "Converter",
+        "category": "WIP",
         "description": "No description available",
         "label": "NormalMapToHeightmap",
         "parameters": {
@@ -14245,7 +14332,7 @@
         }
     },
     "RecurveS": {
-        "category": "Filter/Recurve",
+        "category": "WIP",
         "description": "RecurveS applied a curve adjustment filter using a smooth S-shape curve.",
         "label": "RecurveS",
         "parameters": null,
@@ -14352,7 +14439,7 @@
         }
     },
     "RelativeElevation": {
-        "category": "Features/Landform",
+        "category": "WIP/DEPRECATED",
         "description": "RelativeElevation identifies heightmap relative elevation based on the surrounding heightmap values.",
         "label": "RelativeElevation",
         "parameters": {
@@ -15126,7 +15213,7 @@
         }
     },
     "Ruggedness": {
-        "category": "Features",
+        "category": "WIP/DEPRECATED",
         "description": "Measures the terrain roughness by computing the square root of the sum of squared elevation differences within a specified radius. Indicates how rough or smooth the terrain is by analyzing how much the elevation changes between neighboring areas. Higher values mean a more rugged, uneven surface, while lower values indicate a flatter, smoother landscape.",
         "label": "Ruggedness",
         "parameters": {
@@ -15201,7 +15288,7 @@
         }
     },
     "Rugosity": {
-        "category": "Features",
+        "category": "Terrain Features/Advanced",
         "description": "Rugosity identifies heightmap rugosity, i.e. the roughness or irregularity of the surface.",
         "label": "Rugosity",
         "parameters": {
@@ -15357,7 +15444,7 @@
         }
     },
     "ScanMask": {
-        "category": "Mask",
+        "category": "Terrain Features/Mask Operations",
         "description": "ScanMask adjusts the brightness and contrast of an input mask.",
         "label": "ScanMask",
         "parameters": {
@@ -15459,7 +15546,7 @@
         }
     },
     "SelectAngle": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "SelectAngle is a thresholding operator. It selects angle values within a specified range defined by the shape of a Gaussian pulse.",
         "label": "SelectAngle",
         "parameters": {
@@ -15546,7 +15633,7 @@
         }
     },
     "SelectBlobLog": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "SelectBlobLog performs 'blob' detection using oa Laplacian of Gaussian (log) method. Blobs are areas in an image that are either brighter or darker than the surrounding areas.",
         "label": "SelectBlobLog",
         "parameters": {
@@ -15609,7 +15696,7 @@
         }
     },
     "SelectCavities": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "SelectCavities analyzes the curvature of an heightmap to identify concave or convex features such as valleys, depressions, ridges, or peaks.",
         "label": "SelectCavities",
         "parameters": {
@@ -15696,7 +15783,7 @@
         }
     },
     "SelectGt": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "SelectGt is a thresholding operator. It transforms an input heightmap into a binary heightmap, where each pixel is assigned either a value of 0 or 1, depending on whether its intensity value surpasses a specified threshold value.",
         "label": "SelectGt",
         "parameters": {
@@ -15759,7 +15846,7 @@
         }
     },
     "SelectInterval": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "SelectInterval is a thresholding operator. It transforms an input heightmap into a binary heightmap, where each pixel is assigned either a value of 0 or 1, depending on whether its intensity value is within an interval of values.",
         "label": "SelectInterval",
         "parameters": {
@@ -15828,7 +15915,7 @@
         }
     },
     "SelectInwardOutward": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "SelectInwardOutward returns values > 0.5 if the slope is pointing to the center (slope is inward), and values < 0.5 otherwise (slope is outward).",
         "label": "SelectInwardOutward",
         "parameters": {
@@ -15891,7 +15978,7 @@
         }
     },
     "SelectMidrange": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "TODO",
         "label": "SelectMidrange",
         "parameters": {
@@ -15966,7 +16053,7 @@
         }
     },
     "SelectMultiband3": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "TODO",
         "label": "SelectMultiband3",
         "parameters": {
@@ -16053,7 +16140,7 @@
         }
     },
     "SelectPulse": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "SelectPulse is a thresholding operator. It selects values within a specified range defined by the shape of a Gaussian pulse.",
         "label": "SelectPulse",
         "parameters": {
@@ -16122,7 +16209,7 @@
         }
     },
     "SelectRivers": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "SelectRivers is a thresholding operator. It creates a mask for river systems based on a flow accumulation threshold.",
         "label": "SelectRivers",
         "parameters": {
@@ -16191,7 +16278,7 @@
         }
     },
     "SelectSlope": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "TODO",
         "label": "SelectSlope",
         "parameters": {
@@ -16254,7 +16341,7 @@
         }
     },
     "SelectSoilFlow": {
-        "category": "Mask/ForTexturing",
+        "category": "Terrain Features/ForTexturing",
         "description": "Computes a soil–flow selection map based on the terrain gradient and the flow-accumulation map. This node can be for instance chained with ColorizeGradient for texturing.",
         "label": "SelectSoilFlow",
         "parameters": {
@@ -16359,7 +16446,7 @@
         }
     },
     "SelectSoilRocks": {
-        "category": "Mask/ForTexturing",
+        "category": "Terrain Features/ForTexturing",
         "description": "Computes a multi-scale soil/rock mask using curvature analysis across progressively larger smoothing radii.",
         "label": "SelectSoilRocks",
         "parameters": {
@@ -16464,7 +16551,7 @@
         }
     },
     "SelectSoilWeathered": {
-        "category": "Mask/ForTexturing",
+        "category": "Terrain Features/ForTexturing",
         "description": "Generates a soil-weathering selection mask by combining curvature and gradient analysis from the input heightmap. This node can be for instance chained with ColorizeGradient for texturing.",
         "label": "SelectSoilWeathered",
         "parameters": {
@@ -16563,7 +16650,7 @@
         }
     },
     "SelectTransitions": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "SelectTransitions returns a mask filled with 1 at the blending transition between two heightmaps, and 0 elsewhere.",
         "label": "SelectTransitions",
         "parameters": {
@@ -16632,7 +16719,7 @@
         }
     },
     "SelectValley": {
-        "category": "Mask/Selector",
+        "category": "Terrain Features/Selector",
         "description": "Identifies and selects valley-like regions in the heightmap based on curvature analysis. The selection can be inverted, and additional parameters allow fine-tuning of the selection process. The output is a mask representing the relative width of the valley. The value is 1 at the valley center and decreases to 0 at the edges of the valley.",
         "label": "SelectValley",
         "parameters": {
@@ -16809,7 +16896,7 @@
         }
     },
     "ShapeIndex": {
-        "category": "Filter/Smoothing",
+        "category": "WIP/DEPRECATED",
         "description": "ShapeIndex is a measure used to quantify the shape complexity of landforms in an heightmap. It is calculated based on the second derivatives of the elevation surface. The surface index is greater than 0.5 for convex surface and lower than 0.5 for concave surface.",
         "label": "ShapeIndex",
         "parameters": {
@@ -16872,7 +16959,7 @@
         }
     },
     "SharpenCone": {
-        "category": "Filter/Smoothing",
+        "category": "WIP",
         "description": "SharpenCone is a cone kernel-based sharpen operator enhancing sharpness by emphasizing edges and fine details using a radial gradient shape.",
         "label": "SharpenCone",
         "parameters": {
@@ -17991,7 +18078,7 @@
         }
     },
     "SteepenConvective": {
-        "category": "Filter/Recast",
+        "category": "WIP",
         "description": "TODO",
         "label": "SteepenConvective",
         "parameters": {
@@ -19898,7 +19985,7 @@
         }
     },
     "Unsphericity": {
-        "category": "Features/Landform",
+        "category": "WIP/DEPRECATED",
         "description": "Unsphericity is a measure used to quantify the deviation of the heightmap shape from a perfect sphere. In other words, it indicates how much the terrain differs from being perfectly round or spherical.",
         "label": "Unsphericity",
         "parameters": {
@@ -20150,7 +20237,7 @@
         }
     },
     "ValleyWidth": {
-        "category": "Features/Landform",
+        "category": "Terrain Features/Landform",
         "description": "ValleyWidth identifies valley lines and measure the width of the valley at each cross-section.",
         "label": "ValleyWidth",
         "parameters": {

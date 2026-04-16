@@ -13,7 +13,7 @@ Computes local geometric metrics on a heightmap to characterize terrain features
 # Category
 
 
-Features
+Terrain Features
 # Inputs
 
 |Name|Type|Description|

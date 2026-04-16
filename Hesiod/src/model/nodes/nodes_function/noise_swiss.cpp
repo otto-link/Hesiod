@@ -35,8 +35,6 @@ void setup_noise_swiss_node(BaseNode &node)
   node.add_attr<FloatAttribute>("persistence", "Persistence", 0.5f, 0.f, 1.f);
   node.add_attr<FloatAttribute>("lacunarity", "Lacunarity", 2.f, 0.01f, 4.f);
   node.add_attr<FloatAttribute>("warp_scale", "warp_scale", 0.1f, 0.f, 0.5f);
-  node.add_attr<BoolAttribute>("inverse", "inverse", false);
-  node.add_attr<RangeAttribute>("remap", "remap");
 
   // attribute(s) order
   node.set_attr_ordered_key({"noise_type",

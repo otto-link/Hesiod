@@ -13,7 +13,7 @@ SelectTransitions returns a mask filled with 1 at the blending transition betwee
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

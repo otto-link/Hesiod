@@ -26,7 +26,7 @@ void setup_white_density_map_node(BaseNode &node)
   // attribute(s)
   node.add_attr<SeedAttribute>("seed", "Seed");
   // attribute(s) order
-  node.set_attr_ordered_key({"seed", "_SEPARATOR_", "inverse", "remap"});
+  node.set_attr_ordered_key({"seed"});
 
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = true});

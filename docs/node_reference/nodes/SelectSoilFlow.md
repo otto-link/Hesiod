@@ -13,7 +13,7 @@ Computes a soil–flow selection map based on the terrain gradient and the flow-
 # Category
 
 
-Mask/ForTexturing
+Terrain Features/ForTexturing
 # Inputs
 
 |Name|Type|Description|

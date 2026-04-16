@@ -13,7 +13,7 @@ SelectBlobLog performs 'blob' detection using oa Laplacian of Gaussian (log) met
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

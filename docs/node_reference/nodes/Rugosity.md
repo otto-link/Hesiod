@@ -13,7 +13,7 @@ Rugosity identifies heightmap rugosity, i.e. the roughness or irregularity of th
 # Category
 
 
-Features
+Terrain Features/Advanced
 # Inputs
 
 |Name|Type|Description|

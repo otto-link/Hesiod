@@ -13,7 +13,7 @@ Computes a multi-scale soil/rock mask using curvature analysis across progressiv
 # Category
 
 
-Mask/ForTexturing
+Terrain Features/ForTexturing
 # Inputs
 
 |Name|Type|Description|

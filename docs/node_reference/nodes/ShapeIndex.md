@@ -13,7 +13,7 @@ ShapeIndex is a measure used to quantify the shape complexity of landforms in an
 # Category
 
 
-Filter/Smoothing
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

@@ -13,7 +13,7 @@ SelectRivers is a thresholding operator. It creates a mask for river systems bas
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

@@ -13,7 +13,7 @@ SelectInterval is a thresholding operator. It transforms an input heightmap into
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

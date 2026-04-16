@@ -13,7 +13,7 @@ ExportHeightmap is an operator for exporting a heightmap in various file formats
 # Category
 
 
-IO/Files
+Export
 # Inputs
 
 |Name|Type|Description|

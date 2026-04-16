@@ -13,7 +13,7 @@ SelectAngle is a thresholding operator. It selects angle values within a specifi
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

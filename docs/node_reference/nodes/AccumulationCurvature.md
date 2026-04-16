@@ -13,7 +13,7 @@ Computes the accumulation curvature of a heightmap, indicating how terrain shape
 # Category
 
 
-Features/Landform
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

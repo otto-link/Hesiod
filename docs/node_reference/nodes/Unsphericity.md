@@ -13,7 +13,7 @@ Unsphericity is a measure used to quantify the deviation of the heightmap shape 
 # Category
 
 
-Features/Landform
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

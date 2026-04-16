@@ -13,7 +13,7 @@ SelectGt is a thresholding operator. It transforms an input heightmap into a bin
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

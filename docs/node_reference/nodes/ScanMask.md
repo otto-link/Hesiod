@@ -13,7 +13,7 @@ ScanMask adjusts the brightness and contrast of an input mask.
 # Category
 
 
-Mask
+Terrain Features/Mask Operations
 # Inputs
 
 |Name|Type|Description|

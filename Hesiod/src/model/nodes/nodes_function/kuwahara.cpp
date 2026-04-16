@@ -27,6 +27,9 @@ void setup_kuwahara_node(BaseNode &node)
   node.add_attr<FloatAttribute>("radius", "radius", 0.05f, 0.f, 0.2f);
   node.add_attr<FloatAttribute>("mix_ratio", "mix_ratio", 1.f, 0.f, 1.f);
 
+  // attribute(s) order
+  node.set_attr_ordered_key({"radius", "mix_ratio"});
+
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = true});
 }

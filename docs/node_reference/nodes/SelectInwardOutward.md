@@ -13,7 +13,7 @@ SelectInwardOutward returns values > 0.5 if the slope is pointing to the center 
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

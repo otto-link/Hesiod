@@ -13,7 +13,7 @@ RelativeElevation identifies heightmap relative elevation based on the surroundi
 # Category
 
 
-Features/Landform
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

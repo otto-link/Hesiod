@@ -13,7 +13,7 @@ SelectCavities analyzes the curvature of an heightmap to identify concave or con
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

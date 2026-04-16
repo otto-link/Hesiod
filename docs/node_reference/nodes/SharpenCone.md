@@ -13,7 +13,7 @@ SharpenCone is a cone kernel-based sharpen operator enhancing sharpness by empha
 # Category
 
 
-Filter/Smoothing
+WIP
 # Inputs
 
 |Name|Type|Description|

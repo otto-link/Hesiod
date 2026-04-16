@@ -13,7 +13,7 @@ Dendry is a procedural model for dendritic patterns generation.
 # Category
 
 
-Primitive/Coherent
+WIP
 # Inputs
 
 |Name|Type|Description|

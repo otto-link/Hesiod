@@ -27,12 +27,12 @@ void setup_blend_poisson_bf_node(BaseNode &node)
   // attribute(s)
   node.add_attr<IntAttribute>("iterations", "iterations", 500, 1, INT_MAX);
 
+  // attribute(s) order
+  node.set_attr_ordered_key({"iterations"});
+
   setup_post_process_heightmap_attributes(
       node,
       {.add_mix = false, .remap_active_state = false});
-
-  // attribute(s) order
-  node.set_attr_ordered_key({"iterations", "_SEPARATOR_", "inverse", "remap"});
 }
 
 void compute_blend_poisson_bf_node(BaseNode &node)

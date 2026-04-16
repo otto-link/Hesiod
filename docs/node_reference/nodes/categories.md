@@ -7,24 +7,20 @@ Node Categories
 |Primary|Secondary|Nodes|
 | :--- | :--- | :--- |
 |Boundaries||Bulkify, Falloff, SetBorders, ZeroedEdges|
-|Converter||HeightmapToKernel, HeightmapToMask, HeightmapToNormalMap, HeightmapToRGBA, NormalMapToHeightmap|
+|Converter||HeightmapToKernel, HeightmapToMask, HeightmapToNormalMap, HeightmapToRGBA|
 |Debug||Debug, Preview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicProcedural, HydraulicSaleve, HydraulicStreamLog, Rifts|
 |Erosion|Stratify|Strata, StrataCells, StrataTerrace|
 |Erosion|Thermal|Thermal, ThermalScree, ValleyFill|
 |Erosion|Water|CoastalErosionDiffusion, CoastalErosionProfile|
-|Features|Clustering|KmeansClustering2, KmeansClustering3|
-|Features|Landform|AccumulationCurvature, RelativeElevation, Unsphericity, ValleyWidth|
+|Export||ExportAsset, ExportCloud, ExportCloudToPly, ExportHeightmap, ExportNormalMap, ExportPath, ExportPointsToPly, ExportTexture, ExportTiled, ImportHeightmap, ImportTexture|
 |Filter|Range|Clamp, ClampOblique, Remap, Rescale, ShiftElevation|
-|Filter|Recast|ExpandShrink, Fold, NormalDisplacement, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag, SteepenConvective|
-|Filter|Recurve|Equalize, Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, RecurveS, ReverseAboveThreshold, Saturate|
-|Filter|Smoothing|Laplace, Median3x3, ShapeIndex, SharpenCone, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
+|Filter|Recast|ExpandShrink, Fold, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag|
+|Filter|Recurve|Equalize, Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, ReverseAboveThreshold, Saturate|
+|Filter|Smoothing|Laplace, Median3x3, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRandomPowerLaw, CloudRandomWeibull, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudShuffle, CloudToArrayInterp, CloudToPath, CloudToVectors|
 |Geometry|Path|FindCutPath, Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDecimate, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
 |Hydrology||FlatbedCarve, FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, FlowSimulation, FlowSimulationViscous, MergeWaterDepths, SnowMeltingMap, SnowSimulation, WaterDepthDryOut, WaterDepthFromMask, WaterMask|
-|IO|Files|ExportAsset, ExportCloud, ExportCloudToPly, ExportHeightmap, ExportNormalMap, ExportPath, ExportPointsToPly, ExportTexture, ExportTiled, ImportHeightmap, ImportTexture|
-|Mask|ForTexturing|SelectSoilFlow, SelectSoilRocks, SelectSoilWeathered|
-|Mask|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Smoothstep|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
@@ -34,11 +30,17 @@ Node Categories
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Operator|Transform|Rotate, Translate, Warp, Zoom|
 |Primitive|Authoring|Brush, Ridgelines|
-|Primitive|Coherent|Dendry, GaborWaveFbm, Gavoronoise, HemisphereFieldFbm, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, Phasor, PolygonField, PolygonFieldFbm, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand, WaveletNoise|
+|Primitive|Coherent|GaborWaveFbm, Gavoronoise, HemisphereFieldFbm, Noise, NoiseFbm, NoiseIq, NoiseJordan, NoiseParberry, NoisePingpong, NoiseRidged, NoiseSwiss, Phasor, PolygonField, PolygonFieldFbm, Stamping, Vorolines, VorolinesFbm, Voronoi, VoronoiFbm, Voronoise, Vororand, WaveletNoise|
 |Primitive|Function|Bump, BumpLorentzian, Cone, ConeComplex, ConeSigmoid, Constant, GaussianPulse, Paraboloid, Rift, Slope, Step, WaveDune, WaveSine, WaveSquare, WaveTriangular|
 |Primitive|Geological|Badlands, BasaltField, Caldera, Crater, Island, IslandLandMask, MountainCone, MountainInselberg, MountainRangeRadial, MountainStump, MountainTibesti, Multisteps, Plates, ShatteredPeak|
 |Primitive|Kernel|KernelCupola, KernelDiskSmooth, KernelGabor, KernelPrim|
 |Primitive|Random|White, WhiteDensityMap, WhiteSparse|
 |Routing||Broadcast, Receive, Thru, Toggle|
+|Terrain Features|Advanced|Rugosity|
+|Terrain Features|Clustering|KmeansClustering2, KmeansClustering3|
+|Terrain Features|ForTexturing|SelectSoilFlow, SelectSoilRocks, SelectSoilWeathered|
+|Terrain Features|Landform|ValleyWidth|
+|Terrain Features|Mask Operations|CombineMask, ScanMask|
+|Terrain Features|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Texture||ColorAdjust, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureAdvectionParticle, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
-|WIP|DEPRECATED|Terrace, TextureAdvectionWarp|
+|WIP|DEPRECATED|AccumulationCurvature, CurvatureMean, RelativeElevation, Ruggedness, ShapeIndex, Terrace, TextureAdvectionWarp, Unsphericity|

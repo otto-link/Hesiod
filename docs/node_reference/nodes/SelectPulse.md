@@ -13,7 +13,7 @@ SelectPulse is a thresholding operator. It selects values within a specified ran
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

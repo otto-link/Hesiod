@@ -13,7 +13,7 @@ ExportTexture is a texture to a PNG image file.
 # Category
 
 
-IO/Files
+Export
 # Inputs
 
 |Name|Type|Description|

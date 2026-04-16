@@ -13,7 +13,7 @@ ExportCloud is an operator for exporting cloud data to a csv file.
 # Category
 
 
-IO/Files
+Export
 # Inputs
 
 |Name|Type|Description|

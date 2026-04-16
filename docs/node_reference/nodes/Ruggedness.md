@@ -13,7 +13,7 @@ Measures the terrain roughness by computing the square root of the sum of square
 # Category
 
 
-Features
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

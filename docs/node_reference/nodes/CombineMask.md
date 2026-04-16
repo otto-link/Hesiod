@@ -13,7 +13,7 @@ CombineMask performs basic logical operations on a pair of heightmaps (assuming 
 # Category
 
 
-Mask
+Terrain Features/Mask Operations
 # Inputs
 
 |Name|Type|Description|

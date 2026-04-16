@@ -13,7 +13,7 @@ Identifies and selects valley-like regions in the heightmap based on curvature a
 # Category
 
 
-Mask/Selector
+Terrain Features/Selector
 # Inputs
 
 |Name|Type|Description|

@@ -13,7 +13,7 @@ ValleyWidth identifies valley lines and measure the width of the valley at each 
 # Category
 
 
-Features/Landform
+Terrain Features/Landform
 # Inputs
 
 |Name|Type|Description|

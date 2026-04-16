@@ -13,7 +13,7 @@ Generates a soil-weathering selection mask by combining curvature and gradient a
 # Category
 
 
-Mask/ForTexturing
+Terrain Features/ForTexturing
 # Inputs
 
 |Name|Type|Description|

@@ -27,7 +27,7 @@ void setup_white_sparse_node(BaseNode &node)
   node.add_attr<FloatAttribute>("density", "density", 0.1f, 0.f, 1.f);
 
   // attribute(s) order
-  node.set_attr_ordered_key({"seed", "density", "_SEPARATOR_", "inverse", "remap"});
+  node.set_attr_ordered_key({"seed", "density"});
 
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = true});

@@ -13,7 +13,7 @@ ExportNormalMap is an operator for exporting the normal map of an heightmap as a
 # Category
 
 
-IO/Files
+Export
 # Inputs
 
 |Name|Type|Description|

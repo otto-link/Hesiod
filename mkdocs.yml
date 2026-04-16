@@ -59,6 +59,7 @@ nav:
     - 'node_reference/nodes/Cos.md'
     - 'node_reference/nodes/Crater.md'
     - 'node_reference/nodes/CurvatureMean.md'
+    - 'node_reference/nodes/Curvatures.md'
     - 'node_reference/nodes/Debug.md'
     - 'node_reference/nodes/Dendry.md'
     - 'node_reference/nodes/DepressionFilling.md'
