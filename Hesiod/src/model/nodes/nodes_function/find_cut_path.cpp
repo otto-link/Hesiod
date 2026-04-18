@@ -100,67 +100,119 @@ void compute_find_cut_path_node(BaseNode &node)
   if (!p_in)
     return;
 
-  // --- Params lambda
+  // --- Params
 
-  const auto params = [&node]()
-  {
-    struct P
-    {
-      hmap::DomainBoundary start;
-      hmap::DomainBoundary end;
-      uint                 seed;
-      float                offset_ratio;
-      int                  steps;
-      bool                 favor_boundary_center;
-      bool                 favor_lower_elevation;
-      bool                 favor_sinks;
-      bool                 smooth_path;
-      int                  smooth_sampling;
-    };
-
-    // clang-format off
-    return P{
-      .start = hmap::DomainBoundary(node.get_attr<EnumAttribute>(A_START)),
-      .end = hmap::DomainBoundary(node.get_attr<EnumAttribute>(A_END)),
-      .seed = node.get_attr<SeedAttribute>(A_SEED),
-      .offset_ratio = node.get_attr<FloatAttribute>(A_OFFSET_RATIO),
-      .steps = node.get_attr<IntAttribute>(A_STEPS),
-      .favor_boundary_center = node.get_attr<BoolAttribute>(A_FAVOR_BOUNDARY_CENTER),
-      .favor_lower_elevation = node.get_attr<BoolAttribute>(A_FAVOR_LOWER_ELEVATION),
-      .favor_sinks = node.get_attr<BoolAttribute>(A_FAVOR_SINKS),
-      .smooth_path = node.get_attr<BoolAttribute>(A_SMOOTH_PATH),
-      .smooth_sampling = node.get_attr<IntAttribute>(A_SMOOTH_SAMPLING)
-    };
-    // clang-format on
-  }();
+  // clang-format off
+  const auto start                 = hmap::DomainBoundary(node.get_attr<EnumAttribute>(A_START));
+  const auto end                   = hmap::DomainBoundary(node.get_attr<EnumAttribute>(A_END));
+  const auto seed                  = node.get_attr<SeedAttribute>(A_SEED);
+  const auto offset_ratio          = node.get_attr<FloatAttribute>(A_OFFSET_RATIO);
+  const auto steps                 = node.get_attr<IntAttribute>(A_STEPS);
+  const auto favor_boundary_center = node.get_attr<BoolAttribute>(A_FAVOR_BOUNDARY_CENTER);
+  const auto favor_lower_elevation = node.get_attr<BoolAttribute>(A_FAVOR_LOWER_ELEVATION);
+  const auto favor_sinks           = node.get_attr<BoolAttribute>(A_FAVOR_SINKS);
+  const auto smooth_path           = node.get_attr<BoolAttribute>(A_SMOOTH_PATH);
+  const auto smooth_sampling       = node.get_attr<IntAttribute>(A_SMOOTH_SAMPLING);
+  // clang-format on
 
   // --- Compute
 
   hmap::for_each_tile(
       {p_in},
-      [&node, p_path, &params](std::vector<hmap::Array *> p_arrays,
-                               const hmap::TileRegion &)
+      [&](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
       {
         auto [pa_in] = unpack<1>(p_arrays);
 
         *p_path = hmap::find_cut_path_midpoint(*pa_in,
-                                               params.start,
-                                               params.end,
-                                               params.seed,
-                                               params.offset_ratio,
-                                               params.steps,
-                                               params.favor_boundary_center,
-                                               params.favor_lower_elevation,
-                                               params.favor_sinks);
-
-        if (params.smooth_path)
+                                               start,
+                                               end,
+                                               seed,
+                                               offset_ratio,
+                                               steps,
+                                               favor_boundary_center,
+                                               favor_lower_elevation,
+                                               favor_sinks);
+        if (smooth_path)
         {
-          *p_path = hmap::decimate_vw(*p_path, params.smooth_sampling);
+          *p_path = hmap::decimate_vw(*p_path, smooth_sampling);
           *p_path = hmap::bspline(*p_path);
           p_path->set_values_from_array(*pa_in);
         }
       },
       node.cfg().cm_single_array); // forced, not tileable
 }
+
+// void compute_find_cut_path_node(BaseNode &node)
+// {
+//   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
+
+//   auto *p_in = node.get_value_ref<hmap::VirtualArray>(P_IN);
+//   auto *p_path = node.get_value_ref<hmap::Path>(P_PATH);
+
+//   if (!p_in)
+//     return;
+
+//   // --- Params lambda
+
+//   const auto params = [&node]()
+//   {
+//     struct P
+//     {
+//       hmap::DomainBoundary start;
+//       hmap::DomainBoundary end;
+//       uint                 seed;
+//       float                offset_ratio;
+//       int                  steps;
+//       bool                 favor_boundary_center;
+//       bool                 favor_lower_elevation;
+//       bool                 favor_sinks;
+//       bool                 smooth_path;
+//       int                  smooth_sampling;
+//     };
+
+//     // clang-format off
+//     return P{
+//       .start = hmap::DomainBoundary(node.get_attr<EnumAttribute>(A_START)),
+//       .end = hmap::DomainBoundary(node.get_attr<EnumAttribute>(A_END)),
+//       .seed = node.get_attr<SeedAttribute>(A_SEED),
+//       .offset_ratio = node.get_attr<FloatAttribute>(A_OFFSET_RATIO),
+//       .steps = node.get_attr<IntAttribute>(A_STEPS),
+//       .favor_boundary_center = node.get_attr<BoolAttribute>(A_FAVOR_BOUNDARY_CENTER),
+//       .favor_lower_elevation = node.get_attr<BoolAttribute>(A_FAVOR_LOWER_ELEVATION),
+//       .favor_sinks = node.get_attr<BoolAttribute>(A_FAVOR_SINKS),
+//       .smooth_path = node.get_attr<BoolAttribute>(A_SMOOTH_PATH),
+//       .smooth_sampling = node.get_attr<IntAttribute>(A_SMOOTH_SAMPLING)
+//     };
+//     // clang-format on
+//   }();
+
+//   // --- Compute
+
+//   hmap::for_each_tile(
+//       {p_in},
+//       [&node, p_path, &params](std::vector<hmap::Array *> p_arrays,
+//                                const hmap::TileRegion &)
+//       {
+//         auto [pa_in] = unpack<1>(p_arrays);
+
+//         *p_path = hmap::find_cut_path_midpoint(*pa_in,
+//                                                params.start,
+//                                                params.end,
+//                                                params.seed,
+//                                                params.offset_ratio,
+//                                                params.steps,
+//                                                params.favor_boundary_center,
+//                                                params.favor_lower_elevation,
+//                                                params.favor_sinks);
+
+//         if (params.smooth_path)
+//         {
+//           *p_path = hmap::decimate_vw(*p_path, params.smooth_sampling);
+//           *p_path = hmap::bspline(*p_path);
+//           p_path->set_values_from_array(*pa_in);
+//         }
+//       },
+//       node.cfg().cm_single_array); // forced, not tileable
+// }
 
 } // namespace hesiod

@@ -11,36 +11,56 @@
 
 using namespace attr;
 
+// -----------------------------------------------------------------------------
+// Ports & Attributes
+// -----------------------------------------------------------------------------
+
+constexpr const char *P_IN = "input";
+constexpr const char *P_OUT = "path";
+
+constexpr const char *A_NPOINTS = "npoints";
+
 namespace hesiod
 {
+
+// -----------------------------------------------------------------------------
+// Setup
+// -----------------------------------------------------------------------------
 
 void setup_path_decimate_node(BaseNode &node)
 {
   Logger::log()->trace("setup node {}", node.get_label());
 
   // port(s)
-  node.add_port<hmap::Path>(gnode::PortType::IN, "input");
-  node.add_port<hmap::Path>(gnode::PortType::OUT, "output");
+  node.add_port<hmap::Path>(gnode::PortType::IN, P_IN);
+  node.add_port<hmap::Path>(gnode::PortType::OUT, P_OUT);
 
   // attribute(s)
-  node.add_attr<IntAttribute>("npoints", "npoints", 8, 2, 32);
+  node.add_attr<IntAttribute>(A_NPOINTS, "Point Count Target", 8, 2, 32);
 }
+
+// -----------------------------------------------------------------------------
+// Compute
+// -----------------------------------------------------------------------------
 
 void compute_path_decimate_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path *p_in = node.get_value_ref<hmap::Path>("input");
+  hmap::Path *p_in = node.get_value_ref<hmap::Path>(P_IN);
+  hmap::Path *p_out = node.get_value_ref<hmap::Path>(P_OUT);
 
-  if (p_in)
-  {
-    hmap::Path *p_out = node.get_value_ref<hmap::Path>("output");
-    // copy the input heightmap
-    *p_out = *p_in;
+  if (!p_in || p_in->size() < 2)
+    return;
 
-    if (p_in->size() > 1)
-      *p_out = hmap::decimate_vw(*p_in, node.get_attr<IntAttribute>("npoints"));
-  }
+  // --- Params lambda
+
+  int npoints = node.get_attr<IntAttribute>(A_NPOINTS);
+
+  // --- Compute
+
+  *p_out = *p_in;
+  *p_out = hmap::decimate_vw(*p_in, npoints);
 }
 
 } // namespace hesiod
