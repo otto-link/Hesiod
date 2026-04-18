@@ -38,8 +38,8 @@ void compute_path_decimate_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    if (p_in->get_npoints() > 1)
-      p_out->decimate_vw(node.get_attr<IntAttribute>("npoints"));
+    if (p_in->size() > 1)
+      *p_out = hmap::decimate_vw(*p_in, node.get_attr<IntAttribute>("npoints"));
   }
 }
 

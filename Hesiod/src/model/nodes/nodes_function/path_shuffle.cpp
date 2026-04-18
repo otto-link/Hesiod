@@ -45,7 +45,7 @@ void compute_path_shuffle_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    if (p_in->get_npoints() > 0)
+    if (p_in->size() > 0)
       p_out->shuffle(node.get_attr<FloatAttribute>("dx"),
                      node.get_attr<FloatAttribute>("dy"),
                      node.get_attr<SeedAttribute>("seed"),

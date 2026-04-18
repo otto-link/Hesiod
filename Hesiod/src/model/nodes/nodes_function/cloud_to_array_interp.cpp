@@ -62,7 +62,7 @@ void compute_cloud_to_array_interp_node(BaseNode &node)
 
   hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>(P_OUT);
 
-  if (p_cloud->get_npoints() > 0)
+  if (p_cloud->size() > 0)
   {
     hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>(P_DX);
     hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>(P_DY);

@@ -48,7 +48,7 @@ void compute_path_dig_node(BaseNode &node)
   hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
 
   if (p_path && p_in)
-    if (p_path->get_npoints() > 1)
+    if (p_path->size() > 1)
     {
       hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 

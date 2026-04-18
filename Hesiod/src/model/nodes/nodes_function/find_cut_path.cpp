@@ -155,8 +155,8 @@ void compute_find_cut_path_node(BaseNode &node)
 
         if (params.smooth_path)
         {
-          p_path->decimate_vw(params.smooth_sampling);
-          p_path->bspline();
+          *p_path = hmap::decimate_vw(*p_path, params.smooth_sampling);
+          *p_path = hmap::bspline(*p_path);
           p_path->set_values_from_array(*pa_in);
         }
       },

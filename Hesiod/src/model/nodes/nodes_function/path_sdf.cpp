@@ -42,7 +42,7 @@ void compute_path_sdf_node(BaseNode &node)
     hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("sdf");
 
-    if (p_path->get_npoints() > 1)
+    if (p_path->size() > 1)
     {
       hmap::for_each_tile(
           {p_out, p_dx, p_dy},
@@ -53,13 +53,11 @@ void compute_path_sdf_node(BaseNode &node)
             hmap::Array *pa_dx = p_arrays[1];
             hmap::Array *pa_dy = p_arrays[2];
 
-            glm::vec4 bbox_full = glm::vec4(0.f, 1.f, 0.f, 1.f);
-
-            *pa_out = p_path->to_array_sdf(region.shape,
-                                           bbox_full,
-                                           pa_dx,
-                                           pa_dy,
-                                           region.bbox);
+            *pa_out = hmap::path_sdf_to_array(*p_path,
+                                              region.shape,
+                                              region.bbox,
+                                              pa_dx,
+                                              pa_dy);
           },
           node.cfg().cm_cpu);
 

@@ -76,7 +76,7 @@ void compute_vororand_node(BaseNode &node)
 
         if (p_cloud)
         {
-          if (p_cloud->get_npoints() > 0)
+          if (p_cloud->size() > 0)
           {
             *pa_out = hmap::gpu::vororand(region.shape,
                                           p_cloud->get_x(),

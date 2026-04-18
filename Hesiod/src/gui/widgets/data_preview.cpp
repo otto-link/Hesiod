@@ -219,7 +219,7 @@ void DataPreview::update_preview()
     else if (data_type == typeid(hmap::Cloud).name())
     {
       const hmap::Cloud *p_cloud = static_cast<const hmap::Cloud *>(blind_ptr);
-      if (p_cloud && p_cloud->get_npoints() > 0)
+      if (p_cloud && p_cloud->size() > 0)
       {
         hmap::Array array(shape);
         p_cloud->to_array(array);
@@ -233,7 +233,7 @@ void DataPreview::update_preview()
     else if (data_type == typeid(hmap::Path).name())
     {
       const hmap::Path *p_path = static_cast<const hmap::Path *>(blind_ptr);
-      if (p_path && p_path->get_npoints() > 0)
+      if (p_path && p_path->size() > 0)
       {
         hmap::Array array(shape);
         glm::vec4   bbox(0.f, 1.f, 0.f, 1.f);

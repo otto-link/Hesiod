@@ -43,7 +43,7 @@ void compute_reverse_midpoint_node(BaseNode &node)
   {
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("heightmap");
 
-    if (p_path->get_npoints() > 1)
+    if (p_path->size() > 1)
     {
       hmap::Array path_array = hmap::Array(p_out->shape);
       glm::vec4   bbox = glm::vec4(0.f, 1.f, 0.f, 1.f);

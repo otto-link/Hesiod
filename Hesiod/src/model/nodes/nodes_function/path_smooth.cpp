@@ -45,13 +45,11 @@ void compute_path_smooth_node(BaseNode &node)
   {
     hmap::Path *p_out = node.get_value_ref<hmap::Path>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
-
-    if (p_in->get_npoints() > 1)
-      p_out->smooth(node.get_attr<IntAttribute>("navg"),
-                    node.get_attr<FloatAttribute>("averaging_intensity"),
-                    node.get_attr<FloatAttribute>("inertia"));
+    if (p_in->size() > 1)
+      *p_out = hmap::smooth(*p_in,
+                            node.get_attr<IntAttribute>("navg"),
+                            node.get_attr<FloatAttribute>("averaging_intensity"),
+                            node.get_attr<FloatAttribute>("inertia"));
   }
 }
 

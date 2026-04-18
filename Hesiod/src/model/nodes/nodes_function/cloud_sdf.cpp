@@ -33,7 +33,7 @@ void compute_cloud_sdf_node(BaseNode &node)
   hmap::Cloud        *p_cloud = node.get_value_ref<hmap::Cloud>("cloud");
   hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("sdf");
 
-  if (!p_cloud || p_cloud->get_npoints() == 0)
+  if (!p_cloud || p_cloud->size() == 0)
   {
     // fill with zeros
     hmap::for_each_tile(
@@ -59,12 +59,11 @@ void compute_cloud_sdf_node(BaseNode &node)
           hmap::Array *pa_dx = p_arrays[1];
           hmap::Array *pa_dy = p_arrays[2];
 
-          glm::vec4 bbox_full = glm::vec4(0.f, 1.f, 0.f, 1.f);
-          *pa_out = p_cloud->to_array_sdf(region.shape,
-                                          bbox_full,
-                                          pa_dx,
-                                          pa_dy,
-                                          region.bbox);
+          *pa_out = hmap::cloud_sdf_to_array(*p_cloud,
+                                             region.shape,
+                                             region.bbox,
+                                             pa_dx,
+                                             pa_dy);
         },
         node.cfg().cm_cpu);
 

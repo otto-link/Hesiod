@@ -36,11 +36,8 @@ void compute_path_bspline_node(BaseNode &node)
   {
     hmap::Path *p_out = node.get_value_ref<hmap::Path>("output");
 
-    // copy the input heightmap
-    *p_out = *p_in;
-
-    if (p_in->get_npoints() > 1)
-      p_out->bspline(node.get_attr<IntAttribute>("edge_divisions"));
+    if (p_in->size() > 1)
+      *p_out = hmap::bspline(*p_in, node.get_attr<IntAttribute>("edge_divisions"));
   }
 }
 

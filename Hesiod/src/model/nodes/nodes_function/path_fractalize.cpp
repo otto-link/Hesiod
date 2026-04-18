@@ -70,7 +70,7 @@ void compute_path_fractalize_node(BaseNode &node)
   hmap::Path *p_in = node.get_value_ref<hmap::Path>(P_INPUT);
   hmap::Path *p_out = node.get_value_ref<hmap::Path>(P_OUTPUT);
 
-  if (!p_in || p_in->get_npoints() < 2)
+  if (!p_in || p_in->size() < 2)
     return;
 
   // --- Parameters wrapper
@@ -97,13 +97,12 @@ void compute_path_fractalize_node(BaseNode &node)
 
   // --- Apply fractalize
 
-  *p_out = *p_in;
-
-  p_out->fractalize(params.iterations,
-                    params.seed,
-                    params.sigma,
-                    params.orientation,
-                    params.persistence);
+  *p_out = hmap::fractalize(*p_in,
+                            params.iterations,
+                            params.seed,
+                            params.sigma,
+                            params.orientation,
+                            params.persistence);
 
   if (params.remove_loops)
     *p_out = hmap::remove_geometric_loops(*p_out);

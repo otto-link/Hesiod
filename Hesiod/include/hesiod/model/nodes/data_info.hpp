@@ -48,7 +48,7 @@ template <typename T> std::string get_data_info(BaseNode *node, const std::strin
     return std::format("[{:.2e}, {:.2e}], count: {}",
                        p_val->get_values_min(),
                        p_val->get_values_max(),
-                       p_val->get_npoints());
+                       p_val->size());
   }
   else
   {

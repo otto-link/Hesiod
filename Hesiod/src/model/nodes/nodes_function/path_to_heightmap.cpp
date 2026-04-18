@@ -42,7 +42,7 @@ void compute_path_to_heightmap_node(BaseNode &node)
   {
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("heightmap");
 
-    if (p_path->get_npoints() > 1)
+    if (p_path->size() > 1)
     {
       if (!node.get_attr<BoolAttribute>("filled"))
       {

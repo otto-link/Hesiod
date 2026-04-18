@@ -38,8 +38,8 @@ void compute_path_resample_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_in;
 
-    if (p_in->get_npoints() > 1)
-      p_out->resample(node.get_attr<FloatAttribute>("delta"));
+    if (p_in->size() > 1)
+      p_out->resample_by_spacing(node.get_attr<FloatAttribute>("delta"));
   }
 }
 

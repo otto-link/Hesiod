@@ -345,13 +345,13 @@ float BaseNode::get_memory_usage() const
     {
       auto *p_d = this->get_value_ref<hmap::Cloud>(k);
       if (p_d)
-        count += sizeof(float) * 3 * p_d->get_npoints();
+        count += sizeof(float) * 3 * p_d->size();
     }
     else if (this->get_data_type(k) == typeid(hmap::Path).name())
     {
       auto *p_d = this->get_value_ref<hmap::Path>(k);
       if (p_d)
-        count += sizeof(float) * 3 * p_d->get_npoints();
+        count += sizeof(float) * 3 * p_d->size();
     }
   }
 

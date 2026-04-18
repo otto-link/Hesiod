@@ -83,8 +83,7 @@ void compute_cloud_random_distance_node(BaseNode &node)
                                            node.get_attr<SeedAttribute>("seed"));
   }
 
-  if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active() &&
-      p_cloud->get_npoints() > 0)
+  if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active() && p_cloud->size() > 0)
     p_cloud->remap_values(node.get_attr<RangeAttribute>("remap")[0],
                           node.get_attr<RangeAttribute>("remap")[1]);
 }

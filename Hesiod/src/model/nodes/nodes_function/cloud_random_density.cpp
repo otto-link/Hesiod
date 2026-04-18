@@ -69,7 +69,7 @@ void compute_cloud_random_density_node(BaseNode &node)
     *p_cloud = merge_clouds(clouds);
 
     if (node.get_attr_ref<RangeAttribute>("remap")->get_is_active() &&
-        p_cloud->get_npoints() > 0)
+        p_cloud->size() > 0)
     {
       p_cloud->remap_values(node.get_attr<RangeAttribute>("remap")[0],
                             node.get_attr<RangeAttribute>("remap")[1]);

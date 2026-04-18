@@ -73,7 +73,7 @@ void compute_path_meanderize_node(BaseNode &node)
   hmap::Path *p_in = node.get_value_ref<hmap::Path>(P_INPUT);
   hmap::Path *p_out = node.get_value_ref<hmap::Path>(P_OUTPUT);
 
-  if (!p_in || p_in->get_npoints() < 2)
+  if (!p_in || p_in->size() < 2)
     return;
 
   // --- Parameters wrapper
@@ -101,13 +101,12 @@ void compute_path_meanderize_node(BaseNode &node)
 
   // --- Apply meanderize
 
-  *p_out = *p_in;
-
-  p_out->meanderize(params.ratio,
-                    params.noise_ratio,
-                    params.seed,
-                    params.iterations,
-                    params.edge_divisions);
+  *p_out = hmap::meanderize(*p_in,
+                            params.ratio,
+                            params.noise_ratio,
+                            params.seed,
+                            params.iterations,
+                            params.edge_divisions);
 
   if (params.remove_loops)
     *p_out = hmap::remove_geometric_loops(*p_out);

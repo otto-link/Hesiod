@@ -41,14 +41,14 @@ void compute_ridgelines_node(BaseNode &node)
   {
     hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("heightmap");
 
-    if (p_path->get_npoints() > 1)
+    if (p_path->size() > 1)
     {
       hmap::VirtualArray *p_dx = node.get_value_ref<hmap::VirtualArray>("dx");
       hmap::VirtualArray *p_dy = node.get_value_ref<hmap::VirtualArray>("dy");
 
       std::vector<float> xs, ys, zs = {};
 
-      for (size_t k = 0; k < p_path->get_npoints() - 1; k++)
+      for (size_t k = 0; k < p_path->size() - 1; k++)
       {
         xs.push_back(p_path->points[k].x);
         ys.push_back(p_path->points[k].y);

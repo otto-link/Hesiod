@@ -2,6 +2,7 @@
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
 #include "highmap/geometry/path.hpp"
+#include "highmap/shortest_path.hpp"
 
 #include "attributes.hpp"
 
@@ -48,7 +49,7 @@ void compute_path_find_node(BaseNode &node)
     // copy the input heightmap
     *p_out = *p_waypoints;
 
-    if (p_out->get_npoints() > 1)
+    if (p_out->size() > 1)
     {
       // working shape
       float      ds = (float)node.get_attr<IntAttribute>("downsampling");
@@ -79,12 +80,13 @@ void compute_path_find_node(BaseNode &node)
       glm::vec4 bbox(0.f, 1.f, 0.f, 1.f);
       int       edge_divisions = 0;
 
-      p_out->dijkstra(zw,
-                      bbox,
-                      edge_divisions,
-                      node.get_attr<FloatAttribute>("elevation_ratio"),
-                      node.get_attr<FloatAttribute>("distance_exponent"),
-                      p_mask_array);
+      *p_out = hmap::dijkstra(*p_out,
+                              zw,
+                              bbox,
+                              edge_divisions,
+                              node.get_attr<FloatAttribute>("elevation_ratio"),
+                              node.get_attr<FloatAttribute>("distance_exponent"),
+                              p_mask_array);
 
       // set values based on the "fine" grid array
       p_out->set_values_from_array(z, bbox);
