@@ -147,7 +147,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Blend", "Operator/Blend"},
       {"Blend3", "Operator/Blend"},
       {"BlendPoissonBf", "Operator/Blend"},
-      {"Border", "Operator/Morphology"},
+      {"Border", "WIP/DEPRECATED"},
       {"Brush", "Primitive/Authoring"},
       {"Broadcast", "Routing"},
       {"Bulkify", "Boundaries"},
@@ -156,7 +156,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Caldera", "Primitive/Geological"},
       {"Clamp", "Filter/Range"},
       {"ClampOblique", "Filter/Range"},
-      {"Closing", "Operator/Morphology"},
+      {"Closing", "WIP/DEPRECATED"},
       {"Cloud", "Geometry/Cloud"},
       {"CloudFromCsv", "Geometry/Cloud"},
       {"CloudMerge", "Geometry/Cloud"},
@@ -195,11 +195,11 @@ std::map<std::string, std::string> get_node_inventory()
       {"DepressionFilling", "Erosion"},
       {"Detrend", "WIP"},                     // Filter/Recurve
       {"DiffusionLimitedAggregation", "WIP"}, // Primitive/Coherent
-      {"Dilation", "Operator/Morphology"},
+      {"Dilation", "WIP/DEPRECATED"},
       {"DirectionalBlur", "WIP"}, // Filter/Smoothing
       {"DistanceTransform", "Operator/Morphology"},
       {"Equalize", "Filter/Recurve"},
-      {"Erosion", "Operator/Morphology"},
+      {"Erosion", "WIP/DEPRECATED"},
       {"ExpandShrink", "Filter/Recast"},
       {"ExportAsset", "Export"},
       {"ExportAsCubemap", "WIP"}, // "Export"},
@@ -275,8 +275,9 @@ std::map<std::string, std::string> get_node_inventory()
       {"MixNormalMap", "Texture"},
       {"MixTexture", "Texture"},
       {"Mixer", "Operator/Blend"},
-      {"MorphologicalGradient", "Operator/Morphology"},
-      {"MorphologicalTopHat", "Operator/Morphology"},
+      {"MorphologicalGradient", "WIP/DEPRECATED"},
+      {"MorphologicalOperators", "Operator/Morphology"},
+      {"MorphologicalTopHat", "WIP/DEPRECATED"},
       {"MountainCone", "Primitive/Geological"},
       {"MountainInselberg", "Primitive/Geological"},
       {"MountainRangeRadial", "Primitive/Geological"},
@@ -294,7 +295,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"NoiseSwiss", "Primitive/Coherent"},
       {"NormalDisplacement", "WIP"},
       {"NormalMapToHeightmap", "WIP"},
-      {"Opening", "Operator/Morphology"},
+      {"Opening", "WIP/DEPRECATED"},
       {"Paraboloid", "Primitive/Function"},
       {"Path", "Geometry/Path"},
       {"PathBezier", "WIP/DEPRECATED"},
@@ -604,6 +605,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(MixNormalMap, mix_normal_map);
     SETUP_NODE(MixTexture, mix_texture);
     SETUP_NODE(MorphologicalGradient, morphological_gradient);
+    SETUP_NODE(MorphologicalOperators, morphological_operators);
     SETUP_NODE(MorphologicalTopHat, morphological_top_hat);
     SETUP_NODE(MountainCone, mountain_cone);
     SETUP_NODE(MountainInselberg, mountain_inselberg);

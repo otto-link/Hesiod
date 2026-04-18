@@ -32,6 +32,8 @@ void setup_closing_node(BaseNode &node)
 
 void compute_closing_node(BaseNode &node)
 {
+  Logger::log()->error("Closing node is deprecated, use MorphologyOperators node");
+
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");

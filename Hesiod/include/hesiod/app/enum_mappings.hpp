@@ -150,6 +150,17 @@ static struct EnumMappings
       {"intersection", MaskCombineMethod::INTERSECTION},
       {"exclusion", MaskCombineMethod::EXCLUSION}};
 
+  const std::map<std::string, int> morphology_operation_map = {
+      {"Border", hmap::MorphologyOperation::MO_BORDER},
+      {"Closing", hmap::MorphologyOperation::MO_CLOSING},
+      {"Dilation", hmap::MorphologyOperation::MO_DILATION},
+      {"Erosion", hmap::MorphologyOperation::MO_EROSION},
+      {"Opening", hmap::MorphologyOperation::MO_OPENING},
+      {"Black Hat", hmap::MorphologyOperation::MO_BLACK_HAT},
+      {"Top Hat", hmap::MorphologyOperation::MO_TOP_HAT},
+      {"Gradient", hmap::MorphologyOperation::MO_GRADIENT},
+      {"Laplacian", hmap::MorphologyOperation::MO_LAPLACIAN}};
+
   const std::map<std::string, int> noise_type_map = {
       {"Perlin", hmap::NoiseType::PERLIN},
       {"Perlin (billow)", hmap::NoiseType::PERLIN_BILLOW},
