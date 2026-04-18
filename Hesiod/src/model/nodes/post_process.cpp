@@ -44,6 +44,30 @@ void post_apply_enveloppe(BaseNode           &node,
   }
 }
 
+void post_apply_saturate_percentile(BaseNode           &node,
+                                    hmap::VirtualArray &h,
+                                    float               satmin,
+                                    float               satmax)
+{
+  if (satmin == 0.f && satmax == 1.f)
+    return;
+
+  glm::vec2 range_sat = h.range_percentile(satmin, satmax, node.cfg().cm_cpu);
+  glm::vec2 range = h.range(node.cfg().cm_cpu);
+
+  hmap::for_each_tile(
+      {&h},
+      [range, range_sat](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+      {
+        auto [pa_h] = unpack<1>(p_arrays);
+
+        float k_smoothing = 0.1f * (range_sat.y - range_sat.x);
+
+        hmap::saturate(*pa_h, range_sat.x, range_sat.y, range.x, range.y, k_smoothing);
+      },
+      node.cfg().cm_cpu);
+}
+
 void post_process_heightmap(BaseNode           &node,
                             hmap::VirtualArray &h,
                             hmap::VirtualArray *p_in)

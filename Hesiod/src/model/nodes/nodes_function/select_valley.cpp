@@ -41,30 +41,29 @@ void compute_select_valley_node(BaseNode &node)
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
   hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
+  hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
 
-  if (p_in)
-  {
-    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+  if (!p_in)
+    return;
 
-    int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
+  int ir = std::max(1, (int)(node.get_attr<FloatAttribute>("radius") * p_out->shape.x));
 
-    hmap::for_each_tile(
-        {p_out, p_in},
-        [&node, ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
-        {
-          auto [pa_out, pa_in] = unpack<2>(p_arrays);
-          *pa_out = hmap::gpu::select_valley(
-              *pa_in,
-              ir,
-              node.get_attr<BoolAttribute>("ridge_select"));
-        },
-        node.cfg().cm_gpu);
+  hmap::for_each_tile(
+      {p_out, p_in},
+      [&node, ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+      {
+        auto [pa_out, pa_in] = unpack<2>(p_arrays);
+        *pa_out = hmap::gpu::select_valley(*pa_in,
+                                           ir,
+                                           node.get_attr<BoolAttribute>("ridge_select"));
+      },
+      node.cfg().cm_gpu);
 
-    p_out->smooth_overlap_buffers();
+  p_out->smooth_overlap_buffers();
 
-    // post-process
-    post_process_heightmap(node, *p_out);
-  }
+  // post-process
+  post_apply_saturate_percentile(node, *p_out, 0.f, 0.95f);
+  post_process_heightmap(node, *p_out);
 }
 
 } // namespace hesiod

@@ -27,6 +27,11 @@ void post_apply_enveloppe(BaseNode           &node,
                           hmap::VirtualArray &h,
                           hmap::VirtualArray *p_env);
 
+void post_apply_saturate_percentile(BaseNode           &node,
+                                    hmap::VirtualArray &h,
+                                    float               satmin,
+                                    float               satmax);
+
 void post_process_heightmap(BaseNode           &node,
                             hmap::VirtualArray &h,
                             hmap::VirtualArray *p_in = nullptr);

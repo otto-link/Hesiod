@@ -106,34 +106,9 @@ void compute_local_metrics_node(BaseNode &node)
       },
       node.cfg().cm_gpu);
 
-  // add percentile-based saturation
-  if (params.satmin > 0.f)
-  {
-    glm::vec2 range_sat = p_out->range_percentile(params.satmin,
-                                                  params.satmax,
-                                                  node.cfg().cm_cpu);
-    glm::vec2 range = p_out->range(node.cfg().cm_cpu);
-
-    hmap::for_each_tile(
-        {p_out},
-        [range, range_sat](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
-        {
-          auto [pa_out] = unpack<1>(p_arrays);
-
-          float k_smoothing = 0.1f * (range_sat.y - range_sat.x);
-
-          hmap::saturate(*pa_out,
-                         range_sat.x,
-                         range_sat.y,
-                         range.x,
-                         range.y,
-                         k_smoothing);
-        },
-        node.cfg().cm_cpu);
-  }
-
   // post-process
   p_out->smooth_overlap_buffers();
+  post_apply_saturate_percentile(node, *p_out, params.satmin, params.satmax);
   post_process_heightmap(node, *p_out);
 }
 
