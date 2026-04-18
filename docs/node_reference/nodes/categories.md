@@ -19,13 +19,13 @@ Node Categories
 |Filter|Recurve|Equalize, Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, ReverseAboveThreshold, Saturate|
 |Filter|Smoothing|Laplace, Median3x3, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRandomPowerLaw, CloudRandomWeibull, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudShuffle, CloudToArrayInterp, CloudToPath, CloudToVectors|
-|Geometry|Path|FindCutPath, Path, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, PathDecimate, PathDig, PathFind, PathFractalize, PathFromCsv, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
+|Geometry|Path|FindCutPath, Path, PathDecimate, PathDig, PathFind, PathFractalize, PathFromCsv, PathInflate, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
 |Hydrology||FlatbedCarve, FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, FlowSimulation, FlowSimulationViscous, MergeWaterDepths, SnowMeltingMap, SnowSimulation, WaterDepthDryOut, WaterDepthFromMask, WaterMask|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Smoothstep|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, Blend3, BlendPoissonBf, Mixer, Transfer|
-|Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalTopHat, Opening, RelativeDistanceFromSkeleton, Skeleton|
+|Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalOperators, MorphologicalTopHat, Opening, RelativeDistanceFromSkeleton, Skeleton|
 |Operator|Resynthesis|QuiltingBlend, QuiltingExpand, QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Operator|Transform|Rotate, Translate, Warp, Zoom|
@@ -43,4 +43,4 @@ Node Categories
 |Terrain Features|Mask Operations|CombineMask, ScanMask|
 |Terrain Features|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Texture||ColorAdjust, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureAdvectionParticle, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
-|WIP|DEPRECATED|AccumulationCurvature, CurvatureMean, RelativeElevation, Ruggedness, ShapeIndex, Terrace, TextureAdvectionWarp, Unsphericity|
+|WIP|DEPRECATED|AccumulationCurvature, CurvatureMean, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, RelativeElevation, Ruggedness, ShapeIndex, Terrace, TextureAdvectionWarp, Unsphericity|

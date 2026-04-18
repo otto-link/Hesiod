@@ -9830,6 +9830,81 @@
             }
         }
     },
+    "MorphologicalOperators": {
+        "category": "Operator/Morphology",
+        "description": "No description available",
+        "label": "MorphologicalOperators",
+        "parameters": {
+            "operator": {
+                "description": "No description",
+                "key": "operator",
+                "label": "Operator",
+                "type": "Enumeration"
+            },
+            "post_gain": {
+                "description": "No description",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "No description",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "No description",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "No description",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "No description",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "No description",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "radius": {
+                "description": "No description",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
+            "sat_ratio": {
+                "description": "No description",
+                "key": "sat_ratio",
+                "label": "Saturation Ratio",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "MorphologicalTopHat": {
         "category": "Operator/Morphology",
         "description": "Applies a morphological operator to detect ridges (top hat) or valleys (black hat) in a Digital Elevation Model (DEM).",
@@ -12180,7 +12255,7 @@
         }
     },
     "PathBezier": {
-        "category": "Geometry/Path",
+        "category": "WIP/DEPRECATED",
         "description": "PathBezier uses Bezier interpolation to replace sharp angles and straight segments with smooth, flowing curves.",
         "label": "PathBezier",
         "parameters": {
@@ -12213,7 +12288,7 @@
         }
     },
     "PathBezierRound": {
-        "category": "Geometry/Path",
+        "category": "WIP/DEPRECATED",
         "description": "PathBezierRound uses Bezier interpolation to replace sharp angles and straight segments with smooth, round and flowing curves. PathBezierRound is an alternative to PathBezier.",
         "label": "PathBezierRound",
         "parameters": {
@@ -12246,7 +12321,7 @@
         }
     },
     "PathBspline": {
-        "category": "Geometry/Path",
+        "category": "WIP/DEPRECATED",
         "description": "PathBspline uses Bspline interpolation to replace sharp angles and straight segments with smooth, flowing curves.",
         "label": "PathBspline",
         "parameters": {
@@ -12273,7 +12348,7 @@
         }
     },
     "PathDecasteljau": {
-        "category": "Geometry/Path",
+        "category": "WIP/DEPRECATED",
         "description": "PathDecasteljau uses Decasteljau interpolation to replace sharp angles and straight segments with smooth, flowing curves.",
         "label": "PathDecasteljau",
         "parameters": {
@@ -12307,7 +12382,7 @@
             "npoints": {
                 "description": "No description",
                 "key": "npoints",
-                "label": "npoints",
+                "label": "Point Count Target",
                 "type": "Integer"
             }
         },
@@ -12318,8 +12393,8 @@
                 "description": "No description",
                 "type": "input"
             },
-            "output": {
-                "caption": "output",
+            "path": {
+                "caption": "path",
                 "data_type": "Path",
                 "description": "No description",
                 "type": "output"
@@ -12512,6 +12587,45 @@
             }
         }
     },
+    "PathInflate": {
+        "category": "Geometry/Path",
+        "description": "No description available",
+        "label": "PathInflate",
+        "parameters": {
+            "enable_resampling": {
+                "description": "No description",
+                "key": "enable_resampling",
+                "label": "Enable Resampling",
+                "type": "Bool"
+            },
+            "radius": {
+                "description": "No description",
+                "key": "radius",
+                "label": "Inflation Radius",
+                "type": "Float"
+            },
+            "resample_delta": {
+                "description": "No description",
+                "key": "resample_delta",
+                "label": "Step Size",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Path",
+                "description": "No description",
+                "type": "input"
+            },
+            "path": {
+                "caption": "path",
+                "data_type": "Path",
+                "description": "No description",
+                "type": "output"
+            }
+        }
+    },
     "PathMeanderize": {
         "category": "Geometry/Path",
         "description": "PathMeanderize uses Bezier interpolation to add menaders to the input path.",
@@ -12574,11 +12688,35 @@
         "description": "PathResample resamples the path based to get (approximately) a given distance between points.",
         "label": "PathResample",
         "parameters": {
+            "closed_path": {
+                "description": "No description",
+                "key": "closed_path",
+                "label": "Close Path",
+                "type": "Bool"
+            },
+            "decimate_sampling": {
+                "description": "No description",
+                "key": "decimate_sampling",
+                "label": "Sampling Rate",
+                "type": "Integer"
+            },
             "delta": {
                 "description": "Target distance between the points.",
                 "key": "delta",
-                "label": "delta",
+                "label": "Step Size",
                 "type": "Float"
+            },
+            "enable_decimate": {
+                "description": "No description",
+                "key": "enable_decimate",
+                "label": "Enable Decimation",
+                "type": "Bool"
+            },
+            "method": {
+                "description": "No description",
+                "key": "method",
+                "label": "Interpolation",
+                "type": "Choice"
             }
         },
         "ports": {
@@ -12588,10 +12726,10 @@
                 "description": "Input path.",
                 "type": "input"
             },
-            "output": {
-                "caption": "output",
+            "path": {
+                "caption": "path",
                 "data_type": "Path",
-                "description": "Output path.",
+                "description": "No description",
                 "type": "output"
             }
         }

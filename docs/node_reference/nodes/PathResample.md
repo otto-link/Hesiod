@@ -24,13 +24,17 @@ Geometry/Path
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Path|Output path.|
+|path|Path|No description|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|delta|Float|Target distance between the points.|
+|Close Path|Bool|No description|
+|Sampling Rate|Integer|No description|
+|Step Size|Float|Target distance between the points.|
+|Enable Decimation|Bool|No description|
+|Interpolation|Choice|No description|
 
 # Example
 

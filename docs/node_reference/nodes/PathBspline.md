@@ -13,7 +13,7 @@ PathBspline uses Bspline interpolation to replace sharp angles and straight segm
 # Category
 
 
-Geometry/Path
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

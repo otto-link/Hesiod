@@ -13,7 +13,7 @@ PathBezierRound uses Bezier interpolation to replace sharp angles and straight s
 # Category
 
 
-Geometry/Path
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

@@ -13,7 +13,7 @@ PathDecasteljau uses Decasteljau interpolation to replace sharp angles and strai
 # Category
 
 
-Geometry/Path
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

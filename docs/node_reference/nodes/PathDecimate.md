@@ -24,13 +24,13 @@ Geometry/Path
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|output|Path|No description|
+|path|Path|No description|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|npoints|Integer|No description|
+|Point Count Target|Integer|No description|
 
 # Example
 
