@@ -28,7 +28,7 @@ void setup_path_decasteljau_node(BaseNode &node)
 
 void compute_path_decasteljau_node(BaseNode &node)
 {
-  Logger::log()->error("Decasteljau node is deprecated, use PathResample node");
+  Logger::log()->error("PathDecasteljau node is deprecated, use PathResample node");
 
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 

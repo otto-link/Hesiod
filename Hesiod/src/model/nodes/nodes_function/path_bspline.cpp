@@ -28,7 +28,7 @@ void setup_path_bspline_node(BaseNode &node)
 
 void compute_path_bspline_node(BaseNode &node)
 {
-  Logger::log()->error("BSpline node is deprecated, use PathResample node");
+  Logger::log()->error("PathBSpline node is deprecated, use PathResample node");
 
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 

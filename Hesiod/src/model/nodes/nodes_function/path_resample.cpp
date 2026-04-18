@@ -65,7 +65,7 @@ void setup_path_resample_node(BaseNode &node)
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Resampling",
                              A_DELTA,
                              A_METHOD,
-			     A_CLOSED_PATH,
+                             A_CLOSED_PATH,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Decimation",
