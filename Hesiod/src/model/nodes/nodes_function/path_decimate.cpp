@@ -55,7 +55,7 @@ void compute_path_decimate_node(BaseNode &node)
 
   // --- Params lambda
 
-  int npoints = node.get_attr<IntAttribute>(A_NPOINTS);
+  const auto npoints = node.get_attr<IntAttribute>(A_NPOINTS);
 
   // --- Compute
 
