@@ -135,7 +135,7 @@ void compute_flow_simulation_node(BaseNode &node)
     hmap::for_each_tile(
         {p_z, p_depth_map},
         {p_water_depth},
-        [&node, iterations, dmin, dmax, water_depth](
+        [&](
             std::vector<const hmap::Array *> p_arrays_in,
             std::vector<hmap::Array *>       p_arrays_out,
             const hmap::TileRegion &)
@@ -165,11 +165,21 @@ void compute_flow_simulation_node(BaseNode &node)
 
       hmap::for_each_tile(
           {p_z, p_water_depth},
-          [&node, ir](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+          [&](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
           {
             auto [pa_z, pa_water_depth] = unpack<2>(p_arrays);
 
-            hmap::gpu::water_depth_filter(*pa_water_depth, *pa_z, ir);
+            const bool  smooth_contour = true;
+            const float transition_ratio = 0.2f;
+
+            // p_water_mask is not provided, just use water depth as a
+            // mask
+            hmap::gpu::water_depth_filter(*pa_water_depth,
+                                          *pa_z,
+                                          ir,
+                                          /* p_water_mask */ nullptr,
+                                          smooth_contour,
+                                          transition_ratio);
           },
           node.cfg().cm_gpu);
     }
