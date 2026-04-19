@@ -159,7 +159,9 @@ static struct EnumMappings
       {"Black Hat", hmap::MorphologyOperation::MO_BLACK_HAT},
       {"Top Hat", hmap::MorphologyOperation::MO_TOP_HAT},
       {"Gradient", hmap::MorphologyOperation::MO_GRADIENT},
-      {"Laplacian", hmap::MorphologyOperation::MO_LAPLACIAN}};
+      {"Laplacian", hmap::MorphologyOperation::MO_LAPLACIAN},
+      {"Closing by Reconst.", hmap::MorphologyOperation::MO_CLOSING_BY_RECONSTRUCTION},
+      {"Opening by Reconst.", hmap::MorphologyOperation::MO_OPENING_BY_RECONSTRUCTION}};
 
   const std::map<std::string, int> noise_type_map = {
       {"Perlin", hmap::NoiseType::PERLIN},
