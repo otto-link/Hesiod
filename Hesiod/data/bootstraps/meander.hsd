@@ -44,7 +44,7 @@
                     {
                         "node_id_from": "19",
                         "node_id_to": "18",
-                        "port_id_from": "output",
+                        "port_id_from": "path",
                         "port_id_to": "input"
                     },
                     {
@@ -1296,7 +1296,7 @@
                             "color": "",
                             "elevation": "",
                             "normal_map": "",
-                            "path": "output",
+                            "path": "path",
                             "points": "",
                             "water_depth": ""
                         },
@@ -1502,7 +1502,7 @@
                         "node_in_id": "18",
                         "node_out_id": "19",
                         "port_in_id": "input",
-                        "port_out_id": "output"
+                        "port_out_id": "path"
                     },
                     {
                         "link_type": 2,

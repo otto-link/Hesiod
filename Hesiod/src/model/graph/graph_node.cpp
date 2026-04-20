@@ -207,6 +207,12 @@ void GraphNode::json_from(nlohmann::json const &json, GraphConfig *p_input_confi
       json_safe_get(json_link, "node_id_to", node_id_to);
       json_safe_get(json_link, "port_id_to", port_id_to);
 
+      Logger::log()->trace("GraphNode::json_from, new link request: {}/{} => {}/{}",
+                           node_id_from,
+                           port_id_from,
+                           node_id_to,
+                           port_id_to);
+
       this->new_link(node_id_from, port_id_from, node_id_to, port_id_to);
     }
   }

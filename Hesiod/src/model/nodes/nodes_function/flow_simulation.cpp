@@ -135,8 +135,7 @@ void compute_flow_simulation_node(BaseNode &node)
     hmap::for_each_tile(
         {p_z, p_depth_map},
         {p_water_depth},
-        [&](
-            std::vector<const hmap::Array *> p_arrays_in,
+        [&](std::vector<const hmap::Array *> p_arrays_in,
             std::vector<hmap::Array *>       p_arrays_out,
             const hmap::TileRegion &)
         {
