@@ -25,7 +25,7 @@ Node Categories
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|
 |Operator|Blend|Blend, Blend3, BlendPoissonBf, Mixer, Transfer|
-|Operator|Morphology|Border, Closing, Dilation, DistanceTransform, Erosion, MakeBinary, MorphologicalGradient, MorphologicalOperators, MorphologicalTopHat, Opening, RelativeDistanceFromSkeleton, Skeleton|
+|Operator|Morphology|AreaRemove, DistanceTransform, MakeBinary, MorphologicalOperators, RelativeDistanceFromSkeleton, Skeleton|
 |Operator|Resynthesis|QuiltingBlend, QuiltingExpand, QuiltingShuffle|
 |Operator|Tiling|MakePeriodic, MakePeriodicStitching|
 |Operator|Transform|Rotate, Translate, Warp, Zoom|
@@ -43,4 +43,4 @@ Node Categories
 |Terrain Features|Mask Operations|CombineMask, ScanMask|
 |Terrain Features|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
 |Texture||ColorAdjust, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureAdvectionParticle, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
-|WIP|DEPRECATED|AccumulationCurvature, CurvatureMean, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, RelativeElevation, Ruggedness, ShapeIndex, Terrace, TextureAdvectionWarp, Unsphericity|
+|WIP|DEPRECATED|AccumulationCurvature, Border, Closing, CurvatureMean, Dilation, Erosion, MorphologicalGradient, MorphologicalTopHat, Opening, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, RelativeElevation, Ruggedness, ShapeIndex, Terrace, TextureAdvectionWarp, Unsphericity|

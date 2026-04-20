@@ -13,7 +13,7 @@ Closing is a combination of dilation followed by erosion. It is primarily used f
 # Category
 
 
-Operator/Morphology
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

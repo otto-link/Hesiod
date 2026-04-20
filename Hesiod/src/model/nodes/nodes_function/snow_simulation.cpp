@@ -66,10 +66,10 @@ void setup_snow_simulation_node(BaseNode &node)
   node.add_attr<BoolAttribute>(A_POST_FILTER, "Enable Thermal Relaxation", true);
   node.add_attr<FloatAttribute>(A_THERMAL_TALUS_RATIO, "Thermal Repose Ratio", 0.2f, 0.01f, 1.f);
   node.add_attr<FloatAttribute>(A_K_SNOW, "Avalanche Strength", 0.5f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>(A_K_VISC, "Thermal Creep Strength", 0.1f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>(A_K_VISC, "Thermal Creep Strength", 0.01f, 0.f, 0.2f);
   node.add_attr<FloatAttribute>(A_K_MELT_FACTOR, "Melting Strength", 0.8f, 0.f, 1.f);
   node.add_attr<FloatAttribute>(A_K_DEPTH_RATIO, "Depth Stiffening", 1.f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>(A_K_DEPTH_SLOPE_RATIO, "Depth Repose Boost", 1.f, 0.f, 4.f);
+  node.add_attr<FloatAttribute>(A_K_DEPTH_SLOPE_RATIO, "Depth Repose Boost", 2.f, 0.f, 4.f);
   node.add_attr<BoolAttribute>(A_SHIFT_TO_ZERO, "Rebase Snow to Zero", true);
   // clang-format on
 

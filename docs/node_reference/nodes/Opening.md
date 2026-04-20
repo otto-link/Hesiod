@@ -13,7 +13,7 @@ Opening is a combination of erosion followed by dilation. It is primarily used f
 # Category
 
 
-Operator/Morphology
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

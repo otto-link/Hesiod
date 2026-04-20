@@ -13,7 +13,7 @@ Dilation expands the boundaries of objects in an image and fills in small gaps o
 # Category
 
 
-Operator/Morphology
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

@@ -13,7 +13,7 @@ Highlights terrain boundaries by subtracting the eroded version of a DEM from th
 # Category
 
 
-Operator/Morphology
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

@@ -32,6 +32,7 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|Remove Small Flow Regions|Bool|No description|
 |Predefined Depth Map|Enumeration|No description|
 |Dry-Out Threshold Ratio|Float|No description|
 |Simulation Duration|Float|No description|
@@ -39,6 +40,7 @@ Hydrology
 |Flux Diffusion Strength|Float|No description|
 |Enable Filtering|Bool|No description|
 |Filter Radius|Float|No description|
+|Minimum Lake Radius|Float|No description|
 |Solver Iteration Stride|Integer|Grid sampling stride used by the solver. Higher values process the snow field at a lower spatial resolution, reducing computation time at the cost of fine detail.|
 |Initial Water Depth|Float|No description|
 

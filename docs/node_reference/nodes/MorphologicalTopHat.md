@@ -13,7 +13,7 @@ Applies a morphological operator to detect ridges (top hat) or valleys (black ha
 # Category
 
 
-Operator/Morphology
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

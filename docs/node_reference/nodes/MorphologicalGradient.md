@@ -13,7 +13,7 @@ MorphologicalGradient calculates the difference between dilation and erosion of 
 # Category
 
 
-Operator/Morphology
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|

@@ -64,7 +64,7 @@ void setup_flow_simulation_node(BaseNode &node)
   node.add_attr<BoolAttribute>(A_POST_FILTER, "Enable Filtering", false);
   node.add_attr<FloatAttribute>(A_RADIUS, "Filter Radius", 0.05f, 0.f, 0.2f);
   node.add_attr<BoolAttribute>(A_AREA_FILTER, "Remove Small Flow Regions", true);
-  node.add_attr<FloatAttribute>(A_RADIUS_LIMIT, "Minimum Lake Radius", 0.01f, 1e-3f, 0.1f, "{:.2e}", true);
+  node.add_attr<FloatAttribute>(A_RADIUS_LIMIT, "Minimum Lake Radius", 0.01f, 1e-3f, 0.5f, "{:.2e}", true);
   // clang-format on
 
   // attribute(s) order

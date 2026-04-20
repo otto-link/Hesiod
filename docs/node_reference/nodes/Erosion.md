@@ -13,7 +13,7 @@ Erosion removes small structures or noise from an image, and it also shrinks the
 # Category
 
 
-Operator/Morphology
+WIP/DEPRECATED
 # Inputs
 
 |Name|Type|Description|
