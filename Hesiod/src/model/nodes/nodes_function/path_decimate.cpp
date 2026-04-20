@@ -11,6 +11,9 @@
 
 using namespace attr;
 
+namespace hesiod
+{
+
 // -----------------------------------------------------------------------------
 // Ports & Attributes
 // -----------------------------------------------------------------------------
@@ -19,9 +22,6 @@ constexpr const char *P_IN = "input";
 constexpr const char *P_OUT = "path";
 
 constexpr const char *A_NPOINTS = "npoints";
-
-namespace hesiod
-{
 
 // -----------------------------------------------------------------------------
 // Setup
@@ -53,7 +53,7 @@ void compute_path_decimate_node(BaseNode &node)
   if (!p_in || p_in->size() < 2)
     return;
 
-  // --- Params lambda
+  // --- Params
 
   const auto npoints = node.get_attr<IntAttribute>(A_NPOINTS);
 

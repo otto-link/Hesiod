@@ -15,10 +15,10 @@ using namespace attr;
 namespace hesiod
 {
 
-void generate_map(BaseNode            &node,
-                  hmap::VirtualArray *&p_map,
-                  hmap::VirtualArray  &map,
-                  DefaultMapOptions   &options)
+void generate_map(BaseNode                &node,
+                  hmap::VirtualArray     *&p_map,
+                  hmap::VirtualArray      &map,
+                  const DefaultMapOptions &options)
 {
   // generate
   hmap::for_each_tile(
