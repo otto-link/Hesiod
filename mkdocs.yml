@@ -287,6 +287,7 @@ nav:
     - 'node_reference/nodes/WarpDownslope.md'
     - 'node_reference/nodes/WaterDepthDryOut.md'
     - 'node_reference/nodes/WaterDepthFromMask.md'
+    - 'node_reference/nodes/WaterElevationFromDepth.md'
     - 'node_reference/nodes/WaterMask.md'
     - 'node_reference/nodes/WatershedRidge.md'
     - 'node_reference/nodes/WaveDune.md'

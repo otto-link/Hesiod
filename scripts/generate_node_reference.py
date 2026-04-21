@@ -121,7 +121,11 @@ def generate_node_markdown(data):
             with open(fname, 'r', encoding='utf-8') as f:
                 existing_content = f.read()
             md_file.new_line(existing_content)
-
+        else:
+            # write an empty one if not existing
+            with open(fname, 'w') as f:
+                pass
+    
         md_file.create_md_file()
 
 

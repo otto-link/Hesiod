@@ -3,7 +3,7 @@ WaterDepthDryOut Node
 =====================
 
 
-No description available
+Reduces (dries out) the water depth by applying a ratio to the input depth. This can be used to simulate evaporation, infiltration, or partial drying of flooded areas. An optional mask can be provided to control where the drying effect is applied.
 
 
 
@@ -18,20 +18,20 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|depth|VirtualArray|No description|
-|mask|VirtualArray|No description|
+|depth|VirtualArray|Input water depth values.|
+|mask|VirtualArray|Optional mask defining where the drying effect is applied. Unmasked areas remain unchanged.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|water_depth|VirtualArray|Output water depth map representing flooded areas.|
+|water_depth|VirtualArray|Output water depth after applying the dry-out ratio.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|dry_out_ratio|Float|No description|
+|dry_out_ratio|Float|Ratio applied to the input depth to reduce water. A value of 0 removes all water, while 1 keeps the original depth.|
 
 # Example
 

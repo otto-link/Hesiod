@@ -3,7 +3,7 @@ WaterDepthFromMask Node
 =======================
 
 
-No description available
+Computes water depth over a terrain using a mask to define flooded regions. The method performs a harmonic interpolation (Laplace equation) over the masked domain using a Successive Over-Relaxation (SOR) solver. The resulting water surface is interpolated from boundary conditions, and the water depth is obtained as the difference between this surface and the terrain elevation.
 
 
 
@@ -18,23 +18,23 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|elevation|VirtualArray|No description|
-|water_mask|VirtualArray|No description|
+|elevation|VirtualArray|Input terrain elevation (height field).|
+|water_mask|VirtualArray|Input mask defining where water can accumulate. Values above the threshold indicate flooded regions.|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|water_depth|VirtualArray|Output water depth map representing flooded areas.|
+|water_depth|VirtualArray|Output water depth computed as the difference between the interpolated water surface and the terrain elevation. Zero where no water is present.|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|Max Iterations|Integer|No description|
-|Mask Activation Threshold|Float|No description|
-|Relaxation Factor|Float|No description|
-|Convergence Tolerance|Float|No description|
+|Max Iterations|Integer|Maximum number of SOR iterations used to solve the harmonic interpolation.|
+|Mask Activation Threshold|Float|Threshold used to convert the input mask into a binary field. Values above the threshold define flooded regions, while lower values act as boundaries.|
+|Relaxation Factor|Float|Relaxation factor for the SOR solver. Values between 1 and 2 are recommended for faster convergence.|
+|Convergence Tolerance|Float|Convergence tolerance. The solver stops when the maximum update between iterations falls below this value.|
 
 # Example
 

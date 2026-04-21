@@ -20,7 +20,7 @@ Node Categories
 |Filter|Smoothing|Laplace, Median3x3, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRandomPowerLaw, CloudRandomWeibull, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudShuffle, CloudToArrayInterp, CloudToPath, CloudToVectors|
 |Geometry|Path|FindCutPath, Path, PathDecimate, PathDig, PathFind, PathFractalize, PathFromCsv, PathInflate, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
-|Hydrology||FlatbedCarve, FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, FlowSimulation, FlowSimulationViscous, MergeWaterDepths, SnowMeltingMap, SnowSimulation, WaterDepthDryOut, WaterDepthFromMask, WaterMask|
+|Hydrology||FlatbedCarve, FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, FlowSimulation, FlowSimulationViscous, MergeWaterDepths, SnowMeltingMap, SnowSimulation, WaterDepthDryOut, WaterDepthFromMask, WaterElevationFromDepth, WaterMask|
 |Math|Base|Abs, AbsSmooth, Cos, GaussianDecay, Inverse, Lerp, Smoothstep|
 |Math|Convolution|ConvolveSVD|
 |Math|Gradient|Gradient, GradientAngle, GradientNorm, GradientTalus|

@@ -19,6 +19,7 @@ Export
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |elevation|VirtualArray|Heightmap data defining elevation values.|
+|mask|VirtualArray|Optional mask defining which cells are exported. Masked cells are omitted from the mesh, producing holes. When a mask is used, retriangulation is not available and the mesh is exported at full resolution.|
 |normal map details|VirtualTexture|Optional normal map for enhancing lighting effects on small details.|
 |texture|VirtualTexture|Heightmap data defining texture color values.|
 

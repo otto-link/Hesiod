@@ -4385,6 +4385,12 @@
                 "description": "Heightmap data defining elevation values.",
                 "type": "input"
             },
+            "mask": {
+                "caption": "mask",
+                "data_type": "VirtualArray",
+                "description": "Optional mask defining which cells are exported. Masked cells are omitted from the mesh, producing holes. When a mask is used, retriangulation is not available and the mesh is exported at full resolution.",
+                "type": "input"
+            },
             "normal map details": {
                 "caption": "normal map details",
                 "data_type": "VirtualTexture",
@@ -21366,11 +21372,11 @@
     },
     "WaterDepthDryOut": {
         "category": "Hydrology",
-        "description": "No description available",
+        "description": "Reduces (dries out) the water depth by applying a ratio to the input depth. This can be used to simulate evaporation, infiltration, or partial drying of flooded areas. An optional mask can be provided to control where the drying effect is applied.",
         "label": "WaterDepthDryOut",
         "parameters": {
             "dry_out_ratio": {
-                "description": "No description",
+                "description": "Ratio applied to the input depth to reduce water. A value of 0 removes all water, while 1 keeps the original depth.",
                 "key": "dry_out_ratio",
                 "label": "dry_out_ratio",
                 "type": "Float"
@@ -21380,48 +21386,48 @@
             "depth": {
                 "caption": "depth",
                 "data_type": "VirtualArray",
-                "description": "No description",
+                "description": "Input water depth values.",
                 "type": "input"
             },
             "mask": {
                 "caption": "mask",
                 "data_type": "VirtualArray",
-                "description": "No description",
+                "description": "Optional mask defining where the drying effect is applied. Unmasked areas remain unchanged.",
                 "type": "input"
             },
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "VirtualArray",
-                "description": "Output water depth map representing flooded areas.",
+                "description": "Output water depth after applying the dry-out ratio.",
                 "type": "output"
             }
         }
     },
     "WaterDepthFromMask": {
         "category": "Hydrology",
-        "description": "No description available",
+        "description": "Computes water depth over a terrain using a mask to define flooded regions. The method performs a harmonic interpolation (Laplace equation) over the masked domain using a Successive Over-Relaxation (SOR) solver. The resulting water surface is interpolated from boundary conditions, and the water depth is obtained as the difference between this surface and the terrain elevation.",
         "label": "WaterDepthFromMask",
         "parameters": {
             "iterations": {
-                "description": "No description",
+                "description": "Maximum number of SOR iterations used to solve the harmonic interpolation.",
                 "key": "iterations",
                 "label": "Max Iterations",
                 "type": "Integer"
             },
             "mask_threshold": {
-                "description": "No description",
+                "description": "Threshold used to convert the input mask into a binary field. Values above the threshold define flooded regions, while lower values act as boundaries.",
                 "key": "mask_threshold",
                 "label": "Mask Activation Threshold",
                 "type": "Float"
             },
             "omega": {
-                "description": "No description",
+                "description": "Relaxation factor for the SOR solver. Values between 1 and 2 are recommended for faster convergence.",
                 "key": "omega",
                 "label": "Relaxation Factor",
                 "type": "Float"
             },
             "tolerance": {
-                "description": "No description",
+                "description": "Convergence tolerance. The solver stops when the maximum update between iterations falls below this value.",
                 "key": "tolerance",
                 "label": "Convergence Tolerance",
                 "type": "Float"
@@ -21431,20 +21437,46 @@
             "elevation": {
                 "caption": "elevation",
                 "data_type": "VirtualArray",
-                "description": "No description",
+                "description": "Input terrain elevation (height field).",
                 "type": "input"
             },
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "VirtualArray",
-                "description": "Output water depth map representing flooded areas.",
+                "description": "Output water depth computed as the difference between the interpolated water surface and the terrain elevation. Zero where no water is present.",
                 "type": "output"
             },
             "water_mask": {
                 "caption": "water_mask",
                 "data_type": "VirtualArray",
-                "description": "No description",
+                "description": "Input mask defining where water can accumulate. Values above the threshold indicate flooded regions.",
                 "type": "input"
+            }
+        }
+    },
+    "WaterElevationFromDepth": {
+        "category": "Hydrology",
+        "description": "Computes the absolute water elevation by adding the terrain elevation and the water depth. This simplifies workflows where only depth is available. The resulting water elevation can be used, for example, when exporting water as an asset with ExportAsset.",
+        "label": "WaterElevationFromDepth",
+        "parameters": null,
+        "ports": {
+            "elevation": {
+                "caption": "elevation",
+                "data_type": "VirtualArray",
+                "description": "Input terrain elevation values.",
+                "type": "input"
+            },
+            "water_depth": {
+                "caption": "water_depth",
+                "data_type": "VirtualArray",
+                "description": "Input water depth values relative to the terrain.",
+                "type": "input"
+            },
+            "water_elevation": {
+                "caption": "water_elevation",
+                "data_type": "VirtualArray",
+                "description": "Output absolute water elevation computed as elevation + water_depth.",
+                "type": "output"
             }
         }
     },
