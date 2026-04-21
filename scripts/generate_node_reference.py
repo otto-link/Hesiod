@@ -125,7 +125,7 @@ def generate_node_markdown(data):
             # write an empty one if not existing
             with open(fname, 'w') as f:
                 pass
-    
+
         md_file.create_md_file()
 
 

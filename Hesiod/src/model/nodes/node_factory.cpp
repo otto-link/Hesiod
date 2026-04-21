@@ -197,7 +197,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Detrend", "WIP"},                     // Filter/Recurve
       {"DiffusionLimitedAggregation", "WIP"}, // Primitive/Coherent
       {"Dilation", "WIP/DEPRECATED"},
-      {"DirectionalBlur", "WIP"}, // Filter/Smoothing
+      {"DirectionalBlur", "Filter/Smoothing"},
       {"DistanceTransform", "Operator/Morphology"},
       {"Equalize", "Filter/Recurve"},
       {"Erosion", "WIP/DEPRECATED"},
