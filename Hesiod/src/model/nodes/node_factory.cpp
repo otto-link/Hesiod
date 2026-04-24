@@ -213,7 +213,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"ExportTexture", "Export"},
       {"ExportTiled", "Export"},
       {"Falloff", "Boundaries"},
-      {"FillTalus", "WIP"}, // Operator/Transform
+      {"FillTalus", "Filter"},
       {"FindCutPath", "Geometry/Path"},
       {"FlatbedCarve", "Hydrology"},
       {"FloodingFromBoundaries", "Hydrology"},
