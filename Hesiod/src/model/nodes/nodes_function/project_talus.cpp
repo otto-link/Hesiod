@@ -15,62 +15,98 @@ using namespace attr;
 namespace hesiod
 {
 
+// -----------------------------------------------------------------------------
+// Ports & Attributes
+// -----------------------------------------------------------------------------
+
+constexpr const char *P_IN = "input";
+constexpr const char *P_MASK = "mask";
+constexpr const char *P_OUT = "output";
+
+constexpr const char *A_SLOPE = "slope";
+constexpr const char *A_DIRECTION = "direction";
+
+// -----------------------------------------------------------------------------
+// Setup
+// -----------------------------------------------------------------------------
+
 void setup_project_talus_node(BaseNode &node)
 {
   Logger::log()->trace("setup node {}", node.get_label());
 
-  // port(s)
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "input");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "output", CONFIG(node));
+  // --- Ports
 
-  // attribute(s)
-  node.add_attr<FloatAttribute>("slope", "Slope", 1.f, 0.f, FLT_MAX);
-  node.add_attr<IntAttribute>("direction", "Propagation Direction (D8)", 0, 0, 7);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_IN);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_MASK);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_OUT, CONFIG(node));
 
-  // attribute(s) order
+  // --- Attributes
+
+  node.add_attr<FloatAttribute>(A_SLOPE, "Slope", 1.f, 0.f, FLT_MAX);
+  node.add_attr<IntAttribute>(A_DIRECTION, "Propagation Direction (D8)", 0, 0, 7);
+
+  // --- Attribute(s) order
+
   node.set_attr_ordered_key(
-      {"_GROUPBOX_BEGIN_Main Parameters", "slope", "direction", "_GROUPBOX_END_"});
+      {"_GROUPBOX_BEGIN_Main Parameters", A_SLOPE, A_DIRECTION, "_GROUPBOX_END_"});
 
   setup_pre_process_mask_attributes(node);
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = false});
 }
 
+// -----------------------------------------------------------------------------
+// Compute
+// -----------------------------------------------------------------------------
+
 void compute_project_talus_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::VirtualArray *p_in = node.get_value_ref<hmap::VirtualArray>("input");
+  // --- Inputs / Outputs
 
-  if (p_in)
-  {
-    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
-    hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("output");
+  auto *p_in = node.get_value_ref<hmap::VirtualArray>(P_IN);
+  auto *p_mask = node.get_value_ref<hmap::VirtualArray>(P_MASK);
+  auto *p_out = node.get_value_ref<hmap::VirtualArray>(P_OUT);
 
-    // prepare mask
-    std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
+  if (!p_in)
+    return;
 
-    float talus = node.get_attr<FloatAttribute>("slope") / float(p_in->shape.x);
+  // --- Params
 
-    hmap::for_each_tile(
-        {p_out, p_in, p_mask},
-        [&node, talus](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
-        {
-          auto [pa_out, pa_in, pa_mask] = unpack<3>(p_arrays);
-          *pa_out = hmap::gpu::project_talus_along_direction(
-              *pa_in,
-              talus,
-              pa_mask,
-              node.get_attr<IntAttribute>("direction"));
-        },
-        node.cfg().cm_gpu);
+  // clang-format off
+  const auto slope     = node.get_attr<FloatAttribute>(A_SLOPE);
+  const auto direction = node.get_attr<IntAttribute>(A_DIRECTION);
+  // clang-format on
 
-    p_out->smooth_overlap_buffers();
+  float talus = slope / float(p_in->shape.x);
 
-    // post-process
-    post_process_heightmap(node, *p_out, p_in);
-  }
+  // --- Prepare mask
+
+  std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
+
+  // --- Compute
+
+  hmap::for_each_tile(
+      {p_in, p_mask},
+      {p_out},
+      [&](std::vector<const hmap::Array *> in,
+          std::vector<hmap::Array *>       out,
+          const hmap::TileRegion &)
+      {
+        auto [pa_in, pa_mask] = unpack<2>(in);
+        auto [pa_out] = unpack<1>(out);
+
+        *pa_out = hmap::gpu::project_talus_along_direction(*pa_in,
+                                                           talus,
+                                                           pa_mask,
+                                                           direction);
+      },
+      node.cfg().cm_gpu);
+
+  // --- Post-process
+
+  post_process_heightmap(node, *p_out, p_in);
 }
 
 } // namespace hesiod
