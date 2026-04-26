@@ -69,9 +69,7 @@ void compute_gamma_correction_node(BaseNode &node)
 
   // --- Params
 
-  // clang-format off
   const auto gamma = node.get_attr<FloatAttribute>(A_GAMMA);
-  // clang-format on
 
   // --- Prepare mask
 
