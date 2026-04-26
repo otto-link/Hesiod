@@ -166,7 +166,7 @@ void compute_flow_simulation_node(BaseNode &node)
           std::vector<hmap::Array *>       out,
           const hmap::TileRegion &)
       {
-        const auto [pa_z, pa_depth] = unpack<2>(in);
+        auto [pa_z, pa_depth] = unpack<2>(in);
         auto [pa_water] = unpack<1>(out);
 
         hmap::Array depth_scaled = *pa_depth;
