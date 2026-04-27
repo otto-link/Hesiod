@@ -14,108 +14,136 @@ using namespace attr;
 namespace hesiod
 {
 
+// -----------------------------------------------------------------------------
+// Ports & Attributes
+// -----------------------------------------------------------------------------
+
+constexpr const char *P_Z_IN = "elevation_in";
+constexpr const char *P_DEPTH_IN = "water_depth_in";
+constexpr const char *P_MASK = "mask";
+
+constexpr const char *P_Z_OUT = "elevation";
+constexpr const char *P_DEPTH_OUT = "water_depth";
+constexpr const char *P_SHORE_MASK = "shore_mask";
+
+constexpr const char *A_GROUND_EXTENT = "shore_ground_extent";
+constexpr const char *A_WATER_RATIO = "shore_water_extent_ratio";
+constexpr const char *A_SCARP_RATIO = "scarp_extent_ratio";
+constexpr const char *A_SLOPE = "slope_shore";
+constexpr const char *A_POST_FILTER = "apply_post_filter";
+
+// -----------------------------------------------------------------------------
+// Setup
+// -----------------------------------------------------------------------------
+
 void setup_coastal_erosion_profile_node(BaseNode &node)
 {
   Logger::log()->trace("setup node {}", node.get_label());
 
-  // port(s)
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "elevation_in");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "water_depth_in");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, "mask");
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "elevation", CONFIG(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "water_depth", CONFIG(node));
-  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, "shore_mask", CONFIG(node));
+  // --- Ports
 
-  // attribute(s)
-  node.add_attr<FloatAttribute>("shore_ground_extent",
-                                "Ground Shore Width",
-                                0.05f,
-                                0.f,
-                                0.2f);
-  node.add_attr<FloatAttribute>("shore_water_extent_ratio",
-                                "Water Shore Width Ratio",
-                                1.f,
-                                0.f,
-                                10.f);
-  node.add_attr<FloatAttribute>("scarp_extent_ratio", "Scarp Strength", 0.5f, 0.f, 1.f);
-  node.add_attr<FloatAttribute>("slope_shore", "Shore Slope", 0.5f, 0.f, 8.f);
-  node.add_attr<BoolAttribute>("apply_post_filter", "Enable Shore Smoothing", true);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_Z_IN);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_DEPTH_IN);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_MASK);
 
-  // attribute(s) order
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_Z_OUT, CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_DEPTH_OUT, CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_SHORE_MASK, CONFIG(node));
+
+  // --- Attributes
+
+  // clang-format off
+  node.add_attr<FloatAttribute>(A_GROUND_EXTENT, "Ground Shore Width", 0.05f, 0.f, 0.2f);
+  node.add_attr<FloatAttribute>(A_WATER_RATIO, "Water Shore Width Ratio", 1.f, 0.f, 10.f);
+  node.add_attr<FloatAttribute>(A_SCARP_RATIO, "Scarp Smoothness", 0.9f, 0.f, 1.f);
+  node.add_attr<FloatAttribute>(A_SLOPE, "Shore Slope", 0.5f, 0.f, 8.f);
+  node.add_attr<BoolAttribute>(A_POST_FILTER, "Enable Shore Smoothing", true);
+  // clang-format on
+
+  // --- Attribute(s) order
+
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Shore Geometry",
-                             "shore_ground_extent",
-                             "shore_water_extent_ratio",
+                             A_GROUND_EXTENT,
+                             A_WATER_RATIO,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Profile Shape",
-                             "scarp_extent_ratio",
-                             "slope_shore",
+                             A_SCARP_RATIO,
+                             A_SLOPE,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Smoothing",
-                             "apply_post_filter",
+                             A_POST_FILTER,
                              "_GROUPBOX_END_"});
+
+  setup_pre_process_mask_attributes(node);
 }
+
+// -----------------------------------------------------------------------------
+// Compute
+// -----------------------------------------------------------------------------
 
 void compute_coastal_erosion_profile_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::VirtualArray *p_z = node.get_value_ref<hmap::VirtualArray>("elevation_in");
-  hmap::VirtualArray *p_depth = node.get_value_ref<hmap::VirtualArray>("water_depth_in");
+  // --- Inputs / Outputs
 
-  if (p_z && p_depth)
-  {
-    hmap::VirtualArray *p_mask = node.get_value_ref<hmap::VirtualArray>("mask");
-    hmap::VirtualArray *p_z_out = node.get_value_ref<hmap::VirtualArray>("elevation");
-    hmap::VirtualArray *p_depth_out = node.get_value_ref<hmap::VirtualArray>(
-        "water_depth");
-    hmap::VirtualArray *p_shore_mask = node.get_value_ref<hmap::VirtualArray>(
-        "shore_mask");
+  auto *p_z = node.get_value_ref<hmap::VirtualArray>(P_Z_IN);
+  auto *p_depth = node.get_value_ref<hmap::VirtualArray>(P_DEPTH_IN);
+  auto *p_mask = node.get_value_ref<hmap::VirtualArray>(P_MASK);
 
-    int ir_ground = std::max(
-        1,
-        (int)(node.get_attr<FloatAttribute>("shore_ground_extent") * p_z_out->shape.x));
+  auto *p_z_out = node.get_value_ref<hmap::VirtualArray>(P_Z_OUT);
+  auto *p_depth_out = node.get_value_ref<hmap::VirtualArray>(P_DEPTH_OUT);
+  auto *p_shore_mask = node.get_value_ref<hmap::VirtualArray>(P_SHORE_MASK);
 
-    int ir_water = int(node.get_attr<FloatAttribute>("shore_water_extent_ratio") *
-                       ir_ground);
+  if (!p_z || !p_depth)
+    return;
 
-    float slope_n = node.get_attr<FloatAttribute>("slope_shore") /
-                    float(p_z_out->shape.x);
+  // --- Params
 
-    hmap::for_each_tile(
-        {p_z, p_depth, p_mask, p_z_out, p_depth_out, p_shore_mask},
-        [&node, ir_ground, ir_water, slope_n](std::vector<hmap::Array *> p_arrays,
-                                              const hmap::TileRegion &)
-        {
-          hmap::Array *pa_z = p_arrays[0];
-          hmap::Array *pa_depth = p_arrays[1];
-          hmap::Array *pa_mask = p_arrays[2];
-          hmap::Array *pa_z_out = p_arrays[3];
-          hmap::Array *pa_depth_out = p_arrays[4];
-          hmap::Array *pa_shore_mask = p_arrays[5];
+  // clang-format off
+  const auto ground_extent = node.get_attr<FloatAttribute>(A_GROUND_EXTENT);
+  const auto water_ratio   = node.get_attr<FloatAttribute>(A_WATER_RATIO);
+  const auto scarp_ratio   = node.get_attr<FloatAttribute>(A_SCARP_RATIO);
+  const auto slope         = node.get_attr<FloatAttribute>(A_SLOPE);
+  const auto post_filter   = node.get_attr<BoolAttribute>(A_POST_FILTER);
+  // clang-format on
 
-          *pa_z_out = *pa_z;
-          *pa_depth_out = *pa_depth;
+  int ir_ground = std::max(1, int(ground_extent * p_z->shape.x));
+  int ir_water = int(water_ratio * ir_ground);
 
-          hmap::coastal_erosion_profile(
-              *pa_z_out,
-              pa_mask,
-              *pa_depth_out,
-              ir_ground,
-              ir_water,
-              slope_n * float(pa_z->shape.x),
-              slope_n * float(pa_z->shape.x),
-              node.get_attr<FloatAttribute>("scarp_extent_ratio"),
-              node.get_attr<BoolAttribute>("apply_post_filter"),
-              pa_shore_mask);
-        },
-        node.cfg().cm_cpu);
+  // --- Prepare mask
 
-    p_z_out->smooth_overlap_buffers();
-    p_depth_out->smooth_overlap_buffers();
-    p_shore_mask->smooth_overlap_buffers();
-  }
+  std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_z);
+
+  // --- Compute
+
+  hmap::for_each_tile(
+      {p_z, p_depth, p_mask},
+      {p_z_out, p_depth_out, p_shore_mask},
+      [&](std::vector<const hmap::Array *> in,
+          std::vector<hmap::Array *>       out,
+          const hmap::TileRegion &)
+      {
+        auto [pa_z, pa_depth, pa_mask] = unpack<3>(in);
+        auto [pa_z_out, pa_depth_out, pa_shore_mask] = unpack<3>(out);
+
+        *pa_z_out = *pa_z;
+        *pa_depth_out = *pa_depth;
+
+        hmap::coastal_erosion_profile(*pa_z_out,
+                                      pa_mask,
+                                      *pa_depth_out,
+                                      ir_ground,
+                                      ir_water,
+                                      slope,
+                                      slope,
+                                      scarp_ratio,
+                                      post_filter,
+                                      pa_shore_mask);
+      },
+      node.cfg().cm_cpu);
 }
 
 } // namespace hesiod
