@@ -20,6 +20,7 @@ namespace hesiod
 
 constexpr const char *P_Z_IN = "elevation_in";
 constexpr const char *P_DEPTH_IN = "water_depth_in";
+constexpr const char *P_NOISE = "noise";
 constexpr const char *P_MASK = "mask";
 
 constexpr const char *P_Z_OUT = "elevation";
@@ -31,6 +32,7 @@ constexpr const char *A_WATER_RATIO = "shore_water_extent_ratio";
 constexpr const char *A_SCARP_RATIO = "scarp_extent_ratio";
 constexpr const char *A_SLOPE = "slope_shore";
 constexpr const char *A_POST_FILTER = "apply_post_filter";
+constexpr const char *A_POST_FILTER_ITERATIONS = "post_filter_iterations";
 
 // -----------------------------------------------------------------------------
 // Setup
@@ -44,6 +46,7 @@ void setup_coastal_erosion_profile_node(BaseNode &node)
 
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_Z_IN);
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_DEPTH_IN);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_NOISE);
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_MASK);
 
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_Z_OUT, CONFIG(node));
@@ -53,11 +56,12 @@ void setup_coastal_erosion_profile_node(BaseNode &node)
   // --- Attributes
 
   // clang-format off
-  node.add_attr<FloatAttribute>(A_GROUND_EXTENT, "Ground Shore Width", 0.05f, 0.f, 0.2f);
+  node.add_attr<FloatAttribute>(A_GROUND_EXTENT, "Ground Shore Width", 0.03f, 0.f, 0.2f);
   node.add_attr<FloatAttribute>(A_WATER_RATIO, "Water Shore Width Ratio", 1.f, 0.f, 10.f);
   node.add_attr<FloatAttribute>(A_SCARP_RATIO, "Scarp Smoothness", 0.9f, 0.f, 1.f);
   node.add_attr<FloatAttribute>(A_SLOPE, "Shore Slope", 0.5f, 0.f, 8.f);
   node.add_attr<BoolAttribute>(A_POST_FILTER, "Enable Shore Smoothing", true);
+  node.add_attr<IntAttribute>(A_POST_FILTER_ITERATIONS, "Iterations", 10, 1, 32);
   // clang-format on
 
   // --- Attribute(s) order
@@ -74,8 +78,10 @@ void setup_coastal_erosion_profile_node(BaseNode &node)
                              //
                              "_GROUPBOX_BEGIN_Smoothing",
                              A_POST_FILTER,
+                             A_POST_FILTER_ITERATIONS,
                              "_GROUPBOX_END_"});
 
+  setup_default_noise(node, {.noise_amp = 1.f, .kw = 8.f, .smoothness = 0.f});
   setup_pre_process_mask_attributes(node);
 }
 
@@ -91,6 +97,7 @@ void compute_coastal_erosion_profile_node(BaseNode &node)
 
   auto *p_z = node.get_value_ref<hmap::VirtualArray>(P_Z_IN);
   auto *p_depth = node.get_value_ref<hmap::VirtualArray>(P_DEPTH_IN);
+  auto *p_noise = node.get_value_ref<hmap::VirtualArray>(P_NOISE);
   auto *p_mask = node.get_value_ref<hmap::VirtualArray>(P_MASK);
 
   auto *p_z_out = node.get_value_ref<hmap::VirtualArray>(P_Z_OUT);
@@ -108,6 +115,7 @@ void compute_coastal_erosion_profile_node(BaseNode &node)
   const auto scarp_ratio   = node.get_attr<FloatAttribute>(A_SCARP_RATIO);
   const auto slope         = node.get_attr<FloatAttribute>(A_SLOPE);
   const auto post_filter   = node.get_attr<BoolAttribute>(A_POST_FILTER);
+  const auto iterations    = node.get_attr<IntAttribute>(A_POST_FILTER_ITERATIONS);
   // clang-format on
 
   int ir_ground = std::max(1, int(ground_extent * p_z->shape.x));
@@ -117,16 +125,21 @@ void compute_coastal_erosion_profile_node(BaseNode &node)
 
   std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_z);
 
+  // --- Resolve default noise
+
+  hmap::VirtualArray noise_default(CONFIG(node));
+  generate_noise(node, p_noise, noise_default);
+
   // --- Compute
 
   hmap::for_each_tile(
-      {p_z, p_depth, p_mask},
+      {p_z, p_depth, p_noise, p_mask},
       {p_z_out, p_depth_out, p_shore_mask},
       [&](std::vector<const hmap::Array *> in,
           std::vector<hmap::Array *>       out,
           const hmap::TileRegion &)
       {
-        auto [pa_z, pa_depth, pa_mask] = unpack<3>(in);
+        auto [pa_z, pa_depth, pa_noise, pa_mask] = unpack<4>(in);
         auto [pa_z_out, pa_depth_out, pa_shore_mask] = unpack<3>(out);
 
         *pa_z_out = *pa_z;
@@ -141,9 +154,17 @@ void compute_coastal_erosion_profile_node(BaseNode &node)
                                       slope,
                                       scarp_ratio,
                                       post_filter,
+                                      iterations,
+                                      pa_noise,
                                       pa_shore_mask);
       },
       node.cfg().cm_cpu);
+
+  // --- Post-process
+
+  p_z_out->smooth_overlap_buffers();
+  p_depth_out->smooth_overlap_buffers();
+  p_shore_mask->smooth_overlap_buffers();
 }
 
 } // namespace hesiod
