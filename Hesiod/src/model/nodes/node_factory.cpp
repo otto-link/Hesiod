@@ -395,6 +395,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"TextureAdvectionWarp", "WIP/DEPRECATED"},
       {"TextureQuiltingExpand", "Texture"},
       {"TextureQuiltingShuffle", "Texture"},
+      {"TextureSelectColor", "Texture"},
       {"TextureSplitChannels", "Texture"},
       {"TextureToHeightmap", "Texture"},
       {"TextureUvChecker", "Texture"},
@@ -722,6 +723,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(TextureAdvectionWarp, texture_advection_warp);
     SETUP_NODE(TextureQuiltingExpand, texture_quilting_expand);
     SETUP_NODE(TextureQuiltingShuffle, texture_quilting_shuffle);
+    SETUP_NODE(TextureSelectColor, texture_select_color);
     SETUP_NODE(TextureSplitChannels, texture_split_channels);
     SETUP_NODE(TextureToHeightmap, texture_to_heightmap);
     SETUP_NODE(TextureUvChecker, texture_uv_checker);
