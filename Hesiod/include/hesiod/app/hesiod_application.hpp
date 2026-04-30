@@ -34,6 +34,7 @@ public:
   HesiodApplication(int &argc, char **argv);
   ~HesiodApplication();
 
+  bool is_headless() const;
   void load_project_model_and_ui(const std::string &fname = "", bool keep_name = true);
   void save_project_model_and_ui(const std::string &fname);
   void save_backup(const std::string &fname);
@@ -75,6 +76,8 @@ private:
   MainWindow                *main_window;
   std::unique_ptr<ProjectUI> project_ui;          // because top-level UI
   AppSettingsWindow         *app_settings_window; // owned by MainWindow
+
+  bool headless = false;
 };
 
 } // namespace hesiod

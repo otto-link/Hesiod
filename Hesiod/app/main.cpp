@@ -24,21 +24,16 @@ int main(int argc, char *argv[])
 
   hesiod::Logger::log()->info("Release mode: {}", std::string(HSD_RMODE));
 
-  // ----------------------------------- initialization
+  // --- Start app
 
-  // start QApplication even if headless (for QObject)
   qputenv("QT_LOGGING_RULES", HESIOD_QPUTENV_QT_LOGGING_RULES);
   hesiod::HesiodApplication app(argc, argv);
 
-  // ----------------------------------- batch CLI mode
+  if (!app.is_headless())
+  {
+    app.show();
+    return app.exec();
+  }
 
-  args::ArgumentParser parser("Hesiod.");
-  int                  ret = hesiod::cli::parse_args(parser, argc, argv);
-
-  if (ret >= 0)
-    return ret;
-
-  app.show();
-
-  return app.exec();
+  return 0;
 }

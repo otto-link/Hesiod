@@ -44,29 +44,39 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
 {
   Logger::log()->trace("HesiodApplication::HesiodApplication");
 
+  // --- Initialization
+
   // force icons visibility in the menu bar
   this->setAttribute(Qt::AA_DontShowIconsInMenus, false);
   QStyle *style = QApplication::style();
   style->setProperty("iconInMenu", true);
   QApplication::setStyle(style);
 
-  // launch splash
-  SplashScreen *splash = new SplashScreen();
-
   // start OpenCL
-  splash->show_message("Initializing OpenCL kernels...");
-
   hmap::gpu::init_opencl();
 
   // for colormaps loading
-  splash->show_message("Initializing color gradients...");
-
   hesiod::ColorGradientManager::get_instance();
 
   // context
-  splash->show_message("Initializing application context...");
-
   this->context.initialize();
+
+  // --- Batch CLI mode if requested
+
+  args::ArgumentParser parser("Hesiod.");
+  int                  ret = cli::parse_args(parser, argc, argv);
+
+  if (ret >= 0)
+  {
+    // stop here, skip the rest
+    this->headless = true;
+    return;
+  }
+
+  // --- Continue with GUI
+
+  // launch splash
+  SplashScreen *splash = new SplashScreen();
 
   // apply style
   this->setWindowIcon(QIcon(this->context.app_settings.global.icon_path.c_str()));
@@ -124,6 +134,8 @@ const AppContext &HesiodApplication::get_context() const { return this->context;
 ProjectUI *HesiodApplication::get_project_ui_ref() { return this->project_ui.get(); }
 
 QApplication &HesiodApplication::get_qapp() { return *static_cast<QApplication *>(this); }
+
+bool HesiodApplication::is_headless() const { return this->headless; }
 
 void HesiodApplication::load_project_model_and_ui(const std::string &fname,
                                                   bool               keep_name)
