@@ -19,7 +19,7 @@ Hydrology
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |elevation|VirtualArray|Input terrain elevation values.|
-|water_depth|VirtualArray|Input water depth values relative to the terrain.|
+|water_depth|VirtualArray|Output water depth map representing flooded areas.|
 
 # Outputs
 
@@ -30,4 +30,4 @@ Hydrology
 # Example
 
 
-No example available.
+No example available.  

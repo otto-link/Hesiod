@@ -31,7 +31,7 @@ Filter/Recurve
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|gamma|Float|Gamma exponent.|
+|Gamma Exponent|Float|Gamma exponent.|
 |mask_activate|Bool|Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.|
 |mask_gain|Float|Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.|
 |mask_inverse|Bool|Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.|
@@ -49,4 +49,4 @@ Filter/Recurve
 # Example
 
 
-No example available.
+No example available.  

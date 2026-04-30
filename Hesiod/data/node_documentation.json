@@ -2339,10 +2339,82 @@
                 "label": "Enable Shore Smoothing",
                 "type": "Bool"
             },
+            "dn_add_default_noise": {
+                "description": "Enables or disables the built-in drainage noise. If an external noise input is provided, it overrides this default noise.",
+                "key": "dn_add_default_noise",
+                "label": "Activate",
+                "type": "Bool"
+            },
+            "dn_kw": {
+                "description": "Base spatial frequencies in the X and Y directions.",
+                "key": "dn_kw",
+                "label": "Spatial Frequency",
+                "type": "Float"
+            },
+            "dn_noise_amp": {
+                "description": "Noise amplitude.",
+                "key": "dn_noise_amp",
+                "label": "Amplitude",
+                "type": "Float"
+            },
+            "dn_noise_type": {
+                "description": "Noise type.",
+                "key": "dn_noise_type",
+                "label": "Type",
+                "type": "Enumeration"
+            },
+            "dn_seed": {
+                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
+                "key": "dn_seed",
+                "label": "Seed",
+                "type": "Random seed number"
+            },
+            "dn_smoothness": {
+                "description": "Controls the resulting smoothness of the fractal layering process.",
+                "key": "dn_smoothness",
+                "label": "Smoothness",
+                "type": "Float"
+            },
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "post_filter_iterations": {
+                "description": "No description",
+                "key": "post_filter_iterations",
+                "label": "Iterations",
+                "type": "Integer"
+            },
             "scarp_extent_ratio": {
                 "description": "Ratio in [0,1] defining how much of the ground-side profile is a vertical scarp instead of a sloped shore.",
                 "key": "scarp_extent_ratio",
-                "label": "Scarp Strength",
+                "label": "Scarp Smoothness",
                 "type": "Float"
             },
             "shore_ground_extent": {
@@ -2381,6 +2453,12 @@
                 "caption": "mask",
                 "data_type": "VirtualArray",
                 "description": "Optional mask defining where the coastal transformation is allowed to operate.",
+                "type": "input"
+            },
+            "noise": {
+                "caption": "noise",
+                "data_type": "VirtualArray",
+                "description": "No description",
                 "type": "input"
             },
             "shore_mask": {
@@ -3797,7 +3875,7 @@
         }
     },
     "DirectionalBlur": {
-        "category": "WIP",
+        "category": "Filter/Smoothing",
         "description": "No description available",
         "label": "DirectionalBlur",
         "parameters": {
@@ -3807,11 +3885,35 @@
                 "label": "angle",
                 "type": "Float"
             },
-            "intensity": {
-                "description": "No description",
-                "key": "intensity",
-                "label": "intensity",
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
                 "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
             },
             "post_gain": {
                 "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
@@ -3867,17 +3969,11 @@
                 "label": "radius",
                 "type": "Float"
             },
-            "spread": {
+            "steps": {
                 "description": "No description",
-                "key": "spread",
-                "label": "spread",
-                "type": "Float"
-            },
-            "stretch": {
-                "description": "No description",
-                "key": "stretch",
-                "label": "stretch",
-                "type": "Float"
+                "key": "steps",
+                "label": "steps",
+                "type": "Integer"
             }
         },
         "ports": {
@@ -3889,6 +3985,12 @@
             },
             "input": {
                 "caption": "input",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
                 "data_type": "VirtualArray",
                 "description": "No description",
                 "type": "input"
@@ -4955,13 +5057,19 @@
         }
     },
     "FillTalus": {
-        "category": "WIP",
+        "category": "Filter/Advanced Filters",
         "description": "Fill the heightmap starting from the highest elevations using a regular downslope.",
         "label": "FillTalus",
         "parameters": {
-            "noise_ratio": {
-                "description": "Noise ratio, added to the downslope.",
-                "key": "noise_ratio",
+            "ir": {
+                "description": "No description",
+                "key": "ir",
+                "label": "Radius Search",
+                "type": "Integer"
+            },
+            "nosie_ratio": {
+                "description": "No description",
+                "key": "nosie_ratio",
                 "label": "noise_ratio",
                 "type": "Float"
             },
@@ -4990,6 +5098,12 @@
                 "data_type": "VirtualArray",
                 "description": "Output heightmap.",
                 "type": "output"
+            },
+            "seed_mask": {
+                "caption": "seed_mask",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
             }
         }
     },
@@ -5760,7 +5874,85 @@
             "gain": {
                 "description": "Power law exponent.",
                 "key": "gain",
-                "label": "gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "post_gain": {
+                "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
                 "type": "Float"
             }
         },
@@ -5793,7 +5985,7 @@
             "gamma": {
                 "description": "Gamma exponent.",
                 "key": "gamma",
-                "label": "gamma",
+                "label": "Gamma Exponent",
                 "type": "Float"
             },
             "mask_activate": {
@@ -5904,14 +6096,44 @@
             "gamma": {
                 "description": "Gamma exponent.",
                 "key": "gamma",
-                "label": "gamma",
+                "label": "Gamma Exponent",
                 "type": "Float"
             },
             "k": {
                 "description": "Smoothing factor (typically in [0, 1]).",
                 "key": "k",
-                "label": "k",
+                "label": "Smoothing",
                 "type": "Float"
+            },
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
             },
             "post_gain": {
                 "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
@@ -5964,7 +6186,7 @@
             "radius": {
                 "description": "Filter radius with respect to the domain size.",
                 "key": "radius",
-                "label": "radius",
+                "label": "Radius",
                 "type": "Float"
             }
         },
@@ -9145,6 +9367,54 @@
         "description": "The Lerp operator, short for linear interpolation, is a method for smoothly transitioning between two values over a specified range or interval.",
         "label": "Lerp",
         "parameters": {
+            "post_gain": {
+                "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "Mixing factor for blending input and output values. A value of 0 uses only the input, 1 uses only the output, and intermediate values perform a linear interpolation.",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values. Options include linear interpolation (default), min, max, smooth min, smooth max, add, and subtract.",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
             "swap_inputs": {
                 "description": "No description",
                 "key": "swap_inputs",
@@ -19508,6 +19778,75 @@
             }
         }
     },
+    "TextureSelectColor": {
+        "category": "Texture",
+        "description": "Generates a mask by selecting pixels from the input texture that match a target color within a given tolerance.",
+        "label": "TextureSelectColor",
+        "parameters": {
+            "color": {
+                "description": "Target color used to select matching pixels.",
+                "key": "color",
+                "label": "Color",
+                "type": "Color"
+            },
+            "post_gain": {
+                "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "Standard gamma correction applied to the elevation values. This is a monotonic power-law remapping that shifts emphasis toward low or high elevations, making the overall shape sharper or bulkier without changing its ordering.",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values across the midrange.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a specified target range (default is [0, 1]).",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Modifies the amplitude of elevations by first clamping them to a given interval and then scaling them so that the restricted interval matches the original input range. This enhances contrast in elevation variations while maintaining overall structure.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Defines the radius for post-processing smoothing, determining the size of the neighborhood used to average local values and reduce high-frequency detail. A radius of 0 disables smoothing.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "tolerance": {
+                "description": "Maximum allowed difference between the pixel color and the target color for a match.",
+                "key": "tolerance",
+                "label": "Tolerance",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "mask": {
+                "caption": "mask",
+                "data_type": "VirtualArray",
+                "description": "Output mask where matching pixels are set to 1 and others to 0.",
+                "type": "output"
+            },
+            "texture": {
+                "caption": "texture",
+                "data_type": "VirtualTexture",
+                "description": "Input texture to analyze.",
+                "type": "input"
+            }
+        }
+    },
     "TextureSplitChannels": {
         "category": "Texture",
         "description": "No description available",
@@ -21398,7 +21737,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "VirtualArray",
-                "description": "Output water depth after applying the dry-out ratio.",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             }
         }
@@ -21443,7 +21782,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "VirtualArray",
-                "description": "Output water depth computed as the difference between the interpolated water surface and the terrain elevation. Zero where no water is present.",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "output"
             },
             "water_mask": {
@@ -21469,7 +21808,7 @@
             "water_depth": {
                 "caption": "water_depth",
                 "data_type": "VirtualArray",
-                "description": "Input water depth values relative to the terrain.",
+                "description": "Output water depth map representing flooded areas.",
                 "type": "input"
             },
             "water_elevation": {

@@ -25,7 +25,7 @@ Hydrology
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|water_depth|VirtualArray|Output water depth after applying the dry-out ratio.|
+|water_depth|VirtualArray|Output water depth map representing flooded areas.|
 
 # Parameters
 
@@ -43,3 +43,4 @@ Corresponding Hesiod file: [WaterDepthDryOut.hsd](../../examples/WaterDepthDryOu
 > **Note:** Example files are kept up-to-date with the latest version of [Hesiod](https://github.com/otto-link/Hesiod).
 > If you find an error, please [open an issue](https://github.com/otto-link/Hesiod/issues).
 
+  

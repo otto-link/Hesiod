@@ -264,6 +264,7 @@ nav:
     - 'node_reference/nodes/TextureAdvectionWarp.md'
     - 'node_reference/nodes/TextureQuiltingExpand.md'
     - 'node_reference/nodes/TextureQuiltingShuffle.md'
+    - 'node_reference/nodes/TextureSelectColor.md'
     - 'node_reference/nodes/TextureSplitChannels.md'
     - 'node_reference/nodes/TextureToHeightmap.md'
     - 'node_reference/nodes/TextureUvChecker.md'

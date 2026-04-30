@@ -14,10 +14,11 @@ Node Categories
 |Erosion|Thermal|Thermal, ThermalScree, ValleyFill|
 |Erosion|Water|CoastalErosionDiffusion, CoastalErosionProfile|
 |Export||ExportAsset, ExportCloud, ExportCloudToPly, ExportHeightmap, ExportNormalMap, ExportPath, ExportPointsToPly, ExportTexture, ExportTiled, ImportHeightmap, ImportTexture|
+|Filter|Advanced Filters|FillTalus|
 |Filter|Range|Clamp, ClampOblique, Remap, Rescale, ShiftElevation|
 |Filter|Recast|ExpandShrink, Fold, RecastCanyon, RecastCliff, RecastCliffDirectional, RecastCracks, RecastSag|
 |Filter|Recurve|Equalize, Gain, GammaCorrection, GammaCorrectionLocal, Plateau, Recurve, RecurveKura, ReverseAboveThreshold, Saturate|
-|Filter|Smoothing|Laplace, Median3x3, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
+|Filter|Smoothing|DirectionalBlur, Laplace, Median3x3, SmoothCpulse, SmoothFill, SmoothFillHoles, SmoothFillSmearPeaks|
 |Geometry|Cloud|Cloud, CloudFromCsv, CloudLattice, CloudMerge, CloudRandom, CloudRandomDensity, CloudRandomDistance, CloudRandomPowerLaw, CloudRandomWeibull, CloudRemapValues, CloudSDF, CloudSetValuesFromBorderDistance, CloudSetValuesFromHeightmap, CloudSetValuesFromMinDistance, CloudShuffle, CloudToArrayInterp, CloudToPath, CloudToVectors|
 |Geometry|Path|FindCutPath, Path, PathDecimate, PathDig, PathFind, PathFractalize, PathFromCsv, PathInflate, PathMeanderize, PathResample, PathSDF, PathShuffle, PathSmooth, PathToCloud, PathToHeightmap|
 |Hydrology||FlatbedCarve, FloodingFromBoundaries, FloodingFromPoint, FloodingLakeSystem, FloodingUniformLevel, FlowSimulation, FlowSimulationViscous, MergeWaterDepths, SnowMeltingMap, SnowSimulation, WaterDepthDryOut, WaterDepthFromMask, WaterElevationFromDepth, WaterMask|
@@ -42,5 +43,5 @@ Node Categories
 |Terrain Features|Landform|ValleyWidth|
 |Terrain Features|Mask Operations|CombineMask, ScanMask|
 |Terrain Features|Selector|SelectAngle, SelectBlobLog, SelectCavities, SelectGt, SelectInterval, SelectInwardOutward, SelectMidrange, SelectMultiband3, SelectPulse, SelectRivers, SelectSlope, SelectTransitions, SelectValley|
-|Texture||ColorAdjust, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureAdvectionParticle, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
+|Texture||ColorAdjust, ColorizeGradient, ColorizeSolid, MixNormalMap, MixTexture, SetAlpha, TextureAdvectionParticle, TextureQuiltingExpand, TextureQuiltingShuffle, TextureSelectColor, TextureSplitChannels, TextureToHeightmap, TextureUvChecker|
 |WIP|DEPRECATED|AccumulationCurvature, Border, Closing, CurvatureMean, Dilation, Erosion, MorphologicalGradient, MorphologicalTopHat, Opening, PathBezier, PathBezierRound, PathBspline, PathDecasteljau, RelativeElevation, Ruggedness, ShapeIndex, Terrace, TextureAdvectionWarp, Unsphericity|

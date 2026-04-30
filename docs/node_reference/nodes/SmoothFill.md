@@ -52,4 +52,4 @@ Filter/Smoothing
 # Example
 
 
-No example available.
+No example available.  

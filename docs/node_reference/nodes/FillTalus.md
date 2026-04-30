@@ -13,12 +13,13 @@ Fill the heightmap starting from the highest elevations using a regular downslop
 # Category
 
 
-WIP
+Filter/Advanced Filters
 # Inputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
 |input|VirtualArray|Input heightmap.|
+|seed_mask|VirtualArray|No description|
 
 # Outputs
 
@@ -30,11 +31,12 @@ WIP
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|noise_ratio|Float|Noise ratio, added to the downslope.|
+|Radius Search|Integer|No description|
+|noise_ratio|Float|No description|
 |Seed|Random seed number|Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.|
 |slope|Float|Downslope used for filling.|
 
 # Example
 
 
-No example available.
+No example available.  
