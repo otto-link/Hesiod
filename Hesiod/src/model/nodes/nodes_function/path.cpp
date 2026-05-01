@@ -13,23 +13,63 @@ using namespace attr;
 namespace hesiod
 {
 
+// -----------------------------------------------------------------------------
+// Ports & Attributes
+// -----------------------------------------------------------------------------
+
+constexpr const char *P_BACKGROUND = "background";
+constexpr const char *P_OUT = "path";
+
+constexpr const char *A_PATH = "path";
+constexpr const char *A_CLOSED = "closed";
+
+// -----------------------------------------------------------------------------
+// Setup
+// -----------------------------------------------------------------------------
+
 void setup_path_node(BaseNode &node)
 {
   Logger::log()->trace("setup node {}", node.get_label());
 
-  // port(s)
-  node.add_port<hmap::Path>(gnode::PortType::OUT, "path");
+  // --- Ports
 
-  // attribute(s)
-  node.add_attr<PathAttribute>("path", "path");
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_BACKGROUND);
+  node.add_port<hmap::Path>(gnode::PortType::OUT, P_OUT);
+
+  // --- Attributes
+
+  node.add_attr<CloudAttribute>(A_PATH, "Path", true);
+  node.add_attr<BoolAttribute>(A_CLOSED, "Closed Path", false);
+
+  // --- Attribute(s) order
+
+  node.set_attr_ordered_key(
+      {"_GROUPBOX_BEGIN_Main Parameters", A_PATH, A_CLOSED, "_GROUPBOX_END_"});
+
+  setup_background_image_for_cloud_attribute(node, A_PATH, P_BACKGROUND);
 }
+
+// -----------------------------------------------------------------------------
+// Compute
+// -----------------------------------------------------------------------------
 
 void compute_path_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
-  hmap::Path *p_out = node.get_value_ref<hmap::Path>("path");
-  *p_out = node.get_attr<PathAttribute>("path");
+  // --- Inputs / Outputs
+
+  auto *p_out = node.get_value_ref<hmap::Path>(P_OUT);
+
+  // --- Params
+
+  const auto path_attr = node.get_attr<CloudAttribute>(A_PATH);
+  const auto closed = node.get_attr<BoolAttribute>(A_CLOSED);
+
+  // --- Compute
+
+  *p_out = hmap::Path(path_attr);
+  p_out->set_closed(closed);
 }
 
 } // namespace hesiod

@@ -32,15 +32,18 @@ void setup_colorize_solid_node(BaseNode &node)
 {
   Logger::log()->trace("setup node {}", node.get_label());
 
-  // port(s)
+  // --- Ports
+
   node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_ALPHA);
   node.add_port<hmap::VirtualTexture>(gnode::PortType::OUT, P_TEXTURE, CONFIG_TEX(node));
 
-  // attribute(s)
+  // --- Attributes
+
   node.add_attr<ColorAttribute>(A_COLOR, "Solid Color", 0.f, 1.f, 0.f, 1.f);
   node.add_attr<FloatAttribute>(A_ALPHA, "Transparency", 1.f, 0.f, 1.f);
 
-  // attribute(s) order
+  // --- Attribute(s) order
+
   node.set_attr_ordered_key({A_COLOR, A_ALPHA});
 }
 
@@ -52,11 +55,17 @@ void compute_colorize_solid_node(BaseNode &node)
 {
   Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
 
+  // --- Inputs / Outputs
+
   auto *p_alpha = node.get_value_ref<hmap::VirtualArray>(P_ALPHA);
   auto *p_texture = node.get_value_ref<hmap::VirtualTexture>(P_TEXTURE);
 
-  const std::vector<float> color = node.get_attr<ColorAttribute>(A_COLOR);
-  const float              alpha = node.get_attr<FloatAttribute>(A_ALPHA);
+  // --- Params
+
+  const std::array<float, 4> color = node.get_attr<ColorAttribute>(A_COLOR);
+  const float                alpha = node.get_attr<FloatAttribute>(A_ALPHA);
+
+  // --- Compute
 
   for (int nch = 0; nch < 4; ++nch)
   {

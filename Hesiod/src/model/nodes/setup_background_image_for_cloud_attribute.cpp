@@ -42,7 +42,7 @@ void setup_background_image_for_cloud_attribute(BaseNode          &node,
                               shape_preview.x,
                               shape_preview.y,
                               QImage::Format_RGB888);
-    return tmp_image.copy();
+    return tmp_image.copy().mirrored(false, true);
   };
 
   // assign function to attr
