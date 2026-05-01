@@ -26,6 +26,7 @@ constexpr const char *P_MASK = "mask";
 constexpr const char *P_Z_OUT = "elevation";
 constexpr const char *P_DEPTH_OUT = "water_depth";
 constexpr const char *P_SHORE_MASK = "shore_mask";
+constexpr const char *P_SCARP_MASK = "scarp_mask";
 
 constexpr const char *A_GROUND_EXTENT = "shore_ground_extent";
 constexpr const char *A_WATER_RATIO = "shore_water_extent_ratio";
@@ -52,6 +53,7 @@ void setup_coastal_erosion_profile_node(BaseNode &node)
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_Z_OUT, CONFIG(node));
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_DEPTH_OUT, CONFIG(node));
   node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_SHORE_MASK, CONFIG(node));
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_SCARP_MASK, CONFIG(node));
 
   // --- Attributes
 
@@ -103,6 +105,7 @@ void compute_coastal_erosion_profile_node(BaseNode &node)
   auto *p_z_out = node.get_value_ref<hmap::VirtualArray>(P_Z_OUT);
   auto *p_depth_out = node.get_value_ref<hmap::VirtualArray>(P_DEPTH_OUT);
   auto *p_shore_mask = node.get_value_ref<hmap::VirtualArray>(P_SHORE_MASK);
+  auto *p_scarp_mask = node.get_value_ref<hmap::VirtualArray>(P_SCARP_MASK);
 
   if (!p_z || !p_depth)
     return;
@@ -134,13 +137,13 @@ void compute_coastal_erosion_profile_node(BaseNode &node)
 
   hmap::for_each_tile(
       {p_z, p_depth, p_noise, p_mask},
-      {p_z_out, p_depth_out, p_shore_mask},
+      {p_z_out, p_depth_out, p_shore_mask, p_scarp_mask},
       [&](std::vector<const hmap::Array *> in,
           std::vector<hmap::Array *>       out,
           const hmap::TileRegion &)
       {
         auto [pa_z, pa_depth, pa_noise, pa_mask] = unpack<4>(in);
-        auto [pa_z_out, pa_depth_out, pa_shore_mask] = unpack<3>(out);
+        auto [pa_z_out, pa_depth_out, pa_shore_mask, pa_scarp_mask] = unpack<4>(out);
 
         *pa_z_out = *pa_z;
         *pa_depth_out = *pa_depth;
@@ -156,7 +159,8 @@ void compute_coastal_erosion_profile_node(BaseNode &node)
                                       post_filter,
                                       iterations,
                                       pa_noise,
-                                      pa_shore_mask);
+                                      pa_shore_mask,
+                                      pa_scarp_mask);
       },
       node.cfg().cm_cpu);
 
@@ -165,6 +169,7 @@ void compute_coastal_erosion_profile_node(BaseNode &node)
   p_z_out->smooth_overlap_buffers();
   p_depth_out->smooth_overlap_buffers();
   p_shore_mask->smooth_overlap_buffers();
+  p_scarp_mask->smooth_overlap_buffers();
 }
 
 } // namespace hesiod
