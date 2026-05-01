@@ -54,7 +54,7 @@ void setup_brush_node(BaseNode &node)
                               shape_preview.x,
                               shape_preview.y,
                               QImage::Format_RGB888);
-    return tmp_image.copy();
+    return tmp_image.copy().mirrored(false, true);
   };
 
   // assign function to attr
@@ -68,7 +68,15 @@ void compute_brush_node(BaseNode &node)
   // base noise function
   hmap::VirtualArray *p_out = node.get_value_ref<hmap::VirtualArray>("out");
 
-  hmap::Array array = node.get_attr<ArrayAttribute>("hmap");
+  // retrieve raw data and convert them to an hmap::Array
+  std::vector<float> data = node.get_attr_ref<ArrayAttribute>("hmap")->get_value();
+  glm::vec2          shape = node.get_attr_ref<ArrayAttribute>("hmap")->get_shape();
+
+  hmap::Array array(shape);
+  array.vector = std::move(data);
+  array = array.resample_to_shape_bilinear(node.get_config_ref()->shape);
+
+  // Array -> VirtualArray
   p_out->from_array(array, node.cfg().cm_cpu);
 
   // post-process
