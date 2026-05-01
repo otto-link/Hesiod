@@ -2483,65 +2483,65 @@
     },
     "ColorAdjust": {
         "category": "Texture",
-        "description": "No description available",
+        "description": "Applies color correction and tonemapping to a texture, including levels, exposure, contrast, saturation, temperature, gamma, and optional dithering.",
         "label": "ColorAdjust",
         "parameters": {
             "aces_tonemap": {
-                "description": "No description",
+                "description": "Applies ACES filmic tonemapping for high dynamic range compression.",
                 "key": "aces_tonemap",
                 "label": "ACES Tonemap",
                 "type": "Bool"
             },
             "agx_tonemap": {
-                "description": "No description",
+                "description": "Applies AGX tonemapping with smooth contrast and saturation compression.",
                 "key": "agx_tonemap",
                 "label": "AGX Tonemap",
                 "type": "Bool"
             },
             "contrast": {
-                "description": "No description",
+                "description": "Adjusts contrast around the midrange (0.5).",
                 "key": "contrast",
                 "label": "Contrast",
                 "type": "Float"
             },
             "dither_amp": {
-                "description": "No description",
+                "description": "Amount of noise added.",
                 "key": "dither_amp",
                 "label": "Dither Amplitude",
                 "type": "Float"
             },
             "exposure": {
-                "description": "No description",
+                "description": "Applies exposure adjustment in stops (power-of-two scaling).",
                 "key": "exposure",
                 "label": "Exposure",
                 "type": "Float"
             },
             "filmic_tonemap": {
-                "description": "No description",
+                "description": "Applies simple filmic (Reinhard) tonemapping.",
                 "key": "filmic_tonemap",
                 "label": "Filmic Tonemap",
                 "type": "Bool"
             },
             "gamma": {
-                "description": "No description",
+                "description": "Applies gamma correction (power-law transformation).",
                 "key": "gamma",
                 "label": "Gamma Correction",
                 "type": "Float"
             },
             "levels": {
-                "description": "No description",
+                "description": "Defines input value range remapping before processing (min/max normalization).",
                 "key": "levels",
                 "label": "Levels",
                 "type": "Value range"
             },
             "saturation": {
-                "description": "No description",
+                "description": "Controls color intensity (0 = grayscale, 1 = original).",
                 "key": "saturation",
                 "label": "Saturation",
                 "type": "Float"
             },
             "temperature": {
-                "description": "No description",
+                "description": "Shifts color balance between warm (red) and cool (blue) tones.",
                 "key": "temperature",
                 "label": "Temperature",
                 "type": "Float"
@@ -2551,13 +2551,13 @@
             "texture in": {
                 "caption": "texture in",
                 "data_type": "VirtualTexture",
-                "description": "No description",
+                "description": "Input texture to be adjusted.",
                 "type": "input"
             },
             "texture out": {
                 "caption": "texture out",
                 "data_type": "VirtualTexture",
-                "description": "No description",
+                "description": "Output texture after color adjustments.",
                 "type": "output"
             }
         }
