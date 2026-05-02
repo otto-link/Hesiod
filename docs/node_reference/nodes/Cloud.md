@@ -30,7 +30,7 @@ Geometry/Cloud
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|cloud|Cloud|Cloud data.|
+|Cloud|Cloud|Cloud data.|
 
 # Example
 

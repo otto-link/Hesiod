@@ -14,6 +14,12 @@ A polyline defined by a series of connected points (x, y) with elevation data (z
 
 
 Geometry/Path
+# Inputs
+
+|Name|Type|Description|
+| :--- | :--- | :--- |
+|background|VirtualArray|No description|
+
 # Outputs
 
 |Name|Type|Description|
@@ -24,7 +30,8 @@ Geometry/Path
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|path|Path|The sequence of points defining the path. Each point consists of coordinates (x, y) and an elevation (z).|
+|Closed Path|Bool|No description|
+|Path|Cloud|The sequence of points defining the path. Each point consists of coordinates (x, y) and an elevation (z).|
 
 # Example
 

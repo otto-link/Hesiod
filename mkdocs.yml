@@ -253,6 +253,7 @@ nav:
     - 'node_reference/nodes/Smoothstep.md'
     - 'node_reference/nodes/SnowMeltingMap.md'
     - 'node_reference/nodes/SnowSimulation.md'
+    - 'node_reference/nodes/SpectralEqualizer.md'
     - 'node_reference/nodes/Stamping.md'
     - 'node_reference/nodes/SteepenConvective.md'
     - 'node_reference/nodes/Step.md'

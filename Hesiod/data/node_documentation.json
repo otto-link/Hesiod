@@ -1642,7 +1642,7 @@
             "cloud": {
                 "description": "Cloud data.",
                 "key": "cloud",
-                "label": "cloud",
+                "label": "Cloud",
                 "type": "Cloud"
             }
         },
@@ -2461,6 +2461,12 @@
                 "description": "No description",
                 "type": "input"
             },
+            "scarp_mask": {
+                "caption": "scarp_mask",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "output"
+            },
             "shore_mask": {
                 "caption": "shore_mask",
                 "data_type": "VirtualArray",
@@ -2525,7 +2531,7 @@
             "gamma": {
                 "description": "Applies gamma correction (power-law transformation).",
                 "key": "gamma",
-                "label": "Gamma Correction",
+                "label": "Gamma",
                 "type": "Float"
             },
             "levels": {
@@ -2548,16 +2554,16 @@
             }
         },
         "ports": {
-            "texture in": {
-                "caption": "texture in",
+            "texture_in": {
+                "caption": "texture_in",
                 "data_type": "VirtualTexture",
-                "description": "Input texture to be adjusted.",
+                "description": "No description",
                 "type": "input"
             },
-            "texture out": {
-                "caption": "texture out",
+            "texture_out": {
+                "caption": "texture_out",
                 "data_type": "VirtualTexture",
-                "description": "Output texture after color adjustments.",
+                "description": "No description",
                 "type": "output"
             }
         }
@@ -12559,14 +12565,26 @@
         "description": "A polyline defined by a series of connected points (x, y) with elevation data (z). Paths can represent linear features such as roads, rivers, or boundaries.",
         "label": "Path",
         "parameters": {
+            "closed": {
+                "description": "No description",
+                "key": "closed",
+                "label": "Closed Path",
+                "type": "Bool"
+            },
             "path": {
                 "description": "The sequence of points defining the path. Each point consists of coordinates (x, y) and an elevation (z).",
                 "key": "path",
-                "label": "path",
-                "type": "Path"
+                "label": "Path",
+                "type": "Cloud"
             }
         },
         "ports": {
+            "background": {
+                "caption": "background",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
             "path": {
                 "caption": "path",
                 "data_type": "Path",
@@ -18422,6 +18440,159 @@
                 "data_type": "VirtualArray",
                 "description": "Optional initial snow thickness used as the starting state of the simulation.",
                 "type": "input"
+            }
+        }
+    },
+    "SpectralEqualizer": {
+        "category": "Filter",
+        "description": "Adjusts the frequency content of the input field by decomposing it into multiple scales and reweighting each frequency band independently. This allows fine control over large structures, medium features, and fine details.",
+        "label": "SpectralEqualizer",
+        "parameters": {
+            "mask_activate": {
+                "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
+                "key": "mask_activate",
+                "label": "mask_activate",
+                "type": "Bool"
+            },
+            "mask_gain": {
+                "description": "Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.",
+                "key": "mask_gain",
+                "label": "mask_gain",
+                "type": "Float"
+            },
+            "mask_inverse": {
+                "description": "Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.",
+                "key": "mask_inverse",
+                "label": "mask_inverse",
+                "type": "Bool"
+            },
+            "mask_radius": {
+                "description": "Defines the smoothing radius for the internal mask. A value of 0 disables smoothing. This is bypassed if the 'mask' input is used.",
+                "key": "mask_radius",
+                "label": "mask_radius",
+                "type": "Float"
+            },
+            "mask_type": {
+                "description": "Specifies how the internal mask is computed: 'Elevation' uses height, 'Gradient Norm' uses slope, and 'Elevation mid-range' selects the middle portion of the height range. This parameter is ignored when a 'mask' input is connected.",
+                "key": "mask_type",
+                "label": "mask_type",
+                "type": "Choice"
+            },
+            "post_gain": {
+                "description": "Mid-centered gain transformation applied to the elevation values. Increasing the gain pushes values toward extremes, flattening low/high regions and steepening transitions.",
+                "key": "post_gain",
+                "label": "Gain",
+                "type": "Float"
+            },
+            "post_gamma": {
+                "description": "Gamma correction applied to the elevation values. Adjusts contrast by emphasizing low or high values without changing ordering.",
+                "key": "post_gamma",
+                "label": "Gamma",
+                "type": "Float"
+            },
+            "post_inverse": {
+                "description": "Inverts the output values after processing, flipping low and high values.",
+                "key": "post_inverse",
+                "label": "Invert Output",
+                "type": "Bool"
+            },
+            "post_mix": {
+                "description": "Blending factor between input and processed output. 0 keeps input, 1 uses full output.",
+                "key": "post_mix",
+                "label": "Mix Factor",
+                "type": "Float"
+            },
+            "post_mix_method": {
+                "description": "Method used to combine input and output values (e.g., linear, min, max, add, subtract).",
+                "key": "post_mix_method",
+                "label": "Mix Method",
+                "type": "Enumeration"
+            },
+            "post_remap": {
+                "description": "Linearly remaps the output values to a target range.",
+                "key": "post_remap",
+                "label": "Remap Range",
+                "type": "Value range"
+            },
+            "post_saturate": {
+                "description": "Enhances contrast by clamping values to a range and rescaling to the full output interval.",
+                "key": "post_saturate",
+                "label": "Saturation Range",
+                "type": "Value range"
+            },
+            "post_smoothing_radius": {
+                "description": "Applies additional smoothing to the output. Larger values reduce fine details.",
+                "key": "post_smoothing_radius",
+                "label": "Smoothing Radius",
+                "type": "Float"
+            },
+            "rmax": {
+                "description": "Maximum smoothing radius defining the lowest frequency band. Controls large-scale structures.",
+                "key": "rmax",
+                "label": "Radius Max.",
+                "type": "Float"
+            },
+            "rmin": {
+                "description": "Minimum smoothing radius defining the highest frequency band. Controls fine details.",
+                "key": "rmin",
+                "label": "Radius Min.",
+                "type": "Float"
+            },
+            "w0": {
+                "description": "Weight for the lowest frequency band (largest structures).",
+                "key": "w0",
+                "label": "Band 0",
+                "type": "Float"
+            },
+            "w1": {
+                "description": "Weight for low-mid frequency features.",
+                "key": "w1",
+                "label": "Band 1",
+                "type": "Float"
+            },
+            "w2": {
+                "description": "Weight for mid-frequency features.",
+                "key": "w2",
+                "label": "Band 2",
+                "type": "Float"
+            },
+            "w3": {
+                "description": "Weight for high-mid frequency details.",
+                "key": "w3",
+                "label": "Band 3",
+                "type": "Float"
+            },
+            "w4": {
+                "description": "Weight for fine-scale details.",
+                "key": "w4",
+                "label": "Band 4",
+                "type": "Float"
+            },
+            "w5": {
+                "description": "Weight for the highest frequency band (finest details and noise).",
+                "key": "w5",
+                "label": "Band 5",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "VirtualArray",
+                "description": "Input field to be processed.",
+                "type": "input"
+            },
+            "mask": {
+                "caption": "mask",
+                "data_type": "VirtualArray",
+                "description": "Optional mask controlling where the effect is applied.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "VirtualArray",
+                "description": "Output field with adjusted spectral content.",
+                "type": "output"
             }
         }
     },

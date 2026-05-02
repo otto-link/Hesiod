@@ -3,7 +3,7 @@ ColorAdjust Node
 ================
 
 
-No description available
+Applies color correction and tonemapping to a texture, including levels, exposure, contrast, saturation, temperature, gamma, and optional dithering.
 
 
 
@@ -18,28 +18,28 @@ Texture
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture in|VirtualTexture|No description|
+|texture_in|VirtualTexture|No description|
 
 # Outputs
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|texture out|VirtualTexture|No description|
+|texture_out|VirtualTexture|No description|
 
 # Parameters
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
-|ACES Tonemap|Bool|No description|
-|AGX Tonemap|Bool|No description|
-|Contrast|Float|No description|
-|Dither Amplitude|Float|No description|
-|Exposure|Float|No description|
-|Filmic Tonemap|Bool|No description|
-|Gamma Correction|Float|No description|
-|Levels|Value range|No description|
-|Saturation|Float|No description|
-|Temperature|Float|No description|
+|ACES Tonemap|Bool|Applies ACES filmic tonemapping for high dynamic range compression.|
+|AGX Tonemap|Bool|Applies AGX tonemapping with smooth contrast and saturation compression.|
+|Contrast|Float|Adjusts contrast around the midrange (0.5).|
+|Dither Amplitude|Float|Amount of noise added.|
+|Exposure|Float|Applies exposure adjustment in stops (power-of-two scaling).|
+|Filmic Tonemap|Bool|Applies simple filmic (Reinhard) tonemapping.|
+|Gamma|Float|Applies gamma correction (power-law transformation).|
+|Levels|Value range|Defines input value range remapping before processing (min/max normalization).|
+|Saturation|Float|Controls color intensity (0 = grayscale, 1 = original).|
+|Temperature|Float|Shifts color balance between warm (red) and cool (blue) tones.|
 
 # Example
 
