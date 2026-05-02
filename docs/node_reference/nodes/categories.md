@@ -8,7 +8,7 @@ Node Categories
 | :--- | :--- | :--- |
 |Boundaries||Bulkify, Falloff, SetBorders, ZeroedEdges|
 |Converter||HeightmapToKernel, HeightmapToMask, HeightmapToNormalMap, HeightmapToRGBA|
-|Debug||Debug, Preview|
+|Debug||Compare, Debug, Preview|
 |Erosion|Hydraulic|HydraulicParticle, HydraulicProcedural, HydraulicSaleve, HydraulicStreamLog, Rifts|
 |Erosion|Stratify|Strata, StrataCells, StrataTerrace|
 |Erosion|Thermal|Thermal, ThermalScree, ValleyFill|

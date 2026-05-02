@@ -2733,6 +2733,51 @@
             }
         }
     },
+    "Compare": {
+        "category": "Debug",
+        "description": "Displays a split view of two arrays using a horizontal and vertical slice.",
+        "label": "Compare",
+        "parameters": {
+            "slide_x": {
+                "description": "Normalized horizontal slice position (0 = left, 1 = right).",
+                "key": "slide_x",
+                "label": "X-cutslice Position",
+                "type": "Float"
+            },
+            "slide_y": {
+                "description": "Normalized vertical slice position (0 = top, 1 = bottom).",
+                "key": "slide_y",
+                "label": "Y-cutslice Position",
+                "type": "Float"
+            },
+            "swap_inputs": {
+                "description": "Swaps the roles of input arrays a and b.",
+                "key": "swap_inputs",
+                "label": "Swap Inputs",
+                "type": "Bool"
+            }
+        },
+        "ports": {
+            "a": {
+                "caption": "a",
+                "data_type": "VirtualArray",
+                "description": "First input array (top-left region).",
+                "type": "input"
+            },
+            "b": {
+                "caption": "b",
+                "data_type": "VirtualArray",
+                "description": "Second input array (bottom-right region).",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "VirtualArray",
+                "description": "Resulting array combining a and b based on slice position.",
+                "type": "output"
+            }
+        }
+    },
     "Cone": {
         "category": "Primitive/Function",
         "description": "Generates a conical heightmap.",

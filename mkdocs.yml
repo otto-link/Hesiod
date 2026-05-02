@@ -52,6 +52,7 @@ nav:
     - 'node_reference/nodes/ColorizeGradient.md'
     - 'node_reference/nodes/ColorizeSolid.md'
     - 'node_reference/nodes/CombineMask.md'
+    - 'node_reference/nodes/Compare.md'
     - 'node_reference/nodes/Cone.md'
     - 'node_reference/nodes/ConeComplex.md'
     - 'node_reference/nodes/ConeSigmoid.md'
