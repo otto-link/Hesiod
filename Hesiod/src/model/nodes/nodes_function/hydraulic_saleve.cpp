@@ -263,7 +263,7 @@ void compute_hydraulic_saleve_node(BaseNode &node)
       node.cfg().cm_single_array); // forced, not tileable
 
   // add 1st layer of deposition
-  if (params.deposition_ir > 0)
+  if (params.deposition_ir > 0 && params.deposition_strength > 0.f)
   {
     hmap::for_each_tile(
         {p_out},
@@ -280,29 +280,32 @@ void compute_hydraulic_saleve_node(BaseNode &node)
   }
 
   // add fine river erosion
-  hmap::for_each_tile(
-      {p_out, p_mask},
-      [&params](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
-      {
-        auto [pa_out, pa_mask] = unpack<2>(p_arrays);
+  if (params.stream_strength > 0.f)
+  {
+    hmap::for_each_tile(
+        {p_out, p_mask},
+        [&params](std::vector<hmap::Array *> p_arrays, const hmap::TileRegion &)
+        {
+          auto [pa_out, pa_mask] = unpack<2>(p_arrays);
 
-        hmap::gpu::hydraulic_stream_log(*pa_out,
-                                        params.stream_strength,
-                                        /* talus_ref */ 0.1f,
-                                        pa_mask,
-                                        params.deposition_ir,
-                                        params.deposition_strength,
-                                        params.stream_exp,
-                                        /* gradient_scaling_ratio */ 1.f,
-                                        params.deposition_ir,
-                                        /* saturation_ratio */ 1.f,
-                                        /* p_bedrock */ nullptr,
-                                        /* p_moisture_map */ nullptr,
-                                        /* pa_erosion_map */ nullptr,
-                                        /* pa_deposition_map */ nullptr,
-                                        /* pa_flow_map */ nullptr);
-      },
-      node.cfg().cm_gpu);
+          hmap::gpu::hydraulic_stream_log(*pa_out,
+                                          params.stream_strength,
+                                          /* talus_ref */ 0.1f,
+                                          pa_mask,
+                                          params.deposition_ir,
+                                          params.deposition_strength,
+                                          params.stream_exp,
+                                          /* gradient_scaling_ratio */ 1.f,
+                                          params.deposition_ir,
+                                          /* saturation_ratio */ 1.f,
+                                          /* p_bedrock */ nullptr,
+                                          /* p_moisture_map */ nullptr,
+                                          /* pa_erosion_map */ nullptr,
+                                          /* pa_deposition_map */ nullptr,
+                                          /* pa_flow_map */ nullptr);
+        },
+        node.cfg().cm_gpu);
+  }
 
   // post-process
   p_out->smooth_overlap_buffers();
