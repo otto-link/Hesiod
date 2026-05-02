@@ -55,6 +55,24 @@ void AppSettingsWindow::add_title(const std::string &text, int font_size_delta)
   this->layout->addRow(label);
 }
 
+void AppSettingsWindow::bind_int(const std::string &label, int &value)
+{
+  auto *spin_box = new QSpinBox();
+
+  // initialize with current value
+  spin_box->setValue(value);
+
+  // set a reasonable range...
+  spin_box->setRange(1, 64);
+
+  this->connect(spin_box,
+                QOverload<int>::of(&QSpinBox::valueChanged),
+                this,
+                [&value](int v) { value = v; });
+
+  this->layout->addRow(label.c_str(), spin_box);
+}
+
 void AppSettingsWindow::bind_bool(const std::string &label, bool &state)
 {
   auto *check_box = new QCheckBox();
@@ -126,6 +144,8 @@ void AppSettingsWindow::setup_layout()
 
   this->bind_bool("Create a backup file whenever saving",
                   ctx.app_settings.global.save_backup_file);
+  this->bind_int("Number of threads used for OpenMP",
+                 ctx.app_settings.global.omp_num_threads);
   this->add_description("\n");
 
   // --- Interface

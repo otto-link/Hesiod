@@ -73,6 +73,7 @@ void AppSettings::json_from(nlohmann::json const &json)
   json_safe_get(json, "colors.pressed", colors.pressed);
   json_safe_get(json, "colors.separator", colors.separator);
 
+  json_safe_get(json, "global.omp_num_threads", global.omp_num_threads);
   json_safe_get(json, "global.icon_path", global.icon_path);
   json_safe_get(json,
                 "global.default_startup_project_file",
@@ -176,6 +177,7 @@ nlohmann::json AppSettings::json_to() const
   json["colors.pressed"] = colors.pressed.name().toStdString();
   json["colors.separator"] = colors.separator.name().toStdString();
 
+  json["global.omp_num_threads"] = global.omp_num_threads;
   json["global.icon_path"] = global.icon_path;
   json["global.default_startup_project_file"] = global.default_startup_project_file;
   json["global.save_backup_file"] = global.save_backup_file;

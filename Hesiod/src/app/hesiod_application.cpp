@@ -14,6 +14,8 @@
 #include <QStatusBar>
 #include <QUrl>
 
+#include <omp.h>
+
 #include "highmap/opencl/gpu_opencl.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
@@ -46,6 +48,9 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
 
   // --- Initialization
 
+  // context
+  this->context.initialize();
+
   // force icons visibility in the menu bar
   this->setAttribute(Qt::AA_DontShowIconsInMenus, false);
   QStyle *style = QApplication::style();
@@ -55,11 +60,15 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   // start OpenCL
   hmap::gpu::init_opencl();
 
+  // init OpenMP
+  omp_set_num_threads(this->context.app_settings.global.omp_num_threads);
+#pragma omp parallel
+  {
+    Logger::log()->debug("Checking OpenMP Thread #{}", omp_get_thread_num());
+  }
+
   // for colormaps loading
   hesiod::ColorGradientManager::get_instance();
-
-  // context
-  this->context.initialize();
 
   // --- Batch CLI mode if requested
 

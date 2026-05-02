@@ -19,10 +19,12 @@ struct AppSettings
   AppSettings() = default;
 
   // --- Serialization
+
   void           json_from(nlohmann::json const &json);
   nlohmann::json json_to() const;
 
   // --- Data
+
   struct Model
   {
     bool allow_broadcast_receive_within_same_graph = true;
@@ -54,6 +56,7 @@ struct AppSettings
 
   struct Global
   {
+    int         omp_num_threads = 8;
     std::string icon_path = "data/hesiod_icon.png";
     std::string default_startup_project_file = "data/default.hsd";
     std::string quick_start_html_file = "data/quick_start.html";
