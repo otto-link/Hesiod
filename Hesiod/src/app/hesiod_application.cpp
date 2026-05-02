@@ -17,6 +17,7 @@
 #include <omp.h>
 
 #include "highmap/opencl/gpu_opencl.hpp"
+#include "highmap/openmp.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/cli/batch_mode.hpp"
@@ -61,11 +62,7 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   hmap::gpu::init_opencl();
 
   // init OpenMP
-  omp_set_num_threads(this->context.app_settings.global.omp_num_threads);
-#pragma omp parallel
-  {
-    Logger::log()->debug("Checking OpenMP Thread #{}", omp_get_thread_num());
-  }
+  hmap::init_openmp(this->context.app_settings.global.omp_num_threads);
 
   // for colormaps loading
   hesiod::ColorGradientManager::get_instance();
