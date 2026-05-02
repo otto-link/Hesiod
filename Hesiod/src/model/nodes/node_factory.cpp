@@ -384,6 +384,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Smoothstep", "Math/Base"},
       {"SnowMeltingMap", "Hydrology"},
       {"SnowSimulation", "Hydrology"},
+      {"SpectralEqualizer", "Filter"},
       {"Stamping", "Primitive/Coherent"},
       {"SteepenConvective", "WIP"},
       {"Step", "Primitive/Function"},
@@ -712,6 +713,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Smoothstep, smoothstep);
     SETUP_NODE(SnowMeltingMap, snow_melting_map);
     SETUP_NODE(SnowSimulation, snow_simulation);
+    SETUP_NODE(SpectralEqualizer, spectral_equalizer);
     SETUP_NODE(Stamping, stamping);
     SETUP_NODE(SteepenConvective, steepen_convective);
     SETUP_NODE(Step, step);

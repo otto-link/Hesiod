@@ -1,0 +1,141 @@
+/* Copyright (c) 2023 Otto Link. Distributed under the terms of the GNU General
+ * Public License. The full license is in the file LICENSE, distributed with
+ * this software. */
+#include "highmap/filters.hpp"
+#include "highmap/opencl/gpu_opencl.hpp"
+
+#include "attributes.hpp"
+
+#include "hesiod/logger.hpp"
+#include "hesiod/model/nodes/base_node.hpp"
+#include "hesiod/model/nodes/post_process.hpp"
+
+using namespace attr;
+
+namespace hesiod
+{
+
+// -----------------------------------------------------------------------------
+// Ports & Attributes
+// -----------------------------------------------------------------------------
+
+constexpr const char *P_INPUT = "input";
+constexpr const char *P_MASK = "mask";
+constexpr const char *P_OUTPUT = "output";
+
+constexpr const char *A_W0 = "w0";
+constexpr const char *A_W1 = "w1";
+constexpr const char *A_W2 = "w2";
+constexpr const char *A_W3 = "w3";
+constexpr const char *A_W4 = "w4";
+constexpr const char *A_W5 = "w5";
+constexpr const char *A_RMIN = "rmin";
+constexpr const char *A_RMAX = "rmax";
+
+// -----------------------------------------------------------------------------
+// Setup
+// -----------------------------------------------------------------------------
+
+void setup_spectral_equalizer_node(BaseNode &node)
+{
+  Logger::log()->trace("setup node {}", node.get_label());
+
+  // --- Ports
+
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_INPUT);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::IN, P_MASK);
+  node.add_port<hmap::VirtualArray>(gnode::PortType::OUT, P_OUTPUT, CONFIG(node));
+
+  // --- Attributes
+
+  node.add_attr<FloatAttribute>(A_W0, "Band 0", 1.f, 0.f, 2.f);
+  node.add_attr<FloatAttribute>(A_W1, "Band 1", 1.f, 0.f, 2.f);
+  node.add_attr<FloatAttribute>(A_W2, "Band 2", 1.f, 0.f, 2.f);
+  node.add_attr<FloatAttribute>(A_W3, "Band 3", 1.f, 0.f, 2.f);
+  node.add_attr<FloatAttribute>(A_W4, "Band 4", 1.f, 0.f, 2.f);
+  node.add_attr<FloatAttribute>(A_W5, "Band 5", 1.f, 0.f, 2.f);
+  node.add_attr<FloatAttribute>(A_RMIN, "Radius Min.", 0.05f, 0.f, 0.5f);
+  node.add_attr<FloatAttribute>(A_RMAX, "Radius Max.", 0.25f, 0.f, 0.5f);
+
+  // --- Attribute(s) order
+
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Weights",
+                             A_W0,
+                             A_W1,
+                             A_W2,
+                             A_W3,
+                             A_W4,
+                             A_W5,
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Spectral Extent",
+                             A_RMIN,
+                             A_RMAX,
+                             "_GROUPBOX_END_"});
+
+  setup_pre_process_mask_attributes(node);
+  setup_post_process_heightmap_attributes(node,
+                                          {.add_mix = true, .remap_active_state = false});
+}
+
+// -----------------------------------------------------------------------------
+// Compute
+// -----------------------------------------------------------------------------
+
+void compute_spectral_equalizer_node(BaseNode &node)
+{
+  Logger::log()->trace("computing node [{}]/[{}]", node.get_label(), node.get_id());
+
+  // --- Inputs / Outputs
+
+  auto *p_in = node.get_value_ref<hmap::VirtualArray>(P_INPUT);
+  auto *p_mask = node.get_value_ref<hmap::VirtualArray>(P_MASK);
+  auto *p_out = node.get_value_ref<hmap::VirtualArray>(P_OUTPUT);
+
+  if (!p_in)
+    return;
+
+  // --- Params
+
+  // clang-format off
+  const auto w0   = node.get_attr<FloatAttribute>(A_W0);
+  const auto w1   = node.get_attr<FloatAttribute>(A_W1);
+  const auto w2   = node.get_attr<FloatAttribute>(A_W2);
+  const auto w3   = node.get_attr<FloatAttribute>(A_W3);
+  const auto w4   = node.get_attr<FloatAttribute>(A_W4);
+  const auto w5   = node.get_attr<FloatAttribute>(A_W5);
+  const auto rmin = node.get_attr<FloatAttribute>(A_RMIN);
+  const auto rmax = node.get_attr<FloatAttribute>(A_RMAX);
+  // clang-format on
+
+  std::vector<float> weights = {w0, w1, w2, w3, w4, w5};
+  int                ir_min = std::max(1, (int)(rmin * p_out->shape.x));
+  int                ir_max = std::max(1, (int)(rmax * p_out->shape.x));
+
+  // --- Prepare mask
+
+  std::shared_ptr<hmap::VirtualArray> sp_mask = pre_process_mask(node, p_mask, *p_in);
+
+  // --- Compute
+
+  hmap::for_each_tile(
+      {p_in, p_mask},
+      {p_out},
+      [&](std::vector<const hmap::Array *> p_arrays_in,
+          std::vector<hmap::Array *>       p_arrays_out,
+          const hmap::TileRegion &)
+      {
+        const auto [pa_in, pa_mask] = unpack<2>(p_arrays_in);
+        auto [pa_out] = unpack<1>(p_arrays_out);
+
+        *pa_out = hmap::gpu::spectral_equalizer(*pa_in, weights, ir_min, ir_max, pa_mask);
+      },
+      node.cfg().cm_gpu);
+
+  // --- Post-process
+
+  p_out->smooth_overlap_buffers();
+  post_process_heightmap(node, *p_out, p_in);
+}
+
+} // namespace hesiod
