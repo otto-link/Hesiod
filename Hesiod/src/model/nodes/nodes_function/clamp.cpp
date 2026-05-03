@@ -55,12 +55,18 @@ void setup_clamp_node(BaseNode &node)
 
   // --- Attribute(s) order
 
-  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Main Parameters",
+  node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Range",
                              A_CLAMP,
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Smoothing",
                              A_SMOOTH_MIN,
                              A_K_MIN,
                              A_SMOOTH_MAX,
                              A_K_MAX,
+                             "_GROUPBOX_END_",
+                             //
+                             "_GROUPBOX_BEGIN_Post",
                              A_REMAP,
                              "_GROUPBOX_END_"});
 
