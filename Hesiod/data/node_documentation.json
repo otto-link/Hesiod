@@ -18493,6 +18493,12 @@
         "description": "Adjusts the frequency content of the input field by decomposing it into multiple scales and reweighting each frequency band independently. This allows fine control over large structures, medium features, and fine details.",
         "label": "SpectralEqualizer",
         "parameters": {
+            "eq": {
+                "description": "Weight of frequency bands.",
+                "key": "eq",
+                "label": "Band Weights",
+                "type": "Vector of floats"
+            },
             "mask_activate": {
                 "description": "Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.",
                 "key": "mask_activate",
@@ -18581,42 +18587,6 @@
                 "description": "Minimum smoothing radius defining the highest frequency band. Controls fine details.",
                 "key": "rmin",
                 "label": "Radius Min.",
-                "type": "Float"
-            },
-            "w0": {
-                "description": "Weight for the lowest frequency band (largest structures).",
-                "key": "w0",
-                "label": "Band 0",
-                "type": "Float"
-            },
-            "w1": {
-                "description": "Weight for low-mid frequency features.",
-                "key": "w1",
-                "label": "Band 1",
-                "type": "Float"
-            },
-            "w2": {
-                "description": "Weight for mid-frequency features.",
-                "key": "w2",
-                "label": "Band 2",
-                "type": "Float"
-            },
-            "w3": {
-                "description": "Weight for high-mid frequency details.",
-                "key": "w3",
-                "label": "Band 3",
-                "type": "Float"
-            },
-            "w4": {
-                "description": "Weight for fine-scale details.",
-                "key": "w4",
-                "label": "Band 4",
-                "type": "Float"
-            },
-            "w5": {
-                "description": "Weight for the highest frequency band (finest details and noise).",
-                "key": "w5",
-                "label": "Band 5",
                 "type": "Float"
             }
         },

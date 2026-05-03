@@ -31,6 +31,7 @@ Filter
 
 |Name|Type|Description|
 | :--- | :--- | :--- |
+|Band Weights|Vector of floats|No description|
 |mask_activate|Bool|Enables or disables the internal mask. If the node's 'mask' input is connected, this setting is bypassed and the input mask is used instead.|
 |mask_gain|Float|Controls the intensity or influence of the internal mask. Bypassed if the 'mask' input is connected.|
 |mask_inverse|Bool|Inverts the internal mask, applying the operator where the mask is low. Ignored if a 'mask' input is provided.|
@@ -46,12 +47,6 @@ Filter
 |Smoothing Radius|Float|Applies additional smoothing to the output. Larger values reduce fine details.|
 |Radius Max.|Float|Maximum smoothing radius defining the lowest frequency band. Controls large-scale structures.|
 |Radius Min.|Float|Minimum smoothing radius defining the highest frequency band. Controls fine details.|
-|Band 0|Float|Weight for the lowest frequency band (largest structures).|
-|Band 1|Float|Weight for low-mid frequency features.|
-|Band 2|Float|Weight for mid-frequency features.|
-|Band 3|Float|Weight for high-mid frequency details.|
-|Band 4|Float|Weight for fine-scale details.|
-|Band 5|Float|Weight for the highest frequency band (finest details and noise).|
 
 # Example
 
