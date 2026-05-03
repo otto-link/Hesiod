@@ -92,15 +92,16 @@ void compute_project_talus_node(BaseNode &node)
       {p_out},
       [&](std::vector<const hmap::Array *> in,
           std::vector<hmap::Array *>       out,
-          const hmap::TileRegion &)
+          const hmap::TileRegion          &region)
       {
         auto [pa_in, pa_mask] = unpack<2>(in);
         auto [pa_out] = unpack<1>(out);
 
-        *pa_out = hmap::gpu::project_talus_along_direction(*pa_in,
-                                                           talus,
-                                                           pa_mask,
-                                                           direction);
+        *pa_out = hmap::gpu::project_talus_along_direction(
+            *pa_in,
+            hmap::Array(region.shape, talus),
+            pa_mask,
+            direction);
       },
       node.cfg().cm_gpu);
 
