@@ -23,12 +23,7 @@ constexpr const char *P_INPUT = "input";
 constexpr const char *P_MASK = "mask";
 constexpr const char *P_OUTPUT = "output";
 
-constexpr const char *A_W0 = "w0";
-constexpr const char *A_W1 = "w1";
-constexpr const char *A_W2 = "w2";
-constexpr const char *A_W3 = "w3";
-constexpr const char *A_W4 = "w4";
-constexpr const char *A_W5 = "w5";
+constexpr const char *A_EQ = "eq";
 constexpr const char *A_RMIN = "rmin";
 constexpr const char *A_RMAX = "rmax";
 
@@ -48,24 +43,18 @@ void setup_spectral_equalizer_node(BaseNode &node)
 
   // --- Attributes
 
-  node.add_attr<FloatAttribute>(A_W0, "Band 0", 1.f, 0.f, 2.f);
-  node.add_attr<FloatAttribute>(A_W1, "Band 1", 1.f, 0.f, 2.f);
-  node.add_attr<FloatAttribute>(A_W2, "Band 2", 1.f, 0.f, 2.f);
-  node.add_attr<FloatAttribute>(A_W3, "Band 3", 1.f, 0.f, 2.f);
-  node.add_attr<FloatAttribute>(A_W4, "Band 4", 1.f, 0.f, 2.f);
-  node.add_attr<FloatAttribute>(A_W5, "Band 5", 1.f, 0.f, 2.f);
+  std::vector<float> weights(6, 1.f);
+
+  // clang-format off
+  node.add_attr<VecFloatAttribute>(A_EQ, "Band Weights", weights, 0.f, 2.f, false);
   node.add_attr<FloatAttribute>(A_RMIN, "Radius Min.", 0.05f, 0.f, 0.5f);
   node.add_attr<FloatAttribute>(A_RMAX, "Radius Max.", 0.25f, 0.f, 0.5f);
+  // clang-format on
 
   // --- Attribute(s) order
 
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Weights",
-                             A_W0,
-                             A_W1,
-                             A_W2,
-                             A_W3,
-                             A_W4,
-                             A_W5,
+                             A_EQ,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Spectral Extent",
@@ -98,19 +87,13 @@ void compute_spectral_equalizer_node(BaseNode &node)
   // --- Params
 
   // clang-format off
-  const auto w0   = node.get_attr<FloatAttribute>(A_W0);
-  const auto w1   = node.get_attr<FloatAttribute>(A_W1);
-  const auto w2   = node.get_attr<FloatAttribute>(A_W2);
-  const auto w3   = node.get_attr<FloatAttribute>(A_W3);
-  const auto w4   = node.get_attr<FloatAttribute>(A_W4);
-  const auto w5   = node.get_attr<FloatAttribute>(A_W5);
-  const auto rmin = node.get_attr<FloatAttribute>(A_RMIN);
-  const auto rmax = node.get_attr<FloatAttribute>(A_RMAX);
+  const auto weights = node.get_attr<VecFloatAttribute>(A_EQ);
+  const auto rmin    = node.get_attr<FloatAttribute>(A_RMIN);
+  const auto rmax    = node.get_attr<FloatAttribute>(A_RMAX);
   // clang-format on
 
-  std::vector<float> weights = {w0, w1, w2, w3, w4, w5};
-  int                ir_min = std::max(1, (int)(rmin * p_out->shape.x));
-  int                ir_max = std::max(1, (int)(rmax * p_out->shape.x));
+  int ir_min = std::max(1, (int)(rmin * p_out->shape.x));
+  int ir_max = std::max(1, (int)(rmax * p_out->shape.x));
 
   // --- Prepare mask
 
