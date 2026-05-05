@@ -27,7 +27,7 @@ constexpr const char *P_MASK = "mask";
 constexpr const char *P_OUT = "output";
 
 constexpr const char *A_SLOPE = "slope";
-constexpr const char *A_SCALING = "scaling";
+constexpr const char *A_SKEW = "skew";
 constexpr const char *A_DIRECTION_COUNT = "direction_count";
 constexpr const char *A_DIRECTION_OFFSET = "direction_offset";
 constexpr const char *A_RANDOM_DIRECTIONS = "random_directions";
@@ -54,7 +54,7 @@ void setup_strata_plates_node(BaseNode &node)
 
   // clang-format off
   node.add_attr<FloatAttribute>(A_SLOPE, "Slope", 1.f, 0.f, FLT_MAX);
-  node.add_attr<BoolAttribute>(A_SCALING, "Scale with Elevation", false);
+  node.add_attr<FloatAttribute>(A_SKEW, "Skew", 0.5f, 0.f, 8.f);
   node.add_attr<IntAttribute>(A_DIRECTION_COUNT, "Direction Count", 4, 1, 8);
   node.add_attr<IntAttribute>(A_DIRECTION_OFFSET, "Direction Offset", 0, 0, 7);
   node.add_attr<BoolAttribute>(A_RANDOM_DIRECTIONS, "Random Directions", false);
@@ -66,7 +66,7 @@ void setup_strata_plates_node(BaseNode &node)
 
   node.set_attr_ordered_key({"_GROUPBOX_BEGIN_Slope Control",
                              A_SLOPE,
-                             A_SCALING,
+                             A_SKEW,
                              "_GROUPBOX_END_",
                              //
                              "_GROUPBOX_BEGIN_Plate Directions",
@@ -80,7 +80,7 @@ void setup_strata_plates_node(BaseNode &node)
                              A_MIX_RATIO,
                              "_GROUPBOX_END_"});
 
-  setup_default_noise(node, {.noise_amp = 0.1f, .kw = 4.f, .smoothness = 0.5f});
+  setup_default_noise(node, {.noise_amp = 0.07f, .kw = 4.f, .smoothness = 0.5f});
   setup_pre_process_mask_attributes(node);
   setup_post_process_heightmap_attributes(node,
                                           {.add_mix = true, .remap_active_state = false});
@@ -107,7 +107,7 @@ void compute_strata_plates_node(BaseNode &node)
 
   // clang-format off
   const auto slope             = node.get_attr<FloatAttribute>(A_SLOPE);
-  const auto talus_scaling     = node.get_attr<BoolAttribute>(A_SCALING);
+  const auto skew              = node.get_attr<FloatAttribute>(A_SKEW);
   const auto direction_count   = node.get_attr<IntAttribute>(A_DIRECTION_COUNT);
   const auto direction_offset  = node.get_attr<IntAttribute>(A_DIRECTION_OFFSET);
   const auto random_directions = node.get_attr<BoolAttribute>(A_RANDOM_DIRECTIONS);
@@ -126,16 +126,13 @@ void compute_strata_plates_node(BaseNode &node)
   hmap::VirtualArray talus_map = hmap::VirtualArray(CONFIG(node));
   talus_map.fill(talus, node.cfg().cm_cpu);
 
-  if (talus_scaling)
-  {
-    talus_map.copy_from(*p_in, node.cfg().cm_cpu);
-    talus_map.remap(talus / 100.f, talus, node.cfg().cm_cpu);
-  }
-
   // --- Resolve default noise
 
-  hmap::VirtualArray noise_default(CONFIG(node));
-  generate_noise(node, p_dx, noise_default);
+  hmap::VirtualArray noise_default_x(CONFIG(node));
+  hmap::VirtualArray noise_default_y(CONFIG(node));
+
+  generate_noise(node, p_dx, noise_default_x, 0);
+  generate_noise(node, p_dy, noise_default_y, 1);
 
   // --- Compute
 
@@ -157,6 +154,8 @@ void compute_strata_plates_node(BaseNode &node)
                                  direction_count,
                                  random_directions,
                                  seed,
+                                 -FLT_MAX, // vmin
+                                 skew,
                                  mix_ratio,
                                  pa_mask,
                                  pa_dx,
