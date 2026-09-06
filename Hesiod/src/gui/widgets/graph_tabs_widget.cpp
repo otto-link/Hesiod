@@ -1,6 +1,9 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <map>
+
+#include <QColor>
 #include <QHBoxLayout>
 
 #include "gnodegui/style.hpp"
@@ -37,6 +40,11 @@ GraphTabsWidget::GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager,
   GN_STYLE->node.color_category = ctx.style_settings.category_color_map;
   GN_STYLE->node.port_radius = ctx.app_settings.node_editor.port_radius;
 
+  // How far a node header is pulled from the card surface towards its category
+  // colour. High enough to tell two categories apart side by side, low enough
+  // that a canvas full of nodes still reads as one neutral surface.
+  constexpr qreal kCategoryTint = 0.22;
+
   const auto &design = properties_panel_design();
   if (design.has_own_chrome)
   {
@@ -45,9 +53,32 @@ GraphTabsWidget::GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager,
     auto       &viewer = GN_STYLE->viewer;
     auto       &link = GN_STYLE->link;
 
-    // Use the panel's actual card surfaces and inks, including palette-derived
-    // themes. Category fills would otherwise override color_bg_light.
-    node.color_category.clear();
+    // Keep the per-category signal, but express it the way the panel does. A
+    // group accent there is a small saturated mark against neutral chrome, not
+    // a whole surface, and these are saturated Solarized hues that fill an
+    // entire node header. Blending each one heavily towards the card leaves
+    // every category still distinguishable while the canvas stays the neutral
+    // grey the design is built on.
+    //
+    // Clearing the map instead was the first attempt, and it cost the thing
+    // the colours are for: telling an erosion node from a noise node at a
+    // glance. Theme keeps group_accents out of from_palette() for exactly this
+    // reason, because they encode which family an operation belongs to rather
+    // than tracking a host accent.
+    auto tint_towards = [](const QColor &surface, const QColor &accent, qreal t)
+    {
+      return QColor::fromRgbF(surface.redF() * (1.0 - t) + accent.redF() * t,
+                              surface.greenF() * (1.0 - t) + accent.greenF() * t,
+                              surface.blueF() * (1.0 - t) + accent.blueF() * t);
+    };
+
+    std::map<std::string, QColor> tinted_categories;
+    for (const auto &[category, color] : ctx.style_settings.category_color_map)
+      tinted_categories[category] = tint_towards(theme.section_header,
+                                                 color,
+                                                 kCategoryTint);
+
+    node.color_category = tinted_categories;
     node.color_bg = theme.section_surface;
     node.color_bg_light = theme.section_header;
     node.color_border = theme.hairline;
