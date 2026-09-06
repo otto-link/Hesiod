@@ -396,7 +396,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"SmoothFillSmearPeaks", "Filter/Smoothing"},
       {"Smoothstep", "Math/Base"},
       {"SnowMeltingMap", "Hydrology"},
-      {"SnowSimulation", "Hydrology"},
+      {"SnowSimulation", "WIP"}, // , "Hydrology"},
       {"SpectralEqualizer", "Filter"},
       {"Stamping", "Primitive/Authoring"},
       {"SteepenConvective", "WIP"},
