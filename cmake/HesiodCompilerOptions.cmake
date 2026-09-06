@@ -11,13 +11,14 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
   # Common flags
   target_compile_options(
     hesiod_options
-    INTERFACE -Ofast -ffast-math -Wall -Wextra -Wno-dangling-reference
+    INTERFACE -Wall -Wextra -Wno-dangling-reference
               -Wno-deprecated-declarations)
 
   # Debug flags
   target_compile_options(
     hesiod_options
     INTERFACE $<$<CONFIG:Debug>:
+              -Og
               -g
               -DLOG_LEVEL=3
               -fno-omit-frame-pointer
@@ -38,8 +39,13 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
               >)
 
   # Release flags
-  target_compile_options(hesiod_options
-                         INTERFACE $<$<CONFIG:Release>:-DLOG_LEVEL=3>)
+  target_compile_options(
+    hesiod_options
+    INTERFACE $<$<CONFIG:Release,RelWithDebInfo>:
+              -Ofast
+              -ffast-math
+              -DLOG_LEVEL=3
+              >)
 
   # LTO and function sections (optional)
   if(HESIOD_ENABLE_LTO)
