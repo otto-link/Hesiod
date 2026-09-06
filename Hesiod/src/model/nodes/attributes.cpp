@@ -265,7 +265,9 @@ meta::Attribute<std::vector<glm::vec3>> &add_path(BaseNode          &node,
                                                   bool               closed)
 {
   auto &a = meta::presets::points(node.get_meta_group().current(), key, label);
-  a.metadata().try_add(meta::keys::ui::widget_type, std::string("PathEditor"));
+  a.metadata()
+      .try_add(meta::keys::ui::widget_type, std::string("PathEditor"))
+      ->value() = "PathEditor";
   a.metadata().try_add(std::string(meta::keys::ui::closed), closed);
   set_doc_type(a, "Path");
   apply_category_if_set(node, a);
