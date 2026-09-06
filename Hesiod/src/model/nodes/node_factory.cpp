@@ -230,8 +230,8 @@ std::map<std::string, std::string> get_node_inventory()
       {"FloodingUniformLevel", "Hydrology"},
       {"FlowFixingMST", "WIP"}, // "Hydrology"},
       {"FlowSimulation", "Hydrology"},
-      {"FlowSimulationViscous", "Hydrology"},
-      {"FlowStream", "WIP"}, // Hydrology
+      {"FlowSimulationViscous", "WIP"}, // , "Hydrology"},
+      {"FlowStream", "WIP"},            // Hydrology
       {"Fold", "Filter/Recast"},
       {"GaborWaveFbm", "Primitive/Coherent"},
       {"Gain", "Filter/Recurve"},
