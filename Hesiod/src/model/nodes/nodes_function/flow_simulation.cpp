@@ -64,8 +64,8 @@ void setup_flow_simulation_node(BaseNode &node)
   add_bool(node, A_OUTFLOW_BOUNDARIES, "Outflow Boundaries", true);
   add_float(node, A_DRY_OUT_RATIO, "Dry-Out Threshold Ratio", 0.01f, 0.f, 1.f);
   add_bool(node, A_FLUX_DIFFUSION, "Enable Flux Diffusion", true);
-  add_float(node, A_FLUX_DIFFUSION_STRENGTH, "Flux Diffusion Strength", 0.01f, 0.f, 0.1f);
-  add_int(node, A_SOLVER_STRIDE, "Solver Iteration Stride", 4, 1, 32);
+  add_float(node, A_FLUX_DIFFUSION_STRENGTH, "Flux Diffusion Strength", 1e-6f, 1e-6f, 1e-1f, "{:.2e}", true);
+  add_int(node, A_SOLVER_STRIDE, "Solver Iteration Stride", 1, 1, 32);
 
   node.set_current_category("Post-Filter");
   add_bool(node, A_AREA_FILTER, "Remove Small Flow Regions", true);
