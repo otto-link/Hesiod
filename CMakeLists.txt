@@ -26,6 +26,7 @@ option(HESIOD_MINIMAL_NODE_SET
 # Option to enable LTO and unused-function detection
 option(HESIOD_ENABLE_LTO "Enable LTO and unused-function detection" OFF)
 option(HESIOD_UNUSED_FUNCTIONS "Detect unused static functions" OFF)
+option(HESIOD_PROFILE_BUILD "Enable build time profiling (-ftime-trace)" OFF)
 
 # ------------------------------
 # Modules
