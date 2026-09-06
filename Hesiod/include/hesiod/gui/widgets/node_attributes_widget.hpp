@@ -35,7 +35,7 @@ public:
   QWidget *create_toolbar();
 
 private:
-  void     setup_layout();
+  void setup_layout();
 
   std::weak_ptr<GraphNode>  p_graph_node;
   std::string               node_id;

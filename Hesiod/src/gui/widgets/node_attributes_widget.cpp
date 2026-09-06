@@ -3,10 +3,10 @@
  * this software. */
 #include <fstream>
 
+#include <QAction>
 #include <QApplication>
 #include <QDesktopServices>
 #include <QFileDialog>
-#include <QAction>
 #include <QLayout>
 #include <QMenu>
 #include <QStackedWidget>
@@ -118,7 +118,8 @@ QWidget *NodeAttributesWidget::create_toolbar()
     layout->addWidget(btn);
   }
 
-  if (!panel.has_own_chrome) layout->addStretch();
+  if (!panel.has_own_chrome)
+    layout->addStretch();
 
   // Everything else, by name. These are the occasional ones, and a menu row
   // spelling out "Backup State" is easier to find than a bookmark glyph the
@@ -151,8 +152,10 @@ QWidget *NodeAttributesWidget::create_toolbar()
                 "QMenu::item { padding: 7px 18px 7px 10px; border-radius: 4px; }"
                 "QMenu::item:selected { background: %4; }"
                 "QMenu::separator { height: 1px; background: %3; margin: 5px 8px; }")
-            .arg(theme.bar.name(), theme.ink_primary.name(),
-                 theme.field_border.name(), theme.section_header_hover.name()));
+            .arg(theme.bar.name(),
+                 theme.ink_primary.name(),
+                 theme.field_border.name(),
+                 theme.section_header_hover.name()));
   }
 
   overflow_btn->setMenu(overflow_menu);

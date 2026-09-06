@@ -167,8 +167,10 @@ void NodeSettingsWidget::update_content()
 
     const QString node_caption = QString::fromStdString(p_node->get_caption());
 
-    const bool add_toolbar = HSD_CTX.app_settings.node_editor.show_node_toolbar_in_settings_pan;
-    auto *attr_widget = new NodeAttributesWidget(p_gno->get_shared(), node_id,
+    const bool add_toolbar = HSD_CTX.app_settings.node_editor
+                                 .show_node_toolbar_in_settings_pan;
+    auto *attr_widget = new NodeAttributesWidget(p_gno->get_shared(),
+                                                 node_id,
                                                  this->p_graph_node_widget,
                                                  add_toolbar && !panel.has_own_chrome);
 
@@ -177,14 +179,18 @@ void NodeSettingsWidget::update_content()
       auto *pin = new QToolButton;
       QIcon pin_icon = HSD_ICON("push_pin");
       pin_icon.addPixmap(HSD_ICON("push_pin_accent").pixmap(16, 16),
-                         QIcon::Normal, QIcon::On);
+                         QIcon::Normal,
+                         QIcon::On);
       pin->setIcon(pin_icon);
       pin->setCheckable(true);
       pin->setChecked(contains(this->pinned_node_ids, node_id));
       pin->setAccessibleName("Pin " + node_caption);
       pin->setToolTip("Keep this node in the properties panel");
       pin->setCursor(Qt::PointingHandCursor);
-      connect(pin, &QToolButton::toggled, this, [this, node_id](bool checked)
+      connect(pin,
+              &QToolButton::toggled,
+              this,
+              [this, node_id](bool checked)
               {
                 if (checked && !contains(this->pinned_node_ids, node_id))
                   this->pinned_node_ids.push_back(node_id);
@@ -192,7 +198,9 @@ void NodeSettingsWidget::update_content()
                   remove_all_occurrences(this->pinned_node_ids, node_id);
               });
       this->attr_layout->addWidget(new PropertiesPanelHeader(
-          node_caption, *panel.theme, pin,
+          node_caption,
+          *panel.theme,
+          pin,
           add_toolbar ? attr_widget->create_toolbar() : nullptr));
     }
 
