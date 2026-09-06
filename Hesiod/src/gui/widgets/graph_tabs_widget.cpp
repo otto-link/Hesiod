@@ -4,12 +4,14 @@
 #include <QHBoxLayout>
 
 #include "gnodegui/style.hpp"
+#include "meta_qt/ui/theme.hpp"
 
 #include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/gui/widgets/graph_editor_widget.hpp"
 #include "hesiod/gui/widgets/graph_node_widget.hpp"
 #include "hesiod/gui/widgets/graph_tabs_widget.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
+#include "hesiod/gui/widgets/properties_panel_design.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_manager.hpp"
@@ -34,6 +36,45 @@ GraphTabsWidget::GraphTabsWidget(std::weak_ptr<GraphManager> p_graph_manager,
   GN_STYLE->node.color_port_data = ctx.style_settings.data_color_map;
   GN_STYLE->node.color_category = ctx.style_settings.category_color_map;
   GN_STYLE->node.port_radius = ctx.app_settings.node_editor.port_radius;
+
+  const auto &design = properties_panel_design();
+  if (design.has_own_chrome)
+  {
+    const auto &theme = *design.theme;
+    auto       &node = GN_STYLE->node;
+    auto       &viewer = GN_STYLE->viewer;
+    auto       &link = GN_STYLE->link;
+
+    // Use the panel's actual card surfaces and inks, including palette-derived
+    // themes. Category fills would otherwise override color_bg_light.
+    node.color_category.clear();
+    node.color_bg = theme.section_surface;
+    node.color_bg_light = theme.section_header;
+    node.color_border = theme.hairline;
+    node.color_border_hovered = theme.field_border_hover;
+    node.color_caption = theme.ink_section_title;
+    node.color_icon = theme.ink_icon;
+    node.color_comment = theme.ink_secondary;
+    node.color_selected = theme.accent;
+    node.color_pinned = theme.accent;
+    node.color_port_hovered = theme.accent;
+    node.color_port_selected = theme.accent;
+    node.color_port_data_default = theme.ink_secondary;
+    node.color_port_not_selectable = theme.ink_locked;
+
+    // Header and body share the card outline; the panel's smaller control
+    // radius belongs to embedded controls, not to either half of this card.
+    node.rounding_radius = theme.metrics.section_card_radius;
+    node.pen_width = 1.f;
+    node.pen_width_hovered = 1.f;
+
+    viewer.color_bg = theme.page;
+    viewer.color_toolbar = theme.ink_icon;
+    // Typed links retain their semantic data colours, like the panel's group
+    // accents. Untyped links use secondary ink; selection uses chrome accent.
+    link.color_default = theme.ink_secondary;
+    link.color_selected = theme.accent;
+  }
 
   this->main_layout = new QHBoxLayout(this);
   this->main_layout->setContentsMargins(2, 2, 2, 2);
