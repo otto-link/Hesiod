@@ -1,27 +1,29 @@
 id: io.github.hesiod
 runtime: org.kde.Platform
 runtime-version: '6.8'
+x-gl-version: &gl-version '1.4'
+x-gl-versions: &gl-versions 22.08;22.08-extra;1.4
 sdk: org.kde.Sdk
 base: io.qt.qtwebengine.BaseApp
 base-version: '6.8'
 command: hesiod
 
-add-extensions:
-  org.freedesktop.Platform.GL:
-    directory: lib/GL
-    version: '1.4'
-    versions: 20.08;1.4
-    subdirectories: true
-    no-autodownload: true
-    autodelete: false
-    add-ld-path: lib
-    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d
-    download-if: active-gl-driver
-    enable-if: active-gl-driver
+#add-extensions:
+#  org.freedesktop.Platform.GL:
+#    directory: lib/GL
+#    version: *gl-version
+#    versions: *gl-versions
+#    subdirectories: true
+#    no-autodownload: true
+#    autodelete: false
+#    add-ld-path: lib
+#    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d;OpenCL/vendors;lib/dri;lib/d3d;vulkan/explicit_layer.d;vulkan/implicit_layer.d
+#    download-if: active-gl-driver
+#    enable-if: active-gl-driver
 
 finish_args:
-  - --socket=x11
   - --socket=wayland
+  - --socket=fallback-x11
   - --device=dri
   - --share=ipc
 
@@ -65,8 +67,6 @@ modules:
  - name: opencv
    buildsystem: simple
    build-commands:
-    - cat /usr/lib/x86_64-linux-gnu/pkgconfig/OpenCL.pc
-    - find / -name "*opencl.hpp"
     - cmake -B build/
       -DCMAKE_INSTALL_PREFIX=/app       
       -DCMAKE_BUILD_TYPE=Release        
@@ -186,7 +186,7 @@ modules:
  - name: hesiod
    buildsystem: simple
    build-commands:
-    - cmake -DCMAKE_INSTALL_PREFIX=/app -DHESIOD_ENABLE_GENERATE_APP_IMAGE=OFF -DHIGHMAP_ENABLE_DOCS=OFF -DHIGHMAP_ENABLE_EXAMPLES=OFF -DHIGHMAP_ENABLE_TESTS=OFF -DGNODE_ENABLE_DOCS=OFF -DGNODE_ENABLE_EXAMPLES=OFF -DGNODE_ENABLE_TESTS=OFF -DGNODEGUI_ENABLE_TESTS=OFF -DATTRIBUTES_ENABLE_TESTS=OFF -DHIGHMAP_ENABLE_BENCHMARKS=OFF -DOpenCL_INCLUDE_DIR=/app/include/ -B build/
+    - cmake -DCMAKE_INSTALL_PREFIX=/app -DHESIOD_ENABLE_GENERATE_APP_IMAGE=OFF -DHIGHMAP_ENABLE_DOCS=OFF -DHIGHMAP_ENABLE_EXAMPLES=OFF -DHIGHMAP_ENABLE_TESTS=OFF -DGNODE_ENABLE_DOCS=OFF -DGNODE_ENABLE_EXAMPLES=OFF -DGNODE_ENABLE_TESTS=OFF -DGNODEGUI_ENABLE_TESTS=OFF -DATTRIBUTES_ENABLE_TESTS=OFF -DHIGHMAP_ENABLE_BENCHMARKS=OFF -B build/
     - cmake --build build/ -j$(nproc)
     - cmake --install build/
     - ls build/
