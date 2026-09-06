@@ -156,9 +156,10 @@ void compute_mix_texture_masked_node(BaseNode &node)
           mask_proc -= threshold;
           hmap::clamp_min(mask_proc, 0.f);
         }
+
         if (gain != 1.f)
         {
-          hmap::gain(mask_proc, gain);
+          hmap::gamma_correction(mask_proc, gain);
         }
 
         blended = hmap::gpu::blend_poisson_bf(t1, t2, iterations, &mask_proc);
