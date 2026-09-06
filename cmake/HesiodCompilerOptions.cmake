@@ -10,9 +10,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
   # Common flags
   target_compile_options(
-    hesiod_options
-    INTERFACE -Wall -Wextra -Wno-dangling-reference
-              -Wno-deprecated-declarations)
+    hesiod_options INTERFACE -Wall -Wextra -Wno-dangling-reference
+                             -Wno-deprecated-declarations)
 
   # Debug flags
   target_compile_options(
@@ -40,12 +39,8 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 
   # Release flags
   target_compile_options(
-    hesiod_options
-    INTERFACE $<$<CONFIG:Release,RelWithDebInfo>:
-              -Ofast
-              -ffast-math
-              -DLOG_LEVEL=3
-              >)
+    hesiod_options INTERFACE $<$<CONFIG:Release,RelWithDebInfo>: -Ofast
+                             -ffast-math -DLOG_LEVEL=3 >)
 
   # LTO and function sections (optional)
   if(HESIOD_ENABLE_LTO)
@@ -60,10 +55,14 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     include(CheckCXXCompilerFlag)
     check_cxx_compiler_flag("-ftime-trace" HAS_FTIME_TRACE)
     if(HAS_FTIME_TRACE)
-      message(STATUS "HESIOD_PROFILE_BUILD: -ftime-trace is supported and enabled")
+      message(
+        STATUS "HESIOD_PROFILE_BUILD: -ftime-trace is supported and enabled")
       target_compile_options(hesiod_options INTERFACE -ftime-trace)
     elseif(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-      message(STATUS "HESIOD_PROFILE_BUILD: -ftime-trace not supported in GCC < 14, enabling -ftime-report")
+      message(
+        STATUS
+          "HESIOD_PROFILE_BUILD: -ftime-trace not supported in GCC < 14, enabling -ftime-report"
+      )
       target_compile_options(hesiod_options INTERFACE -ftime-report)
     endif()
   endif()

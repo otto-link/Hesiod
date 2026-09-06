@@ -55,10 +55,14 @@ add_compile_definitions(
 # Status output
 # ------------------------------
 message(STATUS "┌─ Hesiod configuration ──────────────")
-message(STATUS "│ HESIOD_ENABLE_GENERATE_APP_IMAGE:   ${HESIOD_ENABLE_GENERATE_APP_IMAGE}")
-message(STATUS "│ HESIOD_MINIMAL_NODE_SET:            ${HESIOD_MINIMAL_NODE_SET}")
+message(
+  STATUS
+    "│ HESIOD_ENABLE_GENERATE_APP_IMAGE:   ${HESIOD_ENABLE_GENERATE_APP_IMAGE}")
+message(
+  STATUS "│ HESIOD_MINIMAL_NODE_SET:            ${HESIOD_MINIMAL_NODE_SET}")
 message(STATUS "│ HESIOD_ENABLE_LTO:                  ${HESIOD_ENABLE_LTO}")
-message(STATUS "│ HESIOD_UNUSED_FUNCTIONS:            ${HESIOD_UNUSED_FUNCTIONS}")
+message(
+  STATUS "│ HESIOD_UNUSED_FUNCTIONS:            ${HESIOD_UNUSED_FUNCTIONS}")
 message(STATUS "│ HESIOD_PROFILE_BUILD:               ${HESIOD_PROFILE_BUILD}")
 message(STATUS "│ HESIOD_ENABLE_PCH:                  ${HESIOD_ENABLE_PCH}")
 message(STATUS "│ CMAKE_BUILD_TYPE:                   ${CMAKE_BUILD_TYPE}")
