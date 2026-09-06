@@ -13,6 +13,7 @@ echo " Build directory : ${BUILD_DIR}"
 echo " Build type      : ${BUILD_TYPE}"
 echo " Parallel jobs   : ${NUM_JOBS}"
 echo " Node set        : Minimal (HESIOD_MINIMAL_NODE_SET=ON)"
+echo " PCH             : ON (HESIOD_ENABLE_PCH=ON)"
 echo " Profiling       : ON"
 echo "=================================================="
 echo ""
@@ -43,6 +44,7 @@ cmake -B "${BUILD_DIR}" \
     -DCMAKE_BUILD_TYPE="${BUILD_TYPE}" \
     -DHESIOD_PROFILE_BUILD=ON \
     -DHESIOD_MINIMAL_NODE_SET=ON \
+    -DHESIOD_ENABLE_PCH=ON \
     -DCMAKE_CXX_COMPILER_LAUNCHER="${SCRIPT_DIR}/timed_compile.sh"
 
 # 2. Clean build directory / targets

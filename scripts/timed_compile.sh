@@ -17,9 +17,12 @@ START_TIME=$(date +%s%N)
 STATUS=$?
 END_TIME=$(date +%s%N)
 
-if [ -n "$SOURCE_FILE" ]; then
+if [ -n "$SOURCE_FILE" ] && [ -n "$LOG_FILE" ]; then
     DURATION_MS=$(( (END_TIME - START_TIME) / 1000000 ))
-    echo -e "${DURATION_MS}\t${SOURCE_FILE}" >> "${LOG_FILE}"
+    LOG_DIR="$(dirname "${LOG_FILE}")"
+    if [ -d "$LOG_DIR" ]; then
+        echo -e "${DURATION_MS}\t${SOURCE_FILE}" >> "${LOG_FILE}" 2>/dev/null || true
+    fi
 fi
 
 exit $STATUS
