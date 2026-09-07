@@ -141,9 +141,19 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   {
     std::string           path = this->context.app_settings.global.ready_made_path;
     ExampleSelectorDialog ex_dialog(QString::fromStdString(path));
-    const bool            dialog_accepted = ex_dialog.exec();
+    ex_dialog.exec();
 
-    if (dialog_accepted)
+    // Closing the window is a decision not to open anything, so the app stops
+    // rather than dropping the user into a project they never asked for. New
+    // Project falls through with an empty filename, which is what starts one.
+    if (ex_dialog.outcome() == ExampleSelectorDialog::Outcome::Closed)
+    {
+      splash->close();
+      delete splash;
+      ::exit(0);
+    }
+
+    if (ex_dialog.outcome() == ExampleSelectorDialog::Outcome::OpenFile)
     {
       fname = ex_dialog.selected_file().toStdString();
       keep_name = ex_dialog.selected_is_project();
@@ -593,15 +603,31 @@ void HesiodApplication::on_load_ready_made()
 
   std::string           path = this->context.app_settings.global.ready_made_path;
   ExampleSelectorDialog ex_dialog(QString::fromStdString(path));
-  const bool            dialog_accepted = ex_dialog.exec();
+  ex_dialog.exec();
 
-  if (dialog_accepted)
+  switch (ex_dialog.outcome())
+  {
+  case ExampleSelectorDialog::Outcome::OpenFile:
   {
     const std::string fname = ex_dialog.selected_file().toStdString();
     const bool        keep_name = ex_dialog.selected_is_project();
     this->load_project_model_and_ui(fname, keep_name);
     if (keep_name)
       this->add_recent_file(fname);
+    break;
+  }
+
+  case ExampleSelectorDialog::Outcome::NewProject:
+    // Reached from the menu bar with a project already open, where this used
+    // to close the window and leave that project untouched. An empty filename
+    // is what load_project_model_and_ui() treats as a fresh start.
+    this->load_project_model_and_ui("", false);
+    break;
+
+  case ExampleSelectorDialog::Outcome::Closed:
+    // Dismissed from the menu bar, so keep whatever is already open. Only the
+    // startup path treats closing as a reason to quit.
+    break;
   }
 }
 

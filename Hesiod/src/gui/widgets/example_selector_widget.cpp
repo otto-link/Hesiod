@@ -239,17 +239,28 @@ protected:
     QPainter   p(this);
     p.setRenderHint(QPainter::Antialiasing);
     p.fillRect(rect(), t.page);
-    // A quiet vector mountain mark stays crisp at every display scale.
+    // The Hesiod mark, two peaks rather than one chevron, drawn as a vector so
+    // it stays crisp at every display scale. The smaller peak sits forward and
+    // to the left of the larger one so the pair reads as a range instead of
+    // one shape stroked twice. No enclosing disc: the mark carries on its own
+    // at watermark weight, and a filled circle would fight the page.
     p.setPen(QPen(blend_color(t.page, t.ink_primary, 0.035),
                   24,
                   Qt::SolidLine,
                   Qt::RoundCap,
                   Qt::RoundJoin));
-    QPainterPath mark;
-    mark.moveTo(width() * 0.03, height() * 0.81);
-    mark.lineTo(width() * 0.28, height() * 0.40);
-    mark.lineTo(width() * 0.53, height() * 0.81);
-    p.drawPath(mark);
+
+    QPainterPath back_peak;
+    back_peak.moveTo(width() * 0.17, height() * 0.79);
+    back_peak.lineTo(width() * 0.37, height() * 0.37);
+    back_peak.lineTo(width() * 0.57, height() * 0.79);
+    p.drawPath(back_peak);
+
+    QPainterPath front_peak;
+    front_peak.moveTo(width() * 0.02, height() * 0.88);
+    front_peak.lineTo(width() * 0.17, height() * 0.59);
+    front_peak.lineTo(width() * 0.32, height() * 0.88);
+    p.drawPath(front_peak);
   }
 };
 
@@ -543,7 +554,7 @@ ExampleSelectorDialog::ExampleSelectorDialog(const QString &examples_path,
   auto *brand = new QLabel(QStringLiteral("HESIOD"), this->welcome_page);
   brand->setObjectName("selectorBrand");
   brand_layout->addWidget(brand);
-  auto *brand_subtitle = new QLabel(QStringLiteral("Procedural terrain design"),
+  auto *brand_subtitle = new QLabel(QStringLiteral("Procedural Terrain Design"),
                                     this->welcome_page);
   brand_subtitle->setObjectName("selectorBrandSubtitle");
   brand_layout->addWidget(brand_subtitle);
@@ -705,7 +716,7 @@ ExampleSelectorDialog::ExampleSelectorDialog(const QString &examples_path,
   QObject::connect(new_project_button,
                    &QPushButton::clicked,
                    this,
-                   &ExampleSelectorDialog::on_reject);
+                   &ExampleSelectorDialog::start_new_project);
   QObject::connect(open_project_button,
                    &QPushButton::clicked,
                    this,
@@ -717,7 +728,7 @@ ExampleSelectorDialog::ExampleSelectorDialog(const QString &examples_path,
   QObject::connect(this->secondary_button,
                    &QPushButton::clicked,
                    this,
-                   [this]() { this->on_reject(); });
+                   [this]() { this->start_new_project(); });
   QObject::connect(this->search,
                    &QLineEdit::textChanged,
                    this,
@@ -847,6 +858,7 @@ void ExampleSelectorDialog::accept_path(const QString &path, bool project)
     return;
   this->selected_filename = path;
   this->selected_project = project;
+  this->result = Outcome::OpenFile;
   this->accept();
 }
 
@@ -906,6 +918,7 @@ void ExampleSelectorDialog::on_reject()
 {
   this->selected_filename.clear();
   this->selected_project = false;
+  this->result = Outcome::Closed;
   this->reject();
 }
 
@@ -1074,6 +1087,23 @@ void ExampleSelectorDialog::select_card(ProjectCard *card)
   this->open_button->setEnabled(true);
   this->open_button->setText(this->selected_project ? QStringLiteral("OPEN PROJECT")
                                                     : QStringLiteral("Open Example"));
+}
+
+ExampleSelectorDialog::Outcome ExampleSelectorDialog::outcome() const
+{
+  return this->result;
+}
+
+void ExampleSelectorDialog::start_new_project()
+{
+  // Accepted, not rejected. A rejected dialog means the user closed it, and
+  // the caller treats that as "do not continue"; asking for a new project is a
+  // choice and has to be reported as one, or from the menu bar the window just
+  // closes and the open project stays put.
+  this->selected_filename.clear();
+  this->selected_project = false;
+  this->result = Outcome::NewProject;
+  this->accept();
 }
 
 QString ExampleSelectorDialog::selected_file() const { return this->selected_filename; }

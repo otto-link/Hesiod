@@ -28,6 +28,22 @@ class ExampleSelectorDialog : public QDialog
 public:
   explicit ExampleSelectorDialog(const QString &examples_path, QWidget *parent = nullptr);
 
+  /** @brief What the user actually asked for.
+   *
+   * A boolean accepted/rejected cannot carry this. "New Project" and closing
+   * the window both left the dialog rejected, so a caller could not tell them
+   * apart: from the menu bar New Project closed the window and left the open
+   * project untouched, and closing the window could not exit the app because
+   * that would also have fired on New Project.
+   */
+  enum class Outcome
+  {
+    Closed,     ///< dismissed without choosing; the app should not continue
+    NewProject, ///< start an empty project
+    OpenFile    ///< load selected_file()
+  };
+
+  Outcome outcome() const;
   QString selected_file() const;
   bool    selected_is_project() const;
 
@@ -50,11 +66,13 @@ private:
   void relayout_cards();
   void select_card(ProjectCard *card);
   void show_examples();
+  void start_new_project();
   void show_welcome();
 
   QString                examples_path;
   QString                selected_filename;
   bool                   selected_project = false;
+  Outcome                result = Outcome::Closed;
   QStackedWidget        *pages = nullptr;
   QWidget               *welcome_page = nullptr;
   QWidget               *examples_page = nullptr;
