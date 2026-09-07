@@ -139,12 +139,15 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   if (fname.empty() &&
       this->context.app_settings.interface.enable_example_selector_at_startup)
   {
-    std::string path = this->context.app_settings.global.ready_made_path;
-    auto       *ex_dialog = new ExampleSelectorDialog(QString::fromStdString(path));
-    bool        ret = ex_dialog->exec();
+    std::string           path = this->context.app_settings.global.ready_made_path;
+    ExampleSelectorDialog ex_dialog(QString::fromStdString(path));
+    const bool            dialog_accepted = ex_dialog.exec();
 
-    if (ret)
-      fname = ex_dialog->selected_file().toStdString();
+    if (dialog_accepted)
+    {
+      fname = ex_dialog.selected_file().toStdString();
+      keep_name = ex_dialog.selected_is_project();
+    }
   }
 
   this->load_project_model_and_ui(fname, keep_name);
@@ -588,15 +591,17 @@ void HesiodApplication::on_load_ready_made()
   if (!this->confirm_discard_unsaved_changes("Open Ready-made Example"))
     return;
 
-  std::string path = this->context.app_settings.global.ready_made_path;
-  auto       *ex_dialog = new ExampleSelectorDialog(QString::fromStdString(path));
-  bool        ret = ex_dialog->exec();
+  std::string           path = this->context.app_settings.global.ready_made_path;
+  ExampleSelectorDialog ex_dialog(QString::fromStdString(path));
+  const bool            dialog_accepted = ex_dialog.exec();
 
-  if (ret)
+  if (dialog_accepted)
   {
-    std::string fname = ex_dialog->selected_file().toStdString();
-    bool        keep_name = false;
+    const std::string fname = ex_dialog.selected_file().toStdString();
+    const bool        keep_name = ex_dialog.selected_is_project();
     this->load_project_model_and_ui(fname, keep_name);
+    if (keep_name)
+      this->add_recent_file(fname);
   }
 }
 
