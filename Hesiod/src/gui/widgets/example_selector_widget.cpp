@@ -239,28 +239,27 @@ protected:
     QPainter   p(this);
     p.setRenderHint(QPainter::Antialiasing);
     p.fillRect(rect(), t.page);
-    // The Hesiod mark, two peaks rather than one chevron, drawn as a vector so
-    // it stays crisp at every display scale. The smaller peak sits forward and
-    // to the left of the larger one so the pair reads as a range instead of
-    // one shape stroked twice. No enclosing disc: the mark carries on its own
-    // at watermark weight, and a filled circle would fight the page.
-    p.setPen(QPen(blend_color(t.page, t.ink_primary, 0.035),
-                  24,
-                  Qt::SolidLine,
-                  Qt::RoundCap,
-                  Qt::RoundJoin));
+    // The application's own icon as a watermark, rather than a chevron drawn
+    // here. Hand drawing it means the welcome screen carries a second, subtly
+    // different mark that has to be kept in step with the real one by hand;
+    // loading the asset means it simply is the logo.
+    //
+    // Requested at low opacity rather than by blending a pen colour, because
+    // the asset is a full colour image and there is no single stroke colour to
+    // tint. Rendered above display resolution so it stays clean when scaled.
+    const QString icon_path = QString::fromStdString(
+        HSD_CTX.app_settings.global.icon_path);
+    const QIcon mark(icon_path);
 
-    QPainterPath back_peak;
-    back_peak.moveTo(width() * 0.17, height() * 0.79);
-    back_peak.lineTo(width() * 0.37, height() * 0.37);
-    back_peak.lineTo(width() * 0.57, height() * 0.79);
-    p.drawPath(back_peak);
+    if (!mark.isNull())
+    {
+      const int   side = int(std::min(width() * 0.52, height() * 0.62));
+      const QRect target(int(width() * 0.02), int(height() * 0.30), side, side);
 
-    QPainterPath front_peak;
-    front_peak.moveTo(width() * 0.02, height() * 0.88);
-    front_peak.lineTo(width() * 0.17, height() * 0.59);
-    front_peak.lineTo(width() * 0.32, height() * 0.88);
-    p.drawPath(front_peak);
+      p.setOpacity(0.06);
+      p.drawPixmap(target, mark.pixmap(target.size() * 2, this->devicePixelRatioF()));
+      p.setOpacity(1.0);
+    }
   }
 };
 
