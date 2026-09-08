@@ -32,7 +32,7 @@ For older versions:
 
 - Return to the main Blender viewport and open the sidebar by pressing N (if it is not already visible).
 
-![img](images/tuto03.pg)
+![img](images/tuto03.png)
 
 - Click the Connect button to establish communication with Hesiod. If Blender is started before Hesiod, the initial connection attempt may fail. Once Hesiod is running, simply press Connect again to reconnect.
 
