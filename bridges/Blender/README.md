@@ -4,19 +4,23 @@
 
 The Blender Bridge allows Hesiod to stream terrain data directly into Blender for visualization and further editing. This tutorial explains how to install the Blender add-on and establish a connection between Hesiod and Blender.
 
-The add-on script is located at: [bridges/streamer_addon/hesiod_streamer.py](streamer_addon/hesiod_streamer.py)
+The add-on `.zip` is located [here!](https://github.com/Pazelock/Hesiod/blob/main/bridges/Blender/hesiod_streamer_1.6.zip)
 
 ## Intalling the Add-on in Blender
 
+In new versions you can drag-and-drop the downloaded `.zip` straight into Blender to install it.
+
+For older versions:
+
 - Launch Blender and open the Preferences window: Edit → Preferences
 
-![img](images/tuto00.jpg)
+![img](images/tuto00.png)
 
 - Open the “Add-ons” tab
 
 - Click “Install from Disk...” (top-right)
 
-![img](images/tuto01.jpg)
+![img](images/tuto01.png)
 
 - Navigate to: ```bridges/Blender/streamer_addon/hesiod_streamer.py```
 
@@ -24,7 +28,7 @@ The add-on script is located at: [bridges/streamer_addon/hesiod_streamer.py](str
 
 - Once installed, ensure that the add-on is enabled
 
-![img](images/tuto02.jpg)
+![img](images/tuto02.png)
 
 - Return to the main Blender viewport and open the sidebar by pressing N (if it is not already visible).
 
@@ -32,7 +36,7 @@ The add-on script is located at: [bridges/streamer_addon/hesiod_streamer.py](str
 
 - Click the Connect button to establish communication with Hesiod. If Blender is started before Hesiod, the initial connection attempt may fail. Once Hesiod is running, simply press Connect again to reconnect.
 
-![img](images/tuto04.jpg)
+![img](images/tuto04.png)
 
 ## Streaming Data from Hesiod
 
