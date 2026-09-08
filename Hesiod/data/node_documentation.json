@@ -6779,6 +6779,7 @@
                     "elevation_scaling",
                     "detail_scaling",
                     "blending_method",
+                    "fit_boundaries",
                     "flip_x",
                     "flip_y",
                     "export_format",
@@ -6817,6 +6818,12 @@
                 "key": "export_format",
                 "label": "Export Format:",
                 "type": "Enumeration"
+            },
+            "fit_boundaries": {
+                "description": "If enabled, domain coordinates are scaled to exactly [0, 1] x [0, 1] to fit the boundary. Default is false (coordinates scaled to [0, 1 - 1/shape.x] x [0, 1 - 1/shape.y]).",
+                "key": "fit_boundaries",
+                "label": "Fit Boundaries",
+                "type": "Bool"
             },
             "flip_x": {
                 "description": "No description",
