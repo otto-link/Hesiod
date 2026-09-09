@@ -80,6 +80,14 @@ std::string resolve_legacy_group_name(const meta::ContainerGroup &group,
   if (label == "Voronoise")
     return "Voronoise";
 
+  // Cone mappings
+  if (label == "Cone")
+    return "Simple";
+  if (label == "ConeComplex")
+    return "Complex";
+  if (label == "ConeSigmoid")
+    return "Sigmoid";
+
   // Path fractalize mappings
   if (label == "PathFractalize")
     return "Fractalize";
@@ -216,6 +224,22 @@ nlohmann::json convert_legacy_node_json(const nlohmann::json &json_node)
     target_label = "CellularNoise";
     group_name = "Voronoise";
   }
+  // --- Cone family ---
+  else if (label == "Cone")
+  {
+    target_label = "Cone";
+    group_name = "Simple";
+  }
+  else if (label == "ConeComplex")
+  {
+    target_label = "Cone";
+    group_name = "Complex";
+  }
+  else if (label == "ConeSigmoid")
+  {
+    target_label = "Cone";
+    group_name = "Sigmoid";
+  }
   // --- Path Fractalize ---
   else if (label == "PathFractalize")
   {
@@ -258,7 +282,6 @@ nlohmann::json convert_legacy_node_json(const nlohmann::json &json_node)
 
   nlohmann::json converted_node = json_node;
   converted_node["label"] = target_label;
-  converted_node["current"] = group_name;
 
   // If the node already has a "containers" object
   if (converted_node.contains("containers") && converted_node["containers"].is_object())
@@ -278,10 +301,12 @@ nlohmann::json convert_legacy_node_json(const nlohmann::json &json_node)
           main_json["lacunarity"] = {{"value", 2.0f}};
       }
       converted_node["containers"][group_name] = main_json;
+      converted_node["current"] = group_name;
     }
   }
   else
   {
+    converted_node["current"] = group_name;
     // Legacy format: flat attributes at the node level
     static const std::unordered_set<std::string> node_keys = {"id",
                                                               "label",

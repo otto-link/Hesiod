@@ -4399,14 +4399,82 @@
                     "post_remap",
                     "post_saturate"
                 ],
-                "name": "main"
+                "name": "Simple"
+            },
+            {
+                "keys": [
+                    "radius",
+                    "alpha",
+                    "center",
+                    "post_mix_method",
+                    "post_mix",
+                    "post_inverse",
+                    "post_gamma",
+                    "post_gain",
+                    "post_smoothing_radius",
+                    "post_remap",
+                    "post_saturate"
+                ],
+                "name": "Sigmoid"
+            },
+            {
+                "keys": [
+                    "radius",
+                    "alpha",
+                    "smooth_profile",
+                    "center",
+                    "valley_amp",
+                    "valley_nb",
+                    "valley_decay_ratio",
+                    "valley_angle0",
+                    "erosion_profile",
+                    "erosion_delta",
+                    "radial_waviness_amp",
+                    "radial_waviness_kw",
+                    "bias_angle",
+                    "bias_amp",
+                    "bias_exponent",
+                    "post_mix_method",
+                    "post_mix",
+                    "post_inverse",
+                    "post_gamma",
+                    "post_gain",
+                    "post_smoothing_radius",
+                    "post_remap",
+                    "post_saturate"
+                ],
+                "name": "Complex"
             }
         ],
         "parameters": {
+            "alpha": {
+                "description": "No description",
+                "key": "alpha",
+                "label": "alpha",
+                "type": "Float"
+            },
             "apex_elevation": {
                 "description": "Apex elevation.",
                 "key": "apex_elevation",
                 "label": "apex_elevation",
+                "type": "Float"
+            },
+            "bias_amp": {
+                "description": "No description",
+                "key": "bias_amp",
+                "label": "bias_amp",
+                "type": "Float"
+            },
+            "bias_angle": {
+                "description": "No description",
+                "key": "bias_angle",
+                "label": "bias_angle",
+                "type": "Float"
+            },
+            "bias_exponent": {
+                "description": "No description",
+                "key": "bias_exponent",
+                "label": "bias_exponent",
                 "type": "Float"
             },
             "center": {
@@ -4414,6 +4482,18 @@
                 "key": "center",
                 "label": "center",
                 "type": "Vec2Float"
+            },
+            "erosion_delta": {
+                "description": "No description",
+                "key": "erosion_delta",
+                "label": "erosion_delta",
+                "type": "Float"
+            },
+            "erosion_profile": {
+                "description": "No description",
+                "key": "erosion_profile",
+                "label": "erosion_profile",
+                "type": "Enumeration"
             },
             "post_gain": {
                 "description": "Mid-centered gain transformation applied to the elevation values. This is a non-linear recurve operator centered around the mid elevation (typically 0.5). Increasing the gain pushes values toward the minimum and maximum elevations, creating flatter low/high regions with a steeper transition around the midpoint.",
@@ -4463,6 +4543,24 @@
                 "label": "Smoothing Radius",
                 "type": "Float"
             },
+            "radial_waviness_amp": {
+                "description": "No description",
+                "key": "radial_waviness_amp",
+                "label": "radial_waviness_amp",
+                "type": "Float"
+            },
+            "radial_waviness_kw": {
+                "description": "No description",
+                "key": "radial_waviness_kw",
+                "label": "radial_waviness_kw",
+                "type": "Float"
+            },
+            "radius": {
+                "description": "No description",
+                "key": "radius",
+                "label": "radius",
+                "type": "Float"
+            },
             "slope": {
                 "description": "Slope angle of the cone (controls steepness of the sides).",
                 "key": "slope",
@@ -4474,9 +4572,39 @@
                 "key": "smooth_profile",
                 "label": "smooth_profile",
                 "type": "Bool"
+            },
+            "valley_amp": {
+                "description": "No description",
+                "key": "valley_amp",
+                "label": "valley_amp",
+                "type": "Float"
+            },
+            "valley_angle0": {
+                "description": "No description",
+                "key": "valley_angle0",
+                "label": "valley_angle0",
+                "type": "Float"
+            },
+            "valley_decay_ratio": {
+                "description": "No description",
+                "key": "valley_decay_ratio",
+                "label": "valley_decay_ratio",
+                "type": "Float"
+            },
+            "valley_nb": {
+                "description": "No description",
+                "key": "valley_nb",
+                "label": "valley_nb",
+                "type": "Integer"
             }
         },
         "ports": {
+            "control": {
+                "caption": "control",
+                "data_type": "VirtualArray",
+                "description": "No description",
+                "type": "input"
+            },
             "dx": {
                 "caption": "dx",
                 "data_type": "VirtualArray",
@@ -4504,7 +4632,7 @@
         }
     },
     "ConeComplex": {
-        "category": "Primitive/Function",
+        "category": "WIP/DEPRECATED",
         "description": "Generates a complex conical heightfield with valleys, directional bias, and radial waviness.",
         "label": "ConeComplex",
         "parameter_groups": [
@@ -4711,7 +4839,7 @@
         }
     },
     "ConeSigmoid": {
-        "category": "Primitive/Function",
+        "category": "WIP/DEPRECATED",
         "description": "Generates a smooth conical heightmap using a sigmoid-based profile.",
         "label": "ConeSigmoid",
         "parameter_groups": [
@@ -6775,15 +6903,15 @@
                     "fname",
                     "pattern",
                     "auto_export",
+                    "export_format",
+                    "mesh_type",
                     "max_error",
                     "elevation_scaling",
-                    "detail_scaling",
-                    "blending_method",
                     "fit_boundaries",
                     "flip_x",
                     "flip_y",
-                    "export_format",
-                    "mesh_type"
+                    "detail_scaling",
+                    "blending_method"
                 ],
                 "name": "main"
             }
@@ -8399,7 +8527,7 @@
         }
     },
     "FlowSimulationViscous": {
-        "category": "Hydrology",
+        "category": "WIP",
         "description": "No description available",
         "label": "FlowSimulationViscous",
         "parameter_groups": [
@@ -13600,7 +13728,7 @@
         }
     },
     "MakePeriodicStitching": {
-        "category": "Operator/Tiling",
+        "category": "WIP",
         "description": "Makes the input heightmap tileable by creating a smooth transition at the boundaries using stitching. This is useful for generating seamless textures or terrains that can be repeated without visible seams.",
         "label": "MakePeriodicStitching",
         "parameter_groups": [
@@ -19424,7 +19552,7 @@
         }
     },
     "QuiltingBlend": {
-        "category": "Operator/Resynthesis",
+        "category": "WIP",
         "description": "TODO",
         "label": "QuiltingBlend",
         "parameter_groups": [
@@ -19519,7 +19647,7 @@
         }
     },
     "QuiltingExpand": {
-        "category": "Operator/Resynthesis",
+        "category": "WIP",
         "description": "QuiltingExpand is an operator based on quilting that changes the feature wavenumber of a heightmap by modifying the frequency or scale of features present in the heightmap using a quilting-like technique. This operator allows for the synthesis of heightmaps with different levels of detail or spatial frequency content.",
         "label": "QuiltingExpand",
         "parameter_groups": [
@@ -19603,7 +19731,7 @@
         }
     },
     "QuiltingShuffle": {
-        "category": "Operator/Resynthesis",
+        "category": "WIP",
         "description": "QuiltingShuffle performs a quilting procedure and generates a new image by seamlessly stitching together patches from an existing image.",
         "label": "QuiltingShuffle",
         "parameter_groups": [
@@ -23449,14 +23577,14 @@
         "parameter_groups": [
             {
                 "keys": [
-                    "radius",
                     "uniform_radius",
+                    "radius",
                     "radius_west",
                     "radius_east",
                     "radius_north",
                     "radius_south",
-                    "value",
                     "uniform_value",
+                    "value",
                     "value_west",
                     "value_east",
                     "value_north",
@@ -24693,30 +24821,38 @@
         }
     },
     "SnowSimulation": {
-        "category": "Hydrology",
+        "category": "WIP",
         "description": "No description available",
         "label": "SnowSimulation",
         "parameter_groups": [
             {
                 "keys": [
                     "snow_depth",
-                    "talus_global",
-                    "duration",
-                    "solver_stride",
                     "depth_map_type",
-                    "post_filter",
-                    "thermal_talus_ratio",
+                    "duration",
+                    "outflow_boundaries",
+                    "talus_global",
                     "k_snow",
                     "k_visc",
+                    "k_creep",
                     "k_melt_factor",
                     "k_depth_ratio",
                     "k_depth_slope_ratio",
+                    "thermal_talus_ratio",
+                    "post_filter",
+                    "clamp_min_ratio",
                     "shift_to_zero"
                 ],
                 "name": "main"
             }
         ],
         "parameters": {
+            "clamp_min_ratio": {
+                "description": "No description",
+                "key": "clamp_min_ratio",
+                "label": "Lower Threshold Ratio",
+                "type": "Float"
+            },
             "depth_map_type": {
                 "description": "No description",
                 "key": "depth_map_type",
@@ -24727,6 +24863,12 @@
                 "description": "Total simulated time. Higher values allow snow to settle, creep, and stabilize more.",
                 "key": "duration",
                 "label": "Simulation Duration",
+                "type": "Float"
+            },
+            "k_creep": {
+                "description": "No description",
+                "key": "k_creep",
+                "label": "Creep Strength",
                 "type": "Float"
             },
             "k_depth_ratio": {
@@ -24756,8 +24898,14 @@
             "k_visc": {
                 "description": "Controls slow, diffusive snow motion below the repose angle, producing smooth, rounded snow surfaces.",
                 "key": "k_visc",
-                "label": "Thermal Creep Strength",
+                "label": "Viscosity Strength",
                 "type": "Float"
+            },
+            "outflow_boundaries": {
+                "description": "No description",
+                "key": "outflow_boundaries",
+                "label": "Outflow Boundaries",
+                "type": "Bool"
             },
             "post_filter": {
                 "description": "Enables sub-repose thermal smoothing, allowing snow to slowly collapse and relax on gentle slopes.",
@@ -24776,12 +24924,6 @@
                 "key": "snow_depth",
                 "label": "Snow Amount",
                 "type": "Float"
-            },
-            "solver_stride": {
-                "description": "Grid sampling stride used by the solver. Higher values process the snow field at a lower spatial resolution, reducing computation time at the cost of fine detail.",
-                "key": "solver_stride",
-                "label": "Solver Stride",
-                "type": "Integer"
             },
             "talus_global": {
                 "description": "Base repose angle of snow. Higher values allow steeper slopes before snow starts to slide.",
@@ -26522,7 +26664,7 @@
         }
     },
     "TextureQuiltingExpand": {
-        "category": "Texture",
+        "category": "WIP",
         "description": "TODO",
         "label": "TextureQuiltingExpand",
         "parameter_groups": [
@@ -26666,7 +26808,7 @@
         }
     },
     "TextureQuiltingShuffle": {
-        "category": "Texture",
+        "category": "WIP",
         "description": "TODO",
         "label": "TextureQuiltingShuffle",
         "parameter_groups": [
