@@ -13,7 +13,9 @@
 #include "hesiod/gui/widgets/grip_splitter.hpp"
 #include "hesiod/gui/widgets/gui_utils.hpp"
 #include "hesiod/gui/widgets/node_library_widget.hpp"
+#include "hesiod/gui/widgets/node_palette_sidebar.hpp"
 #include "hesiod/gui/widgets/node_settings_widget.hpp"
+#include "hesiod/model/nodes/node_factory.hpp"
 #include "hesiod/gui/widgets/viewers/viewer_3d.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/graph/graph_node.hpp"
@@ -108,6 +110,14 @@ void GraphEditorWidget::set_node_library_visible(bool new_state)
   if (this->node_library_widget)
     this->node_library_widget->setVisible(new_state);
 
+  if (this->node_palette_sidebar)
+  {
+    // a hidden rail must not leave its flyout floating over the graph
+    if (!new_state)
+      this->node_palette_sidebar->close_flyout();
+    this->node_palette_sidebar->setVisible(new_state);
+  }
+
   // arrow points at the panel's collapse direction
   if (this->node_library_toggle_button)
     this->node_library_toggle_button->setArrowType(new_state ? Qt::LeftArrow
@@ -156,8 +166,19 @@ void GraphEditorWidget::setup_layout()
       layout->addWidget(this->node_library_toggle_button, 0, 0, 2, 1);
     }
 
-    this->node_library_widget = new NodeLibraryWidget();
-    layout->addWidget(this->node_library_widget, 0, 1, 2, 1);
+    if (HSD_CTX.app_settings.interface.enable_node_palette_sidebar)
+    {
+      this->node_palette_sidebar = new NodePaletteSidebar(
+          get_node_inventory(),
+          HSD_CTX.style_settings.category_color_map,
+          current_node_palette_style());
+      layout->addWidget(this->node_palette_sidebar, 0, 1, 2, 1);
+    }
+    else
+    {
+      this->node_library_widget = new NodeLibraryWidget();
+      layout->addWidget(this->node_library_widget, 0, 1, 2, 1);
+    }
 
     this->set_node_library_visible(
         HSD_CTX.app_settings.node_editor.show_node_library_pan);
@@ -253,12 +274,37 @@ void GraphEditorWidget::setup_layout()
                   this->graph_node_widget,
                   &GraphNodeWidget::on_new_node_request_replace);
 
-    if (this->node_library_toggle_button)
-      this->connect(this->node_library_toggle_button,
-                    &QToolButton::clicked,
-                    this,
-                    [this]() { Q_EMIT this->node_library_toggle_requested(); });
   }
+
+  // the palette sidebar creates nodes through exactly the same slots as the
+  // library tree, so the two cannot drift apart
+  if (this->node_palette_sidebar)
+  {
+    this->connect(this->node_palette_sidebar,
+                  &NodePaletteSidebar::node_type_selected,
+                  this->graph_node_widget,
+                  [this](const std::string &node_type)
+                  {
+                    QPointF center = this->graph_node_widget->get_center();
+                    this->graph_node_widget->on_new_node_request(node_type, center);
+                  });
+
+    this->connect(this->node_palette_sidebar,
+                  &NodePaletteSidebar::node_type_selected_shift,
+                  this->graph_node_widget,
+                  &GraphNodeWidget::on_new_node_request_chain);
+
+    this->connect(this->node_palette_sidebar,
+                  &NodePaletteSidebar::node_type_selected_ctrl,
+                  this->graph_node_widget,
+                  &GraphNodeWidget::on_new_node_request_replace);
+  }
+
+  if (this->node_library_toggle_button)
+    this->connect(this->node_library_toggle_button,
+                  &QToolButton::clicked,
+                  this,
+                  [this]() { Q_EMIT this->node_library_toggle_requested(); });
 }
 
 } // namespace hesiod
