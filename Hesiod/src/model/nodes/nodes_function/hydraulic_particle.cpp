@@ -274,6 +274,7 @@ void compute_hydraulic_particle_node(BaseNode &node)
             steps_per_level[i] = 1 << (nlevels - 1 - i);
 
           hmap::gpu::hydraulic_particle_multiscale(*pa_out,
+                                                   pa_mask,
                                                    seed,
                                                    steps_per_level,
                                                    pa_bedrock,
@@ -323,7 +324,6 @@ void compute_hydraulic_particle_node(BaseNode &node)
   // --- post-treatments
 
   p_out->smooth_overlap_buffers();
-  p_out->remap(hmin, hmax, node.cfg().cm_cpu);
 
   p_erosion->smooth_overlap_buffers();
   p_erosion->remap(0.f, 1.f, node.cfg().cm_cpu);
