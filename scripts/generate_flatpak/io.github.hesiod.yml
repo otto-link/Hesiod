@@ -12,6 +12,8 @@ finish_args:
   - --device=dri
   - --share=ipc
   - --share=network
+  - --filesystem=home
+  - --filesystem=/tmp
 
 modules:
  - name: opencl-headers
