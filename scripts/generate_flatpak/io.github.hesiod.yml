@@ -207,7 +207,7 @@ modules:
    sources:
      - type: file
        path: launch.sh
-       sha256: f7b71bda2fd8405a77d1c900a40f3c01448fa861bc7e9b4d3a93acb79957b2c7
+       sha256: cc1df03492bd9c996366a01ccf04b77b556610a624e1026524a271bbeb1e1387
 
  - name: metainfo-desktop
    buildsystem: simple
@@ -215,11 +215,12 @@ modules:
      - install -Dm644 io.github.hesiod.desktop -t /app/share/applications
      - install -Dm644 io.github.hesiod.metainfo.xml -t /app/share/metainfo
      - install -Dm644 io.github.hesiod.png -t /app/share/icons/hicolor/256x256/apps
+     - install -Dm644 io.github.hesiod-mime.xml -t /app/share/mime/packages
 
    sources:
      - type: file
        path: io.github.hesiod.desktop
-       sha256: dcbe9178a33c035650cad267d8669825d11bda56466de93d207e2d1d2b526b95
+       sha256: 00f3b9ec1ae60f5dd9db711416e6f9bd6d158b90d647d5f7b7a3a018f2061401
 
      - type: file
        path: io.github.hesiod.metainfo.xml
@@ -228,3 +229,7 @@ modules:
      - type: file
        path: io.github.hesiod.png
        sha256: 82e4a6b4f1e5526db9bce5849ca1e479312bbc8fc7e84fad5af16c9f50160245
+
+     - type: file
+       path: io.github.hesiod-mime.xml
+       sha256: 6ec448e8e7a4bc6e4f9acf8a5c6a917b0c06ea6f6703f5058b4e716c08fcf153

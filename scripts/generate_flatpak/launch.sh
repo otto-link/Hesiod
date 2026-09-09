@@ -15,7 +15,7 @@ ln -s $XDG_DATA_HOME/hesiod/opencv_build_information.log opencv_build_informatio
 
 export QTWEBENGINEPROCESS_PATH=/app/bin/QtWebEngineProcess
 
-LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libOpenCL.so.1 ./hesiod
+LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libOpenCL.so.1 ./hesiod $@
 
 unlink opencv_build_information.log
 unlink imgui.ini
