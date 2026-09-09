@@ -1,31 +1,17 @@
 id: io.github.hesiod
 runtime: org.kde.Platform
 runtime-version: '6.8'
-x-gl-version: &gl-version '1.4'
-x-gl-versions: &gl-versions 22.08;22.08-extra;1.4
 sdk: org.kde.Sdk
 base: io.qt.qtwebengine.BaseApp
 base-version: '6.8'
 command: /app/hesiod/launch.sh
-
-#add-extensions:
-#  org.freedesktop.Platform.GL:
-#    directory: lib/GL
-#    version: *gl-version
-#    versions: *gl-versions
-#    subdirectories: true
-#    no-autodownload: true
-#    autodelete: false
-#    add-ld-path: lib
-#    merge-dirs: vulkan/icd.d;glvnd/egl_vendor.d;OpenCL/vendors;lib/dri;lib/d3d;vulkan/explicit_layer.d;vulkan/implicit_layer.d
-#    download-if: active-gl-driver
-#    enable-if: active-gl-driver
 
 finish_args:
   - --socket=wayland
   - --socket=fallback-x11
   - --device=dri
   - --share=ipc
+  - --share=network
 
 modules:
  - name: opencl-headers
@@ -55,7 +41,7 @@ modules:
  - name: opencl-cpp-headers
    buildsystem: simple
    build-commands:
-    - cmake -DCMAKE_INSTALL_PREFIX=/app -DBUILD_EXAMPLES=OFF -DOPENCL_CLHPP_BUILD_TESTING=OFF -DBUILD_DOCS=OFF -DBUILD_TESTING=OFF -B build
+    - cmake -DCMAKE_INSTALL_PREFIX=/app -DBUILD_EXAMPLES=ON -DOPENCL_CLHPP_BUILD_TESTING=OFF -DBUILD_DOCS=OFF -DBUILD_TESTING=OFF -B build
     - cmake --build build/ -j$(nproc)
     - cmake --install build/
    sources:
@@ -219,4 +205,4 @@ modules:
    sources:
      - type: file
        path: launch.sh
-       sha256: 3b3728fcddb5b96ebfeec104c9480ffbc9a77c61c42183a78415b6fd9ae97a21
+       sha256: 8fcd4d8308b74a290055695cd547382d793a51ad345aaab5fe22dc22f03c4d9b
