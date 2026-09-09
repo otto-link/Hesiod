@@ -9,11 +9,354 @@
 #include "meta/ext/array/array.hpp"
 #include "meta/ext/color_gradient/color_gradient.hpp"
 
+#include "hesiod/app/hesiod_application.hpp"
 #include "hesiod/logger.hpp"
 #include "hesiod/model/nodes/legacy/legacy_converter.hpp"
 
 namespace hesiod
 {
+
+namespace
+{
+
+bool is_output_port_virtual_array(const std::string &node_label)
+{
+  const nlohmann::json &docs = HSD_CTX.node_documentation;
+  if (!docs.is_object() || !docs.contains(node_label))
+    return false;
+
+  const auto &node_doc = docs[node_label];
+  if (!node_doc.is_object() || !node_doc.contains("ports") ||
+      !node_doc["ports"].is_object())
+    return false;
+
+  const auto &ports = node_doc["ports"];
+  if (ports.contains("output") && ports["output"].is_object())
+  {
+    const auto &p = ports["output"];
+    if (p.value("type", "") == "output" && p.value("data_type", "") == "VirtualArray")
+      return true;
+  }
+  if (ports.contains("out") && ports["out"].is_object())
+  {
+    const auto &p = ports["out"];
+    if (p.value("type", "") == "output" && p.value("data_type", "") == "VirtualArray")
+      return true;
+  }
+
+  return false;
+}
+
+std::string resolve_legacy_group_name(const meta::ContainerGroup &group,
+                                      const nlohmann::json       &j)
+{
+  std::string label;
+  if (j.contains("label") && j["label"].is_string())
+    label = j["label"].get<std::string>();
+
+  // Coherent noise mappings
+  if (label == "Noise" || label == "NoiseFbm")
+    return "FBM";
+  if (label == "NoiseRidged")
+    return "Ridged";
+  if (label == "NoiseIq")
+    return "IQ";
+  if (label == "NoiseJordan")
+    return "Jordan";
+  if (label == "NoiseParberry")
+    return "Parberry";
+  if (label == "NoisePingpong")
+    return "PingPong";
+  if (label == "NoiseSwiss")
+    return "Swiss";
+
+  // Cellular noise mappings
+  if (label == "Voronoi" || label == "VoronoiFbm")
+    return "Grid";
+  if (label == "Vorolines" || label == "VorolinesFbm")
+    return "Lines";
+  if (label == "Vororand")
+    return "Scattered";
+  if (label == "Voronoise")
+    return "Voronoise";
+
+  // Cone mappings
+  if (label == "Cone")
+    return "Simple";
+  if (label == "ConeComplex")
+    return "Complex";
+  if (label == "ConeSigmoid")
+    return "Sigmoid";
+
+  // Path fractalize mappings
+  if (label == "PathFractalize")
+    return "Fractalize";
+
+  if (group.current_container_name().has_value() &&
+      group.contains(*group.current_container_name()))
+  {
+    return *group.current_container_name();
+  }
+
+  if (!group.insertion_order().empty())
+    return group.insertion_order().front();
+
+  return "main";
+}
+
+void rename_out_to_output(nlohmann::json &j, const std::string &node_label)
+{
+  if (!j.is_object())
+    return;
+
+  // only rename if the output port is of type VirtualArray
+  if (!is_output_port_virtual_array(node_label))
+    return;
+
+  if (j.contains("containers") && j["containers"].is_object())
+  {
+    for (auto &[cname, cjson] : j["containers"].items())
+    {
+      if (cjson.is_object() && cjson.contains("out") && !cjson.contains("output"))
+      {
+        cjson["output"] = cjson["out"];
+        cjson.erase("out");
+      }
+    }
+  }
+  else
+  {
+    if (j.contains("out") && !j.contains("output"))
+    {
+      j["output"] = j["out"];
+      j.erase("out");
+    }
+  }
+}
+
+} // namespace
+
+nlohmann::json convert_legacy_node_json(const nlohmann::json &json_node)
+{
+  if (!json_node.is_object())
+    return json_node;
+
+  std::string label;
+  if (json_node.contains("label") && json_node["label"].is_string())
+    label = json_node["label"].get<std::string>();
+
+  std::string target_label;
+  std::string group_name;
+  bool        is_single_octave = false;
+
+  // --- Coherent noise family ---
+  if (label == "Noise")
+  {
+    target_label = "CoherentNoise";
+    group_name = "FBM";
+    is_single_octave = true;
+  }
+  else if (label == "NoiseFbm")
+  {
+    target_label = "CoherentNoise";
+    group_name = "FBM";
+  }
+  else if (label == "NoiseRidged")
+  {
+    target_label = "CoherentNoise";
+    group_name = "Ridged";
+  }
+  else if (label == "NoiseIq")
+  {
+    target_label = "CoherentNoise";
+    group_name = "IQ";
+  }
+  else if (label == "NoiseJordan")
+  {
+    target_label = "CoherentNoise";
+    group_name = "Jordan";
+  }
+  else if (label == "NoiseParberry")
+  {
+    target_label = "CoherentNoise";
+    group_name = "Parberry";
+  }
+  else if (label == "NoisePingpong")
+  {
+    target_label = "CoherentNoise";
+    group_name = "PingPong";
+  }
+  else if (label == "NoiseSwiss")
+  {
+    target_label = "CoherentNoise";
+    group_name = "Swiss";
+  }
+  // --- Cellular noise / Voronoi family ---
+  else if (label == "Voronoi")
+  {
+    target_label = "CellularNoise";
+    group_name = "Grid";
+    is_single_octave = true;
+  }
+  else if (label == "VoronoiFbm")
+  {
+    target_label = "CellularNoise";
+    group_name = "Grid";
+  }
+  else if (label == "Vorolines")
+  {
+    target_label = "CellularNoise";
+    group_name = "Lines";
+    is_single_octave = true;
+  }
+  else if (label == "VorolinesFbm")
+  {
+    target_label = "CellularNoise";
+    group_name = "Lines";
+  }
+  else if (label == "Vororand")
+  {
+    target_label = "CellularNoise";
+    group_name = "Scattered";
+  }
+  else if (label == "Voronoise")
+  {
+    target_label = "CellularNoise";
+    group_name = "Voronoise";
+  }
+  // --- Cone family ---
+  else if (label == "Cone")
+  {
+    target_label = "Cone";
+    group_name = "Simple";
+  }
+  else if (label == "ConeComplex")
+  {
+    target_label = "Cone";
+    group_name = "Complex";
+  }
+  else if (label == "ConeSigmoid")
+  {
+    target_label = "Cone";
+    group_name = "Sigmoid";
+  }
+  // --- Path Fractalize ---
+  else if (label == "PathFractalize")
+  {
+    target_label = "PathFractalize";
+    group_name = "Fractalize";
+  }
+  // --- SetBorders ---
+  else if (label == "SetBorders")
+  {
+    nlohmann::json converted_node = json_node;
+    if (converted_node.contains("containers") && converted_node["containers"].is_object())
+    {
+      if (converted_node["containers"].contains("main") &&
+          converted_node["containers"]["main"].is_object())
+      {
+        auto &main_json = converted_node["containers"]["main"];
+        if (!main_json.contains("value") && main_json.contains("value_west"))
+        {
+          main_json["value"] = main_json["value_west"];
+        }
+      }
+    }
+    else
+    {
+      if (!converted_node.contains("value") && converted_node.contains("value_west"))
+      {
+        converted_node["value"] = converted_node["value_west"];
+      }
+    }
+    rename_out_to_output(converted_node, "SetBorders");
+    return converted_node;
+  }
+
+  if (target_label.empty() || group_name.empty())
+  {
+    nlohmann::json converted_node = json_node;
+    rename_out_to_output(converted_node, label);
+    return converted_node;
+  }
+
+  nlohmann::json converted_node = json_node;
+  converted_node["label"] = target_label;
+
+  // If the node already has a "containers" object
+  if (converted_node.contains("containers") && converted_node["containers"].is_object())
+  {
+    if (converted_node["containers"].contains("main"))
+    {
+      nlohmann::json main_json = converted_node["containers"]["main"];
+      converted_node["containers"].erase("main");
+      if (is_single_octave)
+      {
+        main_json["octaves"] = {{"value", 1}};
+        if (!main_json.contains("weight"))
+          main_json["weight"] = {{"value", 0.7f}};
+        if (!main_json.contains("persistence"))
+          main_json["persistence"] = {{"value", 0.5f}};
+        if (!main_json.contains("lacunarity"))
+          main_json["lacunarity"] = {{"value", 2.0f}};
+      }
+      converted_node["containers"][group_name] = main_json;
+      converted_node["current"] = group_name;
+    }
+  }
+  else
+  {
+    converted_node["current"] = group_name;
+    // Legacy format: flat attributes at the node level
+    static const std::unordered_set<std::string> node_keys = {"id",
+                                                              "label",
+                                                              "caption",
+                                                              "comment",
+                                                              "runtime_info",
+                                                              "state",
+                                                              "current",
+                                                              "containers"};
+
+    nlohmann::json           container_json = nlohmann::json::object();
+    std::vector<std::string> keys_to_remove;
+
+    for (auto &[key, val] : converted_node.items())
+    {
+      if (!node_keys.contains(key))
+      {
+        container_json[key] = val;
+        keys_to_remove.push_back(key);
+      }
+    }
+
+    for (const auto &key : keys_to_remove)
+    {
+      converted_node.erase(key);
+    }
+
+    if (converted_node.contains("state"))
+    {
+      container_json["state"] = converted_node["state"];
+    }
+
+    if (is_single_octave)
+    {
+      container_json["octaves"] = {{"value", 1}};
+      if (!container_json.contains("weight"))
+        container_json["weight"] = {{"value", 0.7f}};
+      if (!container_json.contains("persistence"))
+        container_json["persistence"] = {{"value", 0.5f}};
+      if (!container_json.contains("lacunarity"))
+        container_json["lacunarity"] = {{"value", 2.0f}};
+    }
+
+    converted_node["containers"] = nlohmann::json::object();
+    converted_node["containers"][group_name] = container_json;
+  }
+
+  rename_out_to_output(converted_node, target_label);
+  return converted_node;
+}
 
 nlohmann::json convert_legacy_attribute_json(const meta::AbstractAttribute *attr,
                                              const nlohmann::json          &j)
@@ -189,6 +532,19 @@ nlohmann::json convert_legacy_container_group_json(const meta::ContainerGroup &g
   if (j.contains("containers") && j["containers"].is_object())
   {
     nlohmann::json converted_group = j;
+
+    // If the serialized group contains a single "main" container but the target group
+    // does not have a "main" container (e.g. CoherentNoise, CellularNoise), remap "main"
+    // to the resolved group container name.
+    if (converted_group["containers"].contains("main") && !group.contains("main"))
+    {
+      std::string    target_name = resolve_legacy_group_name(group, j);
+      nlohmann::json main_json = converted_group["containers"]["main"];
+      converted_group["containers"].erase("main");
+      converted_group["containers"][target_name] = main_json;
+      converted_group["current"] = target_name;
+    }
+
     for (auto &[cname, cjson] : converted_group["containers"].items())
     {
       if (cjson.is_object())
@@ -201,6 +557,18 @@ nlohmann::json convert_legacy_container_group_json(const meta::ContainerGroup &g
 
         if (container)
         {
+          if (container->find("value") && !cjson.contains("value") &&
+              cjson.contains("value_west"))
+          {
+            cjson["value"] = cjson["value_west"];
+          }
+
+          if (container->find("output") && !cjson.contains("output") &&
+              cjson.contains("out"))
+          {
+            cjson["output"] = cjson["out"];
+          }
+
           for (const auto &key : container->insertion_order())
           {
             auto *attr = container->find(key);
@@ -215,26 +583,44 @@ nlohmann::json convert_legacy_container_group_json(const meta::ContainerGroup &g
     return converted_group;
   }
 
-  // Legacy format: the node JSON has attributes directly (or in a single "main"
-  // container). Wrap into ContainerGroup format: { "current": "main", "containers": {
-  // "main": ... } }
+  // Legacy format: the node JSON has attributes directly (flat attributes).
+  // Determine target container name (either "main" if present in group, or resolved group
+  // name for multi-container nodes like CoherentNoise, CellularNoise).
+  std::string target_container_name = "main";
+  if (!group.contains("main"))
+  {
+    target_container_name = resolve_legacy_group_name(group, j);
+  }
+
   nlohmann::json group_json = nlohmann::json::object();
-  group_json["current"] = "main";
+  group_json["current"] = target_container_name;
 
-  nlohmann::json main_container_json = nlohmann::json::object();
+  nlohmann::json target_container_json = nlohmann::json::object();
 
-  const meta::AttributeContainer *container = group.find("main");
+  const meta::AttributeContainer *container = group.find(target_container_name);
   if (!container)
     container = &group.current();
 
   if (container)
   {
+    nlohmann::json j_copy = j;
+    if (container->find("value") && !j_copy.contains("value") &&
+        j_copy.contains("value_west"))
+    {
+      j_copy["value"] = j_copy["value_west"];
+    }
+
+    if (container->find("output") && !j_copy.contains("output") && j_copy.contains("out"))
+    {
+      j_copy["output"] = j_copy["out"];
+    }
+
     for (const auto &key : container->insertion_order())
     {
       auto *attr = container->find(key);
-      if (j.contains(key))
+      if (j_copy.contains(key))
       {
-        main_container_json[key] = convert_legacy_attribute_json(attr, j[key]);
+        target_container_json[key] = convert_legacy_attribute_json(attr, j_copy[key]);
       }
     }
   }
@@ -250,17 +636,17 @@ nlohmann::json convert_legacy_container_group_json(const meta::ContainerGroup &g
     {
       if (!node_keys.contains(key))
       {
-        main_container_json[key] = val;
+        target_container_json[key] = val;
       }
     }
   }
 
   if (j.contains("state"))
   {
-    main_container_json["state"] = j["state"];
+    target_container_json["state"] = j["state"];
   }
 
-  group_json["containers"]["main"] = main_container_json;
+  group_json["containers"][target_container_name] = target_container_json;
   return group_json;
 }
 

@@ -18,12 +18,8 @@ namespace hesiod
 // Ports & Attributes
 // -----------------------------------------------------------------------------
 
-// -----------------------------------------------------------------------------
-// Ports & Attributes
-// -----------------------------------------------------------------------------
-
 constexpr const char *P_PATH = "path";
-constexpr const char *P_OUT  = "out";
+constexpr const char *P_OUT  = "output";
 
 constexpr const char *A_SEED          = "seed";
 constexpr const char *A_ISLAND_COUNT  = "island_count";

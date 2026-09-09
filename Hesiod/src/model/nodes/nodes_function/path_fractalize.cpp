@@ -16,10 +16,6 @@ namespace hesiod
 // Ports & Attributes
 // -----------------------------------------------------------------------------
 
-// -----------------------------------------------------------------------------
-// Ports & Attributes
-// -----------------------------------------------------------------------------
-
 constexpr const char *P_INPUT  = "input";
 constexpr const char *P_OUTPUT = "output";
 
@@ -28,7 +24,11 @@ constexpr const char *A_SEED         = "seed";
 constexpr const char *A_SIGMA        = "sigma";
 constexpr const char *A_ORIENTATION  = "orientation";
 constexpr const char *A_PERSISTENCE  = "persistence";
+constexpr const char *A_HEIGHT_RATIO = "height_ratio";
 constexpr const char *A_REMOVE_LOOPS = "remove_loops";
+
+constexpr const char *G_FRACTALIZE = "Fractalize";
+constexpr const char *G_SQUIGGLE   = "Squiggle";
 
 // -----------------------------------------------------------------------------
 // Setup
@@ -42,13 +42,41 @@ void setup_path_fractalize_node(BaseNode &node)
   node.add_port<hmap::Path>(gnode::PortType::IN, P_INPUT);
   node.add_port<hmap::Path>(gnode::PortType::OUT, P_OUTPUT);
 
-  // attribute(s)
-  add_int(node, A_ITERATIONS, "Iterations", 4, 1, 10);
-  add_seed(node, A_SEED, "Random Seed");
-  add_float(node, A_SIGMA, "Sigma", 0.3f, 0.f, 1.f);
-  add_int(node, A_ORIENTATION, "Orientation", 0, 0, 1);
-  add_float(node, A_PERSISTENCE, "Persistence", 1.f, 0.01f, 4.f);
-  add_bool(node, A_REMOVE_LOOPS, "Remove Geometric Loops", false);
+  // Group: Fractalize
+  {
+    node.set_current_group(G_FRACTALIZE);
+
+    node.set_current_category("Main Parameters");
+
+    add_int(node, A_ITERATIONS, "Iterations", 4, 1, 10);
+    add_seed(node, A_SEED, "Random Seed");
+    add_float(node, A_SIGMA, "Sigma", 0.3f, 0.f, 1.f);
+    add_int(node, A_ORIENTATION, "Orientation", 0, 0, 1);
+    add_float(node, A_PERSISTENCE, "Persistence", 1.f, 0.01f, 4.f);
+
+    node.set_current_category("Post-Process");
+
+    add_bool(node, A_REMOVE_LOOPS, "Remove Geometric Loops", false);
+  }
+
+  // Group: Squiggle
+  {
+    node.set_current_group(G_SQUIGGLE);
+
+    node.set_current_category("Main Parameters");
+
+    add_int(node, A_ITERATIONS, "Iterations", 4, 1, 10);
+    add_seed(node, A_SEED, "Random Seed");
+    add_float(node, A_HEIGHT_RATIO, "Height Ratio", 0.5f, 0.f, 1.f);
+    add_int(node, A_ORIENTATION, "Orientation", 0, -1, 1);
+
+    node.set_current_category("Post-Process");
+
+    add_bool(node, A_REMOVE_LOOPS, "Remove Geometric Loops", false);
+  }
+
+  // Reset active group to first
+  node.set_current_group(G_FRACTALIZE);
 }
 
 // -----------------------------------------------------------------------------
@@ -65,38 +93,53 @@ void compute_path_fractalize_node(BaseNode &node)
   if (!p_in || p_in->size() < 2)
     return;
 
-  // --- Parameters wrapper
+  const std::string current_group = node.get_meta_group()
+                                        .current_container_name()
+                                        .value_or(G_FRACTALIZE);
 
-  const auto params = [&node]()
+  Logger::log()->trace("compute_path_fractalize_node: current_group {}", current_group);
+
+  const auto iterations   = node.val<int>(A_ITERATIONS);
+  const auto seed         = uint(node.val<int>(A_SEED));
+  const auto orientation  = node.val<int>(A_ORIENTATION);
+  const auto remove_loops = node.val<bool>(A_REMOVE_LOOPS);
+
+  if (current_group == G_FRACTALIZE)
   {
-    struct P
-    {
-      int   iterations;
-      uint  seed;
-      float sigma;
-      int   orientation;
-      float persistence;
-      bool  remove_loops;
-    };
+    const auto sigma       = node.val<float>(A_SIGMA);
+    const auto persistence = node.val<float>(A_PERSISTENCE);
 
-    return P{.iterations   = node.val<int>(A_ITERATIONS),
-             .seed         = uint(node.val<int>(A_SEED)),
-             .sigma        = node.val<float>(A_SIGMA),
-             .orientation  = node.val<int>(A_ORIENTATION),
-             .persistence  = node.val<float>(A_PERSISTENCE),
-             .remove_loops = node.val<bool>(A_REMOVE_LOOPS)};
-  }();
+    *p_out = hmap::fractalize(*p_in,
+                              iterations,
+                              seed,
+                              sigma,
+                              orientation,
+                              persistence,
+                              /* p_control_field */ nullptr,
+                              /* bbox */ glm::vec4{0.f, 1.f, 0.f, 1.f},
+                              /* bounded */ false);
+  }
+  else if (current_group == G_SQUIGGLE)
+  {
+    const auto height_ratio = node.val<float>(A_HEIGHT_RATIO);
 
-  // --- Apply fractalize
+    *p_out = hmap::squiggle(*p_in,
+                            iterations,
+                            seed,
+                            height_ratio,
+                            orientation,
+                            /* p_weights */ nullptr,
+                            /* p_mask */ nullptr,
+                            /* bbox */ glm::vec4{0.f, 1.f, 0.f, 1.f});
+  }
+  else
+  {
+    Logger::log()->error("compute_path_fractalize_node: group {} not implemented",
+                         current_group);
+    return;
+  }
 
-  *p_out = hmap::fractalize(*p_in,
-                            params.iterations,
-                            params.seed,
-                            params.sigma,
-                            params.orientation,
-                            params.persistence);
-
-  if (params.remove_loops)
+  if (remove_loops)
     *p_out = hmap::remove_geometric_loops(*p_out);
 }
 

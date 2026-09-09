@@ -19,6 +19,8 @@
 
 #include <omp.h>
 
+#include "meta_qt/designs/stock/stock.hpp"
+
 #include "highmap/opencl/gpu_opencl.hpp"
 #include "highmap/openmp.hpp"
 
@@ -26,6 +28,7 @@
 #include "hesiod/cli/batch_mode.hpp"
 #include "hesiod/gui/project_ui.hpp"
 #include "hesiod/gui/widgets/about_dialog.hpp"
+#include "hesiod/gui/widgets/batch_export_progress_dialog.hpp"
 #include "hesiod/gui/widgets/documentation_popup.hpp"
 #include "hesiod/gui/widgets/example_selector_dialog.hpp"
 #include "hesiod/gui/widgets/graph_config_widgets/bake_config_dialog.hpp"
@@ -79,6 +82,9 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
 
   // Blender streamer
   this->blender_streamer.start();
+
+  // meta design registration
+  meta::qt::stock::register_design();
 
   // --- Batch CLI mode if requested
 
@@ -134,12 +140,25 @@ HesiodApplication::HesiodApplication(int &argc, char **argv) : QApplication(argc
   if (fname.empty() &&
       this->context.app_settings.interface.enable_example_selector_at_startup)
   {
-    std::string path = this->context.app_settings.global.ready_made_path;
-    auto       *ex_dialog = new ExampleSelectorDialog(QString::fromStdString(path));
-    bool        ret = ex_dialog->exec();
+    std::string           path = this->context.app_settings.global.ready_made_path;
+    ExampleSelectorDialog ex_dialog(QString::fromStdString(path));
+    ex_dialog.exec();
 
-    if (ret)
-      fname = ex_dialog->selected_file().toStdString();
+    // Closing the window is a decision not to open anything, so the app stops
+    // rather than dropping the user into a project they never asked for. New
+    // Project falls through with an empty filename, which is what starts one.
+    if (ex_dialog.outcome() == ExampleSelectorDialog::Outcome::Closed)
+    {
+      splash->close();
+      delete splash;
+      ::exit(0);
+    }
+
+    if (ex_dialog.outcome() == ExampleSelectorDialog::Outcome::OpenFile)
+    {
+      fname = ex_dialog.selected_file().toStdString();
+      keep_name = ex_dialog.selected_is_project();
+    }
   }
 
   this->load_project_model_and_ui(fname, keep_name);
@@ -425,15 +444,8 @@ void HesiodApplication::on_export_batch()
 
   this->notify("Baking and exporting...");
 
-  // block UI
-  QProgressDialog progress(tr("Baking and exporting..."),
-                           QString(),
-                           0,
-                           0,
-                           this->main_window);
-  progress.setWindowModality(Qt::ApplicationModal);
-  progress.setCancelButton(nullptr);
-  progress.setMinimumDuration(0); // show immediately
+  // show batch export progress dialog
+  BatchExportProgressDialog progress(this->main_window);
   progress.show();
   QCoreApplication::processEvents();
 
@@ -444,6 +456,8 @@ void HesiodApplication::on_export_batch()
                                         bake_settings.nvariants + 1);
     this->notify(msg);
 
+    const std::string variant_name = (k == 0) ? "Base" : ("Variant " + std::to_string(k));
+    progress.set_variant(k + 1, bake_settings.nvariants + 1, variant_name);
     QCoreApplication::processEvents(); // render progress dialog
 
     const fs::path project_path = this->context.project_model->get_path();
@@ -513,20 +527,60 @@ void HesiodApplication::on_export_batch()
                            bake_shape.x,
                            bake_shape.y);
 
-      // run batch node
+      // run batch node with progress callbacks
+      auto setup_callbacks = [&progress](GraphManager &gm)
+      {
+        std::vector<NodeExportStatus> scheduled_nodes;
+
+        for (const auto &graph_id : gm.get_graph_order())
+        {
+          GraphNode *p_graph = gm.get_graph_ref_by_id(graph_id);
+          if (!p_graph)
+            continue;
+
+          // wire up per-node compute callbacks
+          p_graph->compute_started = [&progress](const std::string &node_id)
+          { progress.on_node_started(node_id); };
+
+          p_graph->compute_finished = [&progress](const std::string &node_id)
+          { progress.on_node_finished(node_id, true); };
+
+          // populate the scheduled list in topological update order if possible
+          std::vector<std::string> dirty_ids;
+          for (const auto &[nid, p_node] : p_graph->get_nodes())
+            dirty_ids.push_back(nid);
+
+          std::vector<std::string> sorted_ids = p_graph->topological_sort(dirty_ids);
+          for (const auto &nid : sorted_ids)
+          {
+            BaseNode        *p_base = p_graph->get_node_ref_by_id<BaseNode>(nid);
+            NodeExportStatus st;
+            st.node_id = nid;
+            st.node_label = p_base ? p_base->get_caption() : nid;
+            st.node_type = p_base ? p_base->get_node_type() : "";
+            st.state = NodeComputeState::Pending;
+            scheduled_nodes.push_back(st);
+          }
+        }
+
+        progress.set_node_list(scheduled_nodes);
+      };
+
       hesiod::cli::run_batch_mode(fname.string(),
                                   bake_shape,
                                   bake_config.tiling,
                                   bake_config.overlap,
-                                  &bake_config);
+                                  &bake_config,
+                                  setup_callbacks);
     }
   }
 
   // save config
   this->context.project_model->set_bake_config(bake_settings);
 
-  // unblock UI
-  progress.close();
+  progress.set_overall_progress(bake_settings.nvariants + 1, bake_settings.nvariants + 1);
+  progress.on_export_finished();
+  progress.exec();
 
   this->notify("Baking and exporting terminated.");
 }
@@ -583,15 +637,33 @@ void HesiodApplication::on_load_ready_made()
   if (!this->confirm_discard_unsaved_changes("Open Ready-made Example"))
     return;
 
-  std::string path = this->context.app_settings.global.ready_made_path;
-  auto       *ex_dialog = new ExampleSelectorDialog(QString::fromStdString(path));
-  bool        ret = ex_dialog->exec();
+  std::string           path = this->context.app_settings.global.ready_made_path;
+  ExampleSelectorDialog ex_dialog(QString::fromStdString(path));
+  ex_dialog.exec();
 
-  if (ret)
+  switch (ex_dialog.outcome())
   {
-    std::string fname = ex_dialog->selected_file().toStdString();
-    bool        keep_name = false;
+  case ExampleSelectorDialog::Outcome::OpenFile:
+  {
+    const std::string fname = ex_dialog.selected_file().toStdString();
+    const bool        keep_name = ex_dialog.selected_is_project();
     this->load_project_model_and_ui(fname, keep_name);
+    if (keep_name)
+      this->add_recent_file(fname);
+    break;
+  }
+
+  case ExampleSelectorDialog::Outcome::NewProject:
+    // Reached from the menu bar with a project already open, where this used
+    // to close the window and leave that project untouched. An empty filename
+    // is what load_project_model_and_ui() treats as a fresh start.
+    this->load_project_model_and_ui("", false);
+    break;
+
+  case ExampleSelectorDialog::Outcome::Closed:
+    // Dismissed from the menu bar, so keep whatever is already open. Only the
+    // startup path treats closing as a reason to quit.
+    break;
   }
 }
 
