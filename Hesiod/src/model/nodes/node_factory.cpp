@@ -356,6 +356,7 @@ std::map<std::string, std::string> get_node_inventory()
       {"Rescale", "Filter/Range"},
       {"ReverseAboveThreshold", "Filter/Recurve"},
       {"ReverseMidpoint", "WIP"}, // Primitive/Authoring
+      {"RidgeAccentuate", "Filter/Advanced Filters"},
       {"Ridgelines", "Primitive/Authoring"},
       {"Rift", "Primitive/Geological"},
       {"Rifts", "Erosion/Hydraulic"},
@@ -703,6 +704,7 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Rescale, rescale);
     SETUP_NODE(ReverseAboveThreshold, reverse_above_theshold);
     SETUP_NODE(ReverseMidpoint, reverse_midpoint);
+    SETUP_NODE(RidgeAccentuate, ridge_accentuate);
     SETUP_NODE(Ridgelines, ridgelines);
     SETUP_NODE(Rift, rift);
     SETUP_NODE(Rifts, rifts);
