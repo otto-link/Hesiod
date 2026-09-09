@@ -6,7 +6,7 @@ x-gl-versions: &gl-versions 22.08;22.08-extra;1.4
 sdk: org.kde.Sdk
 base: io.qt.qtwebengine.BaseApp
 base-version: '6.8'
-command: hesiod
+command: /app/hesiod/launch.sh
 
 #add-extensions:
 #  org.freedesktop.Platform.GL:
@@ -68,15 +68,15 @@ modules:
    buildsystem: simple
    build-commands:
     - cmake -B build/
-      -DCMAKE_INSTALL_PREFIX=/app       
-      -DCMAKE_BUILD_TYPE=Release        
-      -DENABLE_CXX11=ON                 
-      -DBUILD_TESTS=OFF                 
-      -DBUILD_PERF_TESTS=OFF            
-      -DWITH_XINE=ON                    
-      -DENABLE_PRECOMPILED_HEADERS=OFF  
-      -DCMAKE_SKIP_RPATH=ON             
-      -DBUILD_WITH_DEBUG_INFO=OFF       
+      -DCMAKE_INSTALL_PREFIX=/app
+      -DCMAKE_BUILD_TYPE=Release
+      -DENABLE_CXX11=ON
+      -DBUILD_TESTS=OFF
+      -DBUILD_PERF_TESTS=OFF
+      -DWITH_XINE=ON
+      -DENABLE_PRECOMPILED_HEADERS=OFF
+      -DCMAKE_SKIP_RPATH=ON
+      -DBUILD_WITH_DEBUG_INFO=OFF
       -Wno-dev
     - cmake --build build/ -j$(nproc)
     - cmake --install build/
@@ -183,6 +183,18 @@ modules:
       url: https://github.com/freeglut/freeglut.git
       tag: v3.8.0
 
+ - name: clinfo
+   buildsystem: simple
+   build-commands:
+     - make
+     - make install PREFIX=/app
+     - chmod u+w /app/bin/clinfo
+   sources:
+     - type: archive
+       url: https://github.com/Oblomov/clinfo/archive/refs/tags/3.0.25.02.14.zip
+       sha256: 98d9bf7c1bf6c29672f4bbf672570c58bf80f69a25633b3bac46b94cc90523e4
+       path: clinfo.zip
+
  - name: hesiod
    buildsystem: simple
    build-commands:
@@ -190,8 +202,21 @@ modules:
     - cmake --build build/ -j$(nproc)
     - cmake --install build/
     - ls build/
-    - mv build/bin/hesiod /app/bin
+    - mkdir /app/hesiod
+    - mv build/bin/hesiod /app/hesiod/
+    - mv build/bin/data /app/hesiod/
    sources:
     - type: git
       url: https://github.com/ottolink-dev/Hesiod.git
       tag: main
+
+ - name: launch-script
+   buildsystem: simple
+   build-commands:
+     - mv launch.sh /app/hesiod/
+     - chmod +x /app/hesiod/launch.sh
+
+   sources:
+     - type: file
+       path: launch.sh
+       sha256: 3b3728fcddb5b96ebfeec104c9480ffbc9a77c61c42183a78415b6fd9ae97a21
