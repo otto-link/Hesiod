@@ -207,4 +207,4 @@ modules:
    sources:
      - type: file
        path: launch.sh
-       sha256: 8fcd4d8308b74a290055695cd547382d793a51ad345aaab5fe22dc22f03c4d9b
+       sha256: f7b71bda2fd8405a77d1c900a40f3c01448fa861bc7e9b4d3a93acb79957b2c7
