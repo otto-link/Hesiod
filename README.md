@@ -24,6 +24,25 @@ This project is licensed under the GNU General Public License v3.0.
 
 Available here: https://sourceforge.net/projects/hesiod
 
+### Nix / NixOS
+
+The repository is a Nix flake. To try Hesiod without installing anything:
+
+``` bash
+nix run github:ottolink-dev/Hesiod        # main branch
+nix run github:ottolink-dev/Hesiod/dev    # development branch
+```
+
+To install it on NixOS, add the flake as an input and put
+`hesiod.packages.${system}.default` in `environment.systemPackages`
+(an overlay is exported as `overlays.default` too). GPU acceleration needs
+an OpenCL ICD on the host, for instance `hardware.graphics.extraPackages`
+with your vendor's OpenCL package on NixOS.
+
+The launcher runs Hesiod from `~/.local/share/hesiod` (honouring
+`XDG_DATA_HOME`), where the packaged `data/` directory is symlinked and
+run-time files such as the texture cache are written.
+
 ### Windows
 
 #### Getting the sources
@@ -33,7 +52,7 @@ Use `PowerShell` to clone the repository (because Visual Studio won't clone the 
 git clone --recurse-submodules git@github.com:otto-link/Hesiod.git
 ```
 
-To get the submodules, you will need a GitHub account with its SSH key configured.
+Submodules are fetched over https; no GitHub account is required to build.
 
 Install [Qt6](https://doc.qt.io/qt-6/windows.html) and install the missing OpenSource dependencies using `vcpkg`:
 ```
@@ -58,7 +77,7 @@ cd Hesiod
 git submodule update --init --recursive
 ```
 
-To get the submodules, you will need a GitHub account with its SSH key configured.
+Submodules are fetched over https; no GitHub account is required to build.
 
 #### Building
 
