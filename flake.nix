@@ -23,16 +23,23 @@
       # checkout, since the sandbox has no .git to ask.
       # Only the parts CMake consumes. Keeping the packaging files, docs and
       # tests out of the source means editing them doesn't trigger a rebuild.
-      src = nixpkgs.lib.fileset.toSource {
-        root = ./.;
-        fileset = nixpkgs.lib.fileset.unions [
-          ./CMakeLists.txt
-          ./cmake
-          ./external
-          ./Hesiod
-          ./LICENSE
-        ];
-      };
+      # `github:` flake references silently yield empty submodule directories
+      # (GitHub tarballs carry no gitlinks), so refuse to build such a tree.
+      src =
+        assert nixpkgs.lib.assertMsg (builtins.pathExists ./external/HighMap/CMakeLists.txt) ''
+          Hesiod was fetched without its submodules. Use a git+https flake
+          reference, e.g. nix run 'git+https://github.com/ottolink-dev/Hesiod?ref=main'
+        '';
+        nixpkgs.lib.fileset.toSource {
+          root = ./.;
+          fileset = nixpkgs.lib.fileset.unions [
+            ./CMakeLists.txt
+            ./cmake
+            ./external
+            ./Hesiod
+            ./LICENSE
+          ];
+        };
 
       baseVersion = "0.6.0";
       gitSuffix = self.shortRev or self.dirtyShortRev or "unknown";

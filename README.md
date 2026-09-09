@@ -29,9 +29,12 @@ Available here: https://sourceforge.net/projects/hesiod
 The repository is a Nix flake. To try Hesiod without installing anything:
 
 ``` bash
-nix run github:ottolink-dev/Hesiod        # main branch
-nix run github:ottolink-dev/Hesiod/dev    # development branch
+nix run 'git+https://github.com/ottolink-dev/Hesiod?ref=main'   # main branch
+nix run 'git+https://github.com/ottolink-dev/Hesiod?ref=dev'    # development branch
 ```
+
+Use the `git+https://` form: the `github:` shorthand fetches a tarball that
+does not include the submodules, and the flake refuses to build such a tree.
 
 To install it on NixOS, add the flake as an input and put
 `hesiod.packages.${system}.default` in `environment.systemPackages`
