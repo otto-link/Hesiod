@@ -74,6 +74,7 @@ message(STATUS "└────────────────────�
 # ------------------------------
 add_subdirectory(external)
 add_subdirectory(Hesiod)
+add_subdirectory(bridges)
 
 if(HESIOD_ENABLE_GENERATE_APP_IMAGE)
   add_subdirectory(scripts/generate_appimage)
