@@ -11712,7 +11712,7 @@
     },
     "HydraulicStreamLog": {
         "category": "Erosion/Hydraulic",
-        "description": "HydraulicStream is a hydraulic erosion operator using a flow-stream formulation and an infinite flow-direction algorithm (D∞). Erosion intensity is driven by flow accumulation, terrain gradient, moisture, and optional bedrock limits. Deposition is simulated using convolution kernels whose radius and scale control smoothing and sediment redistribution.",
+        "description": "HydraulicStream is a hydraulic erosion operator using a flow-stream formulation and an infinite flow-direction algorithm (D\u221e). Erosion intensity is driven by flow accumulation, terrain gradient, moisture, and optional bedrock limits. Deposition is simulated using convolution kernels whose radius and scale control smoothing and sediment redistribution.",
         "label": "HydraulicStreamLog",
         "parameter_groups": [
             {
@@ -12529,7 +12529,7 @@
             "land_mask": {
                 "caption": "land_mask",
                 "data_type": "VirtualArray",
-                "description": "Binary mask defining the island’s footprint; nonzero pixels are considered land. Consider using the node IslandLandMask to generate this mask.",
+                "description": "Binary mask defining the island\u2019s footprint; nonzero pixels are considered land. Consider using the node IslandLandMask to generate this mask.",
                 "type": "input"
             },
             "output": {
@@ -15737,7 +15737,7 @@
                 "type": "Float"
             },
             "noise_inflate": {
-                "description": "Controls how noise affects the step profile. ‘Inflate’ pushes elevations outward, while ‘Deflate’ pulls them inward.",
+                "description": "Controls how noise affects the step profile. \u2018Inflate\u2019 pushes elevations outward, while \u2018Deflate\u2019 pulls them inward.",
                 "key": "noise_inflate",
                 "label": "",
                 "type": "Bool"
@@ -17352,195 +17352,6 @@
             }
         }
     },
-    "PathBezier": {
-        "category": "WIP/DEPRECATED",
-        "description": "PathBezier uses Bezier interpolation to replace sharp angles and straight segments with smooth, flowing curves.",
-        "label": "PathBezier",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "curvature_ratio",
-                    "edge_divisions"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "curvature_ratio": {
-                "description": "Amount of curvature (usually in [-1, 1] and commonly > 0).",
-                "key": "curvature_ratio",
-                "label": "curvature_ratio",
-                "type": "Float"
-            },
-            "edge_divisions": {
-                "description": "Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.",
-                "key": "edge_divisions",
-                "label": "edge_divisions",
-                "type": "Integer"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "Input path.",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Path",
-                "description": "Output path.",
-                "type": "output"
-            }
-        }
-    },
-    "PathBezierRound": {
-        "category": "WIP/DEPRECATED",
-        "description": "PathBezierRound uses Bezier interpolation to replace sharp angles and straight segments with smooth, round and flowing curves. PathBezierRound is an alternative to PathBezier.",
-        "label": "PathBezierRound",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "curvature_ratio",
-                    "edge_divisions"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "curvature_ratio": {
-                "description": "Amount of curvature (usually in [-1, 1] and commonly > 0).",
-                "key": "curvature_ratio",
-                "label": "curvature_ratio",
-                "type": "Float"
-            },
-            "edge_divisions": {
-                "description": "Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.",
-                "key": "edge_divisions",
-                "label": "edge_divisions",
-                "type": "Integer"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "Input path.",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Path",
-                "description": "Output path.",
-                "type": "output"
-            }
-        }
-    },
-    "PathBspline": {
-        "category": "WIP/DEPRECATED",
-        "description": "PathBspline uses Bspline interpolation to replace sharp angles and straight segments with smooth, flowing curves.",
-        "label": "PathBspline",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "edge_divisions"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "edge_divisions": {
-                "description": "Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.",
-                "key": "edge_divisions",
-                "label": "edge_divisions",
-                "type": "Integer"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "Input path.",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Path",
-                "description": "Output path.",
-                "type": "output"
-            }
-        }
-    },
-    "PathDecasteljau": {
-        "category": "WIP/DEPRECATED",
-        "description": "PathDecasteljau uses Decasteljau interpolation to replace sharp angles and straight segments with smooth, flowing curves.",
-        "label": "PathDecasteljau",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "edge_divisions"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "edge_divisions": {
-                "description": "Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.",
-                "key": "edge_divisions",
-                "label": "edge_divisions",
-                "type": "Integer"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "Input path.",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Path",
-                "description": "Output path.",
-                "type": "output"
-            }
-        }
-    },
-    "PathDecimate": {
-        "category": "Geometry/Path",
-        "description": "No description available",
-        "label": "PathDecimate",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "npoints"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "npoints": {
-                "description": "No description",
-                "key": "npoints",
-                "label": "Point Count Target",
-                "type": "Integer"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "No description",
-                "type": "input"
-            },
-            "path": {
-                "caption": "path",
-                "data_type": "Path",
-                "description": "No description",
-                "type": "output"
-            }
-        }
-    },
     "PathDig": {
         "category": "Geometry/Path",
         "description": "TODO",
@@ -17671,92 +17482,6 @@
             }
         }
     },
-    "PathFractalize": {
-        "category": "Geometry/Path",
-        "description": "PathFractalize fractalizes a polyline using a mid-point displacement algorithm. The procedure involves iteratively modifying the polyline's geometry to increase its complexity, mimicking fractal characteristics.",
-        "label": "PathFractalize",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "iterations",
-                    "seed",
-                    "sigma",
-                    "orientation",
-                    "persistence",
-                    "remove_loops"
-                ],
-                "name": "Fractalize"
-            },
-            {
-                "keys": [
-                    "iterations",
-                    "seed",
-                    "height_ratio",
-                    "orientation",
-                    "remove_loops"
-                ],
-                "name": "Squiggle"
-            }
-        ],
-        "parameters": {
-            "height_ratio": {
-                "description": "No description",
-                "key": "height_ratio",
-                "label": "Height Ratio",
-                "type": "Float"
-            },
-            "iterations": {
-                "description": "Number of mid-point displacement iterations.",
-                "key": "iterations",
-                "label": "Iterations",
-                "type": "Integer"
-            },
-            "orientation": {
-                "description": "Displacement orientation (0 for random inward/outward displacement, 1 to inflate the path and -1 to deflate the path).",
-                "key": "orientation",
-                "label": "Orientation",
-                "type": "Integer"
-            },
-            "persistence": {
-                "description": "The amplitude scaling factor for subsequent noise octaves. Lower values reduce the contribution of higher octaves.",
-                "key": "persistence",
-                "label": "Persistence",
-                "type": "Float"
-            },
-            "remove_loops": {
-                "description": "No description",
-                "key": "remove_loops",
-                "label": "Remove Geometric Loops",
-                "type": "Bool"
-            },
-            "seed": {
-                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
-                "key": "seed",
-                "label": "Random Seed",
-                "type": "Random seed number"
-            },
-            "sigma": {
-                "description": "Half-width of the random Gaussian displacement, normalized by the distance between points.",
-                "key": "sigma",
-                "label": "Sigma",
-                "type": "Float"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "Input path.",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Path",
-                "description": "Output path.",
-                "type": "output"
-            }
-        }
-    },
     "PathFromCsv": {
         "category": "Geometry/Path",
         "description": "No description available",
@@ -17786,61 +17511,34 @@
             }
         }
     },
-    "PathInflate": {
+    "PathNoise": {
         "category": "Geometry/Path",
-        "description": "No description available",
-        "label": "PathInflate",
+        "description": "PathNoise adds procedural perturbations, fractal details, meanders, or random jitter to a path.",
+        "label": "PathNoise",
         "parameter_groups": [
             {
+                "name": "Fractalize",
                 "keys": [
-                    "radius",
-                    "enable_resampling",
-                    "resample_delta"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "enable_resampling": {
-                "description": "No description",
-                "key": "enable_resampling",
-                "label": "Enable Resampling",
-                "type": "Bool"
+                    "iterations",
+                    "seed",
+                    "sigma",
+                    "orientation",
+                    "persistence",
+                    "remove_loops"
+                ]
             },
-            "radius": {
-                "description": "No description",
-                "key": "radius",
-                "label": "Inflation Radius",
-                "type": "Float"
-            },
-            "resample_delta": {
-                "description": "No description",
-                "key": "resample_delta",
-                "label": "Step Size",
-                "type": "Float"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "No description",
-                "type": "input"
-            },
-            "path": {
-                "caption": "path",
-                "data_type": "Path",
-                "description": "No description",
-                "type": "output"
-            }
-        }
-    },
-    "PathMeanderize": {
-        "category": "Geometry/Path",
-        "description": "PathMeanderize uses Bezier interpolation to add menaders to the input path.",
-        "label": "PathMeanderize",
-        "parameter_groups": [
             {
+                "name": "Squiggle",
+                "keys": [
+                    "iterations",
+                    "seed",
+                    "height_ratio",
+                    "orientation",
+                    "remove_loops"
+                ]
+            },
+            {
+                "name": "Meanderize",
                 "keys": [
                     "ratio",
                     "noise_ratio",
@@ -17848,27 +17546,53 @@
                     "iterations",
                     "edge_divisions",
                     "remove_loops"
-                ],
-                "name": "main"
+                ]
+            },
+            {
+                "name": "Shuffle",
+                "keys": [
+                    "dx",
+                    "dy",
+                    "dv",
+                    "seed"
+                ]
             }
         ],
         "parameters": {
-            "edge_divisions": {
-                "description": "Edge sub-divisions of each edge. After the operation, the path is remeshed based on this new sub-division.",
-                "key": "edge_divisions",
-                "label": "Edge Divisions",
-                "type": "Integer"
-            },
             "iterations": {
-                "description": "Number of meandering iterations.",
+                "description": "Number of procedural displacement or solver iterations.",
                 "key": "iterations",
-                "label": "Solver Iterations",
+                "label": "Iterations",
                 "type": "Integer"
             },
-            "noise_ratio": {
-                "description": "Randomness ratio.",
-                "key": "noise_ratio",
-                "label": "Noise Ratio",
+            "seed": {
+                "description": "Random seed number.",
+                "key": "seed",
+                "label": "Random Seed",
+                "type": "Random seed number"
+            },
+            "sigma": {
+                "description": "Half-width of the random Gaussian displacement.",
+                "key": "sigma",
+                "label": "Sigma",
+                "type": "Float"
+            },
+            "orientation": {
+                "description": "Displacement orientation (0 for random, 1 for outward/inflate, -1 for inward/deflate).",
+                "key": "orientation",
+                "label": "Orientation",
+                "type": "Integer"
+            },
+            "persistence": {
+                "description": "Amplitude scaling factor across displacement iterations.",
+                "key": "persistence",
+                "label": "Persistence",
+                "type": "Float"
+            },
+            "height_ratio": {
+                "description": "Height ratio for squiggle displacements.",
+                "key": "height_ratio",
+                "label": "Height Ratio",
                 "type": "Float"
             },
             "ratio": {
@@ -17877,17 +17601,149 @@
                 "label": "Meander Ratio",
                 "type": "Float"
             },
+            "noise_ratio": {
+                "description": "Meander randomness noise ratio.",
+                "key": "noise_ratio",
+                "label": "Noise Ratio",
+                "type": "Float"
+            },
+            "edge_divisions": {
+                "description": "Edge sub-divisions for meander arcs.",
+                "key": "edge_divisions",
+                "label": "Edge Divisions",
+                "type": "Integer"
+            },
             "remove_loops": {
-                "description": "No description",
+                "description": "Removes self-intersecting geometric loops from the path.",
                 "key": "remove_loops",
                 "label": "Remove Geometric Loops",
                 "type": "Bool"
             },
-            "seed": {
-                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
-                "key": "seed",
-                "label": "Seed",
-                "type": "Random seed number"
+            "dx": {
+                "description": "Random displacement along X axis.",
+                "key": "dx",
+                "label": "dx",
+                "type": "Float"
+            },
+            "dy": {
+                "description": "Random displacement along Y axis.",
+                "key": "dy",
+                "label": "dy",
+                "type": "Float"
+            },
+            "dv": {
+                "description": "Random elevation / value displacement.",
+                "key": "dv",
+                "label": "dv",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Path",
+                "description": "Input path.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Path",
+                "description": "Output perturbed path.",
+                "type": "output"
+            }
+        }
+    },
+    "PathResample": {
+        "category": "Geometry/Path",
+        "description": "PathResample modifies a path through resampling, curve interpolation, simplification (decimation), or smoothing.",
+        "label": "PathResample",
+        "parameter_groups": [
+            {
+                "name": "Interpolate",
+                "keys": [
+                    "delta",
+                    "method",
+                    "curvature_ratio",
+                    "closed_path",
+                    "enable_decimate",
+                    "decimate_sampling"
+                ]
+            },
+            {
+                "name": "Decimate",
+                "keys": [
+                    "npoints"
+                ]
+            },
+            {
+                "name": "Smooth",
+                "keys": [
+                    "navg",
+                    "averaging_intensity",
+                    "inertia"
+                ]
+            }
+        ],
+        "parameters": {
+            "delta": {
+                "description": "Target distance between points for resampling.",
+                "key": "delta",
+                "label": "Step Size",
+                "type": "Float"
+            },
+            "method": {
+                "description": "Curve interpolation method (Bezier, BSpline, Catmullrom, Decasteljau, Cubic, Akima, Linear).",
+                "key": "method",
+                "label": "Interpolation",
+                "type": "Choice"
+            },
+            "curvature_ratio": {
+                "description": "Curvature ratio used by Bezier interpolation algorithms.",
+                "key": "curvature_ratio",
+                "label": "Curvature Ratio",
+                "type": "Float"
+            },
+            "closed_path": {
+                "description": "Whether the resampled path forms a closed loop.",
+                "key": "closed_path",
+                "label": "Close Path",
+                "type": "Bool"
+            },
+            "enable_decimate": {
+                "description": "Enables pre-decimation before curve interpolation.",
+                "key": "enable_decimate",
+                "label": "Enable Decimation",
+                "type": "Bool"
+            },
+            "decimate_sampling": {
+                "description": "Sampling rate/target point count for pre-decimation.",
+                "key": "decimate_sampling",
+                "label": "Sampling Rate",
+                "type": "Integer"
+            },
+            "npoints": {
+                "description": "Target number of points after decimation.",
+                "key": "npoints",
+                "label": "Point Count Target",
+                "type": "Integer"
+            },
+            "navg": {
+                "description": "Averaging window size for path smoothing.",
+                "key": "navg",
+                "label": "Averaging Window",
+                "type": "Integer"
+            },
+            "averaging_intensity": {
+                "description": "Intensity of smoothing displacement.",
+                "key": "averaging_intensity",
+                "label": "Averaging Intensity",
+                "type": "Float"
+            },
+            "inertia": {
+                "description": "Inertia factor preserving original vertex positions during smoothing.",
+                "key": "inertia",
+                "label": "Inertia",
+                "type": "Float"
             }
         },
         "ports": {
@@ -17901,69 +17757,6 @@
                 "caption": "output",
                 "data_type": "Path",
                 "description": "Output path.",
-                "type": "output"
-            }
-        }
-    },
-    "PathResample": {
-        "category": "Geometry/Path",
-        "description": "PathResample resamples the path based to get (approximately) a given distance between points.",
-        "label": "PathResample",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "delta",
-                    "method",
-                    "closed_path",
-                    "enable_decimate",
-                    "decimate_sampling"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "closed_path": {
-                "description": "No description",
-                "key": "closed_path",
-                "label": "Close Path",
-                "type": "Bool"
-            },
-            "decimate_sampling": {
-                "description": "No description",
-                "key": "decimate_sampling",
-                "label": "Sampling Rate",
-                "type": "Integer"
-            },
-            "delta": {
-                "description": "Target distance between the points.",
-                "key": "delta",
-                "label": "Step Size",
-                "type": "Float"
-            },
-            "enable_decimate": {
-                "description": "No description",
-                "key": "enable_decimate",
-                "label": "Enable Decimation",
-                "type": "Bool"
-            },
-            "method": {
-                "description": "No description",
-                "key": "method",
-                "label": "Interpolation",
-                "type": "Choice"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "Input path.",
-                "type": "input"
-            },
-            "path": {
-                "caption": "path",
-                "data_type": "Path",
-                "description": "No description",
                 "type": "output"
             }
         }
@@ -18046,153 +17839,6 @@
                 "caption": "sdf",
                 "data_type": "VirtualArray",
                 "description": "Signed distance as an heightmap.",
-                "type": "output"
-            }
-        }
-    },
-    "PathScale": {
-        "category": "Geometry/Path",
-        "description": "PathScale scales the coordinates of the points in a path relative to a specified center point.",
-        "label": "PathScale",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "scale",
-                    "center"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "center": {
-                "description": "Center of scaling.",
-                "key": "center",
-                "label": "Center",
-                "type": "Vec2Float"
-            },
-            "scale": {
-                "description": "Scale factor.",
-                "key": "scale",
-                "label": "Scale",
-                "type": "Float"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "Input path.",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Path",
-                "description": "Output scaled path.",
-                "type": "output"
-            }
-        }
-    },
-    "PathShuffle": {
-        "category": "Geometry/Path",
-        "description": "No description available",
-        "label": "PathShuffle",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "dx",
-                    "dy",
-                    "dv",
-                    "seed"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "dv": {
-                "description": "No description",
-                "key": "dv",
-                "label": "dv",
-                "type": "Float"
-            },
-            "dx": {
-                "description": "No description",
-                "key": "dx",
-                "label": "dx",
-                "type": "Float"
-            },
-            "dy": {
-                "description": "No description",
-                "key": "dy",
-                "label": "dy",
-                "type": "Float"
-            },
-            "seed": {
-                "description": "Random seed number. The random seed is an offset to the randomized process. A different seed will produce a new result.",
-                "key": "seed",
-                "label": "Seed",
-                "type": "Random seed number"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "No description",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Path",
-                "description": "No description",
-                "type": "output"
-            }
-        }
-    },
-    "PathSmooth": {
-        "category": "Geometry/Path",
-        "description": "TODO",
-        "label": "PathSmooth",
-        "parameter_groups": [
-            {
-                "keys": [
-                    "navg",
-                    "averaging_intensity",
-                    "inertia"
-                ],
-                "name": "main"
-            }
-        ],
-        "parameters": {
-            "averaging_intensity": {
-                "description": "TODO",
-                "key": "averaging_intensity",
-                "label": "averaging_intensity",
-                "type": "Float"
-            },
-            "inertia": {
-                "description": "TODO",
-                "key": "inertia",
-                "label": "inertia",
-                "type": "Float"
-            },
-            "navg": {
-                "description": "TODO",
-                "key": "navg",
-                "label": "navg",
-                "type": "Integer"
-            }
-        },
-        "ports": {
-            "input": {
-                "caption": "input",
-                "data_type": "Path",
-                "description": "TODO",
-                "type": "input"
-            },
-            "output": {
-                "caption": "output",
-                "data_type": "Path",
-                "description": "TODO",
                 "type": "output"
             }
         }
@@ -18297,6 +17943,74 @@
                 "data_type": "Path",
                 "description": "Input path.",
                 "type": "input"
+            }
+        }
+    },
+    "PathTransform": {
+        "category": "Geometry/Path",
+        "description": "PathTransform applies spatial transformations (scaling) or morphological offsets (inflation) to a path.",
+        "label": "PathTransform",
+        "parameter_groups": [
+            {
+                "name": "Scale",
+                "keys": [
+                    "scale",
+                    "center"
+                ]
+            },
+            {
+                "name": "Inflate",
+                "keys": [
+                    "radius",
+                    "enable_resampling",
+                    "resample_delta"
+                ]
+            }
+        ],
+        "parameters": {
+            "scale": {
+                "description": "Scale factor.",
+                "key": "scale",
+                "label": "Scale",
+                "type": "Float"
+            },
+            "center": {
+                "description": "Center coordinates for scaling transformation.",
+                "key": "center",
+                "label": "Center",
+                "type": "Vec2Float"
+            },
+            "radius": {
+                "description": "Inflation/offset radius.",
+                "key": "radius",
+                "label": "Inflation Radius",
+                "type": "Float"
+            },
+            "enable_resampling": {
+                "description": "Resample path vertices before inflation.",
+                "key": "enable_resampling",
+                "label": "Enable Resampling",
+                "type": "Bool"
+            },
+            "resample_delta": {
+                "description": "Step size distance for resampling before inflation.",
+                "key": "resample_delta",
+                "label": "Step Size",
+                "type": "Float"
+            }
+        },
+        "ports": {
+            "input": {
+                "caption": "input",
+                "data_type": "Path",
+                "description": "Input path.",
+                "type": "input"
+            },
+            "output": {
+                "caption": "output",
+                "data_type": "Path",
+                "description": "Output transformed path.",
+                "type": "output"
             }
         }
     },
@@ -22785,7 +22499,7 @@
     },
     "SelectSoilFlow": {
         "category": "Terrain Features/ForTexturing",
-        "description": "Computes a soil–flow selection map based on the terrain gradient and the flow-accumulation map. This node can be for instance chained with ColorizeGradient for texturing.",
+        "description": "Computes a soil\u2013flow selection map based on the terrain gradient and the flow-accumulation map. This node can be for instance chained with ColorizeGradient for texturing.",
         "label": "SelectSoilFlow",
         "parameter_groups": [
             {
@@ -27818,7 +27532,7 @@
             "output": {
                 "caption": "output",
                 "data_type": "VirtualArray",
-                "description": "Resulting heightmap that combines the target’s base shape with the source’s high-frequency details.",
+                "description": "Resulting heightmap that combines the target\u2019s base shape with the source\u2019s high-frequency details.",
                 "type": "output"
             },
             "source": {
