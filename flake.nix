@@ -37,6 +37,7 @@
             ./cmake
             ./external
             ./Hesiod
+            ./bridges
             ./LICENSE
           ];
         };

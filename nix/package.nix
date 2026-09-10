@@ -95,6 +95,10 @@ stdenv.mkDerivation (finalAttrs: {
     # The build writes `git describe` output here; the sandbox has no .git.
     echo "v${finalAttrs.version}" > $out/share/hesiod/data/git_version.txt
 
+    # Blender bridge add-on, ready to install from Blender's preferences.
+    install -Dm644 $src/bridges/Blender/hesiod_streamer.zip \
+      $out/share/hesiod/blender/hesiod_streamer.zip
+
     install -Dm644 $src/Hesiod/data/hesiod_icon.png \
       $out/share/icons/hicolor/512x512/apps/hesiod.png
     install -Dm644 ${./hesiod.desktop} $out/share/applications/hesiod.desktop
