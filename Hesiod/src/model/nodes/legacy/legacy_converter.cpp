@@ -88,9 +88,26 @@ std::string resolve_legacy_group_name(const meta::ContainerGroup &group,
   if (label == "ConeSigmoid")
     return "Sigmoid";
 
-  // Path fractalize mappings
-  if (label == "PathFractalize")
+  // Path mappings
+  if (label == "PathResample" || label == "PathBezier" || label == "PathBezierRound" ||
+      label == "PathBspline" || label == "PathDecasteljau")
+    return "Interpolate";
+  if (label == "PathDecimate")
+    return "Decimate";
+  if (label == "PathSmooth")
+    return "Smooth";
+
+  if (label == "PathNoise" || label == "PathFractalize")
     return "Fractalize";
+  if (label == "PathMeanderize")
+    return "Meanderize";
+  if (label == "PathShuffle")
+    return "Shuffle";
+
+  if (label == "PathTransform" || label == "PathScale")
+    return "Scale";
+  if (label == "PathInflate")
+    return "Inflate";
 
   if (group.current_container_name().has_value() &&
       group.contains(*group.current_container_name()))
@@ -240,11 +257,50 @@ nlohmann::json convert_legacy_node_json(const nlohmann::json &json_node)
     target_label = "Cone";
     group_name = "Sigmoid";
   }
-  // --- Path Fractalize ---
-  else if (label == "PathFractalize")
+  // --- Path Resample family ---
+  else if (label == "PathResample" || label == "PathBezier" ||
+           label == "PathBezierRound" || label == "PathBspline" ||
+           label == "PathDecasteljau")
   {
-    target_label = "PathFractalize";
+    target_label = "PathResample";
+    group_name = "Interpolate";
+  }
+  else if (label == "PathDecimate")
+  {
+    target_label = "PathResample";
+    group_name = "Decimate";
+  }
+  else if (label == "PathSmooth")
+  {
+    target_label = "PathResample";
+    group_name = "Smooth";
+  }
+  // --- Path Noise family ---
+  else if (label == "PathNoise" || label == "PathFractalize")
+  {
+    target_label = "PathNoise";
     group_name = "Fractalize";
+  }
+  else if (label == "PathMeanderize")
+  {
+    target_label = "PathNoise";
+    group_name = "Meanderize";
+  }
+  else if (label == "PathShuffle")
+  {
+    target_label = "PathNoise";
+    group_name = "Shuffle";
+  }
+  // --- Path Transform family ---
+  else if (label == "PathTransform" || label == "PathScale")
+  {
+    target_label = "PathTransform";
+    group_name = "Scale";
+  }
+  else if (label == "PathInflate")
+  {
+    target_label = "PathTransform";
+    group_name = "Inflate";
   }
   // --- SetBorders ---
   else if (label == "SetBorders")

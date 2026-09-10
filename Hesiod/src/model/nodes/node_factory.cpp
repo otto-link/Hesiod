@@ -310,24 +310,15 @@ std::map<std::string, std::string> get_node_inventory()
       {"Opening", "WIP/DEPRECATED"},
       {"Paraboloid", "Primitive/Function"},
       {"Path", "Geometry/Path"},
-      {"PathBezier", "WIP/DEPRECATED"},
-      {"PathBezierRound", "WIP/DEPRECATED"},
-      {"PathBspline", "WIP/DEPRECATED"},
-      {"PathDecasteljau", "WIP/DEPRECATED"},
-      {"PathDecimate", "Geometry/Path"},
       {"PathDig", "Geometry/Path"},
       {"PathFind", "Geometry/Path"},
-      {"PathFractalize", "Geometry/Path"},
       {"PathFromCsv", "Geometry/Path"},
-      {"PathInflate", "Geometry/Path"},
-      {"PathMeanderize", "Geometry/Path"},
+      {"PathNoise", "Geometry/Path"},
       {"PathResample", "Geometry/Path"},
-      {"PathScale", "Geometry/Path"},
       {"PathSDF", "Geometry/Path"},
-      {"PathShuffle", "Geometry/Path"},
-      {"PathSmooth", "Geometry/Path"},
       {"PathToCloud", "Geometry/Path"},
       {"PathToHeightmap", "Geometry/Path"},
+      {"PathTransform", "Geometry/Path"},
       {"Phasor", "Primitive/Coherent"},
       {"Plateau", "Filter/Recurve"},
       {"Plates", "Primitive/Geological"},
@@ -660,24 +651,15 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Opening, opening);
     SETUP_NODE(Paraboloid, paraboloid);
     SETUP_NODE(Path, path);
-    SETUP_NODE(PathBezier, path_bezier);
-    SETUP_NODE(PathBezierRound, path_bezier_round);
-    SETUP_NODE(PathBspline, path_bspline);
-    SETUP_NODE(PathDecasteljau, path_decasteljau);
-    SETUP_NODE(PathDecimate, path_decimate);
     SETUP_NODE(PathDig, path_dig);
     SETUP_NODE(PathFind, path_find);
-    SETUP_NODE(PathFractalize, path_fractalize);
     SETUP_NODE(PathFromCsv, path_from_csv);
-    SETUP_NODE(PathInflate, path_inflate);
-    SETUP_NODE(PathMeanderize, path_meanderize);
+    SETUP_NODE(PathNoise, path_noise);
     SETUP_NODE(PathResample, path_resample);
-    SETUP_NODE(PathScale, path_scale);
     SETUP_NODE(PathSDF, path_sdf);
-    SETUP_NODE(PathShuffle, path_shuffle);
-    SETUP_NODE(PathSmooth, path_smooth);
     SETUP_NODE(PathToCloud, path_to_cloud);
     SETUP_NODE(PathToHeightmap, path_to_heightmap);
+    SETUP_NODE(PathTransform, path_transform);
     SETUP_NODE(Phasor, phasor);
     SETUP_NODE(Plateau, plateau);
     SETUP_NODE(Plates, plates);
