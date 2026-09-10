@@ -80,6 +80,12 @@ std::string resolve_legacy_group_name(const meta::ContainerGroup &group,
   if (label == "Voronoise")
     return "Voronoise";
 
+  // Bump mappings
+  if (label == "Bump")
+    return "Cosine";
+  if (label == "BumpLorentzian")
+    return "Lorentzian";
+
   // Cone mappings
   if (label == "Cone")
     return "Simple";
@@ -240,6 +246,17 @@ nlohmann::json convert_legacy_node_json(const nlohmann::json &json_node)
   {
     target_label = "CellularNoise";
     group_name = "Voronoise";
+  }
+  // --- Bump family ---
+  else if (label == "Bump")
+  {
+    target_label = "Bump";
+    group_name = "Cosine";
+  }
+  else if (label == "BumpLorentzian")
+  {
+    target_label = "Bump";
+    group_name = "Lorentzian";
   }
   // --- Cone family ---
   else if (label == "Cone")

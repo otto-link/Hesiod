@@ -154,7 +154,6 @@ std::map<std::string, std::string> get_node_inventory()
       {"Broadcast", "Routing"},
       {"Bulkify", "Boundaries"},
       {"Bump", "Primitive/Function"},
-      {"BumpLorentzian", "Primitive/Function"},
       {"Caldera", "WIP"}, // "Primitive/Geological"},
       {"Clamp", "Filter/Range"},
       {"ClampOblique", "Filter/Range"},
@@ -501,7 +500,6 @@ std::shared_ptr<gnode::Node> node_factory(const std::string         &node_type,
     SETUP_NODE(Brush, brush);
     SETUP_NODE(Bulkify, bulkify);
     SETUP_NODE(Bump, bump);
-    SETUP_NODE(BumpLorentzian, bump_lorentzian);
     SETUP_NODE(Caldera, caldera);
     SETUP_NODE(Clamp, clamp);
     SETUP_NODE(ClampOblique, clamp_oblique);
