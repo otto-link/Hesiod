@@ -8,6 +8,7 @@
 
 #include <QByteArray>
 #include <QDir>
+#include <QGuiApplication>
 #include <QStandardPaths>
 #include <QtGlobal>
 
@@ -196,10 +197,31 @@ Resolution apply_scale(double configured)
   if (std::abs(result.effective - kDefault) < 1e-6)
     return result;
 
+  // Qt rounds the *screen* DPI factor before our factor is multiplied in, and
+  // the default policy on X11/Wayland rounds to a whole number. On a 1.0
+  // monitor that is harmless, but the rounded screen factor and the unrounded
+  // product then disagree about how many device pixels a logical pixel is, and
+  // input coordinates are mapped with one while widgets are laid out with the
+  // other -- which is exactly the "cursor lands next to the widget" offset.
+  // PassThrough keeps the screen factor unrounded so the two agree again.
+  //
+  // Set only when we are the ones scaling: a user who pinned the policy
+  // themselves keeps it, and at 1.0 we return above without touching anything.
+  if (!qEnvironmentVariableIsSet("QT_SCALE_FACTOR_ROUNDING_POLICY"))
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
+        Qt::HighDpiScaleFactorRoundingPolicy::PassThrough);
+
   // Qt multiplies this into the per-monitor DPI factor rather than replacing
   // it, which is exactly what we want: a 150% monitor stays at 150% and the
   // user's preference rides on top.
-  qputenv("QT_SCALE_FACTOR", QByteArray::number(result.effective, 'g', 4));
+  //
+  // 'f' with a fixed precision, never 'g': 'g' can emit an exponent form, and
+  // the C locale is not guaranteed here -- a comma decimal separator parses as
+  // a truncated integer inside Qt, which silently scales by 0 or 9 instead of
+  // 0.9.
+  QByteArray factor = QByteArray::number(result.effective, 'f', 4);
+  factor.replace(',', '.');
+  qputenv("QT_SCALE_FACTOR", factor);
 
   Logger::log()->info("ui_scale: interface scale {} applied via QT_SCALE_FACTOR",
                       result.effective);

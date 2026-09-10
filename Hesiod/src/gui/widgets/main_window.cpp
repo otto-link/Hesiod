@@ -68,6 +68,12 @@ void MainWindow::restore_geometry()
   {
     const QRect available = screen->availableGeometry();
 
+    // A geometry that is not usable at all is a stale one, not a preference:
+    // fall back to a comfortable fraction of the screen rather than restoring a
+    // sliver. Guards a config written before the window ever had a real size.
+    if (geom.width() < 320 || geom.height() < 240)
+      geom.setSize(QSize(available.width() * 3 / 4, available.height() * 3 / 4));
+
     geom.setSize(geom.size().boundedTo(available.size()));
     geom.moveLeft(std::clamp(geom.left(), available.left(), available.right() -
                                                                 geom.width() + 1));

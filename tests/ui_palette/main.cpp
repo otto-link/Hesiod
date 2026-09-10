@@ -315,6 +315,28 @@ void test_scale_environment_override()
           "and is not rewritten into our range");
   }
 
+  // A fractional factor has to survive the round trip through the environment
+  // exactly. 'g' formatting can emit an exponent, and a non-C locale can emit a
+  // comma, both of which Qt reparses as something else entirely -- 0.9 arriving
+  // as 0 or 9 is the difference between a slightly smaller interface and an
+  // unusable one.
+  qunsetenv("QT_SCALE_FACTOR");
+  for (const double factor : {0.5, 0.75, 0.9, 1.05, 1.25, 2.5, 3.0})
+  {
+    ui_scale::apply_scale(factor);
+
+    const QByteArray written = qgetenv("QT_SCALE_FACTOR");
+
+    check(std::abs(written.toDouble() - factor) < 1e-9,
+          "a fractional scale reaches Qt unchanged");
+    check(!written.contains('e') && !written.contains('E'),
+          "the factor is never written in exponent form");
+    check(!written.contains(','),
+          "the factor never carries a locale decimal comma");
+
+    qunsetenv("QT_SCALE_FACTOR");
+  }
+
   if (had_original)
     qputenv("QT_SCALE_FACTOR", original);
   else

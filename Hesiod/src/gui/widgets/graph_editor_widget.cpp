@@ -1,6 +1,8 @@
 /* Copyright (c) 2025 Otto Link. Distributed under the terms of the GNU General
  * Public License. The full license is in the file LICENSE, distributed with
  * this software. */
+#include <algorithm>
+
 #include <QGridLayout>
 #include <QSplitter>
 #include <QTimer>
@@ -233,7 +235,27 @@ void GraphEditorWidget::setup_layout()
   h_splitter->addWidget(this->node_settings_widget);
   h_splitter->setStretchFactor(0, 1); // graph area absorbs window resizing
   h_splitter->setStretchFactor(1, 0); // settings keeps its width
-  h_splitter->setSizes({650, HSD_CTX.app_settings.node_editor.node_settings_panel_width});
+  // Both numbers are logical pixels, and the graph half is a constant while the
+  // settings half comes from a file written at whatever scale the user ran
+  // last. QSplitter distributes its *actual* width in proportion to these, so
+  // the pair only has to be a ratio -- but a saved width that is wide relative
+  // to the window (a panel dragged wide at 100%, reopened in a window that is
+  // narrower in logical pixels after a scale change) starves the graph, and one
+  // that is small relative to a constant 650 collapses the settings pane to
+  // nothing. Clamp the settings share against the width the splitter will
+  // really get, so neither pane can be squeezed out by a stale number.
+  {
+    const int saved = HSD_CTX.app_settings.node_editor.node_settings_panel_width;
+
+    // width() is not final before the first show; fall back to the sum so the
+    // ratio is still sane, and let the clamp below do the rest
+    const int total = h_splitter->width() > 0 ? h_splitter->width() : 650 + saved;
+
+    // never less than a usable panel, never more than half the splitter
+    const int settings = std::clamp(saved, 200, std::max(200, total / 2));
+
+    h_splitter->setSizes({std::max(200, total - settings), settings});
+  }
 
   this->connect(h_splitter,
                 &QSplitter::splitterMoved,

@@ -177,37 +177,47 @@ void draw_glyph(QPainter &painter, const QRectF &box, const QColor &color, int s
  * QMenu positions itself on the screen, but a menu with more entries than the
  * display is tall is laid out in columns first, and that layout overshoots by
  * the frame width -- measured at every scale from 0.5x to 3x, the last column
- * ended up 13 to 88 logical pixels below the bottom of the screen. With
- * `menu-scrollable` on, shrinking it here turns the overflow into scroll arrows
- * instead of clipped entries.
+ * ended up 13 to 88 logical pixels below the bottom of the screen. Sliding the
+ * popup back inside fixes that; its size is left to QMenu, whose own scroll
+ * arrows (`menu-scrollable`) handle a list taller than the display.
  */
 void clamp_to_screen(QMenu *menu, const QRect &available)
 {
-  // setGeometry() below produces move/resize events that come straight back
-  // here; one pass is always enough, so refuse to re-enter rather than relying
-  // on the rectangle happening to be a fixed point
+  // move() below produces a move event that comes straight back here; one pass
+  // is always enough, so refuse to re-enter rather than relying on the
+  // rectangle happening to be a fixed point
   static bool clamping = false;
   if (clamping)
     return;
 
-  QRect geom = menu->geometry();
+  const QRect geom = menu->geometry();
+  QRect       moved = geom;
 
-  geom.setSize(geom.size().boundedTo(available.size()));
+  // Move only, never resize. A popup's size is decided by QMenu's own layout
+  // pass (column count, scroll arrows, the native shadow margin around it);
+  // forcing a different size from the outside leaves the widget's idea of its
+  // rectangle and the platform window disagreeing, and every mouse position is
+  // then translated through the wrong one -- the cursor highlights one entry
+  // while the click lands on another. Anything genuinely taller than the screen
+  // is handled by the menu's own scroll arrows, which is what `menu-scrollable`
+  // in the stylesheet is for.
+  if (moved.bottom() > available.bottom())
+    moved.moveBottom(available.bottom());
+  if (moved.right() > available.right())
+    moved.moveRight(available.right());
 
-  if (geom.bottom() > available.bottom())
-    geom.moveBottom(available.bottom());
-  if (geom.top() < available.top())
-    geom.moveTop(available.top());
-  if (geom.right() > available.right())
-    geom.moveRight(available.right());
-  if (geom.left() < available.left())
-    geom.moveLeft(available.left());
+  // top/left last: on a menu taller or wider than the screen these win, so the
+  // start of the list stays reachable rather than its end
+  if (moved.top() < available.top())
+    moved.moveTop(available.top());
+  if (moved.left() < available.left())
+    moved.moveLeft(available.left());
 
-  if (geom == menu->geometry())
+  if (moved.topLeft() == geom.topLeft())
     return;
 
   clamping = true;
-  menu->setGeometry(geom);
+  menu->move(moved.topLeft());
   clamping = false;
 }
 
