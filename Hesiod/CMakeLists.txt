@@ -91,6 +91,33 @@ target_link_libraries(
           ZLIB::ZLIB)
 
 # ------------------------------
+# Precompiled Headers (PCH)
+# ------------------------------
+if(HESIOD_ENABLE_PCH)
+  message(STATUS "Precompiled Headers (PCH) enabled for target ${PROJECT_NAME}")
+  target_precompile_headers(
+    ${PROJECT_NAME}
+    PRIVATE
+    <vector>
+    <string>
+    <memory>
+    <cmath>
+    <functional>
+    <algorithm>
+    <map>
+    <unordered_map>
+    <iostream>
+    <spdlog/spdlog.h>
+    <nlohmann/json.hpp>
+    <QString>
+    <QWidget>
+    <QObject>
+    <QPainter>
+    <QPoint>
+    <QColor>)
+endif()
+
+# ------------------------------
 # Copy data folder
 # ------------------------------
 file(COPY ${CMAKE_SOURCE_DIR}/Hesiod/data

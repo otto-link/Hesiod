@@ -88,6 +88,25 @@ struct AppSettings
     bool enable_heightmapper_widget = true;
     bool enable_tool_tips = true;
     bool enable_example_selector_at_startup = true;
+
+    // Node properties panel look. Both are names resolved at runtime, not
+    // enums, so registering a new design or colourway does not mean editing
+    // this struct.
+    //
+    // "industrial" and "stock" are peer designs, so selecting "stock" gives
+    // the unmodified Qt look -- that is how the two are A/B compared without a
+    // rebuild. A widget type "industrial" does not cover yet resolves through
+    // stock via the design's fallback chain. An unregistered name falls back
+    // to stock with a warning rather than drawing an empty panel.
+    //
+    // Applied at panel construction. Changing either takes effect on restart --
+    // see meta_qt/ui/theme.hpp for why live re-theming is deliberately not
+    // supported yet.
+    // "palette" derives every colour from the application palette, so the
+    // panel follows the app's colour scheme rather than imposing its own.
+    // "industrial-dark" pins the reference colourway instead.
+    std::string properties_panel_design = "industrial";
+    std::string properties_panel_theme = "palette";
   } interface;
 
   struct NodeEditor
@@ -104,12 +123,14 @@ struct AppSettings
     float       auto_layout_dy = 384.f;
     bool        show_node_library_pan = true;
     bool        show_node_settings_pan = true;
+    int         node_settings_panel_width = 500;
     bool        show_node_toolbar_in_settings_pan = true;
     bool        show_viewer = true;
     int         max_bake_resolution = 8192 * 4;
     bool        disable_during_update = false;
     bool        enable_node_groups = true;
     bool        live_update = false;
+    float       port_radius = 7.f;
   } node_editor;
 
   struct Viewer

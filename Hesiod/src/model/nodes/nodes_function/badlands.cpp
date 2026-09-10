@@ -17,14 +17,10 @@ namespace hesiod
 // Ports & Attributes
 // -----------------------------------------------------------------------------
 
-// -----------------------------------------------------------------------------
-// Ports & Attributes
-// -----------------------------------------------------------------------------
-
 constexpr const char *P_DX  = "dx";
 constexpr const char *P_DY  = "dy";
 constexpr const char *P_ENV = "envelope";
-constexpr const char *P_OUT = "out";
+constexpr const char *P_OUT = "output";
 
 constexpr const char *A_ELEVATION      = "elevation";
 constexpr const char *A_KW             = "kw";

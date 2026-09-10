@@ -23,9 +23,10 @@ option(HESIOD_ENABLE_GENERATE_APP_IMAGE "Enable AppImage generation" ON)
 option(HESIOD_MINIMAL_NODE_SET
        "Use a minimal set of nodes (ADVANCED DEV ONLY!!!)" OFF)
 
-# Option to enable LTO and unused-function detection
 option(HESIOD_ENABLE_LTO "Enable LTO and unused-function detection" OFF)
 option(HESIOD_UNUSED_FUNCTIONS "Detect unused static functions" OFF)
+option(HESIOD_PROFILE_BUILD "Enable build time profiling (-ftime-trace)" OFF)
+option(HESIOD_ENABLE_PCH "Enable Precompiled Headers (PCH)" OFF)
 
 # ------------------------------
 # Modules
@@ -51,10 +52,29 @@ add_compile_definitions(
   HSD_DEFAULT_GPU_MODE=true)
 
 # ------------------------------
+# Status output
+# ------------------------------
+message(STATUS "┌─ Hesiod configuration ──────────────")
+message(
+  STATUS
+    "│ HESIOD_ENABLE_GENERATE_APP_IMAGE:   ${HESIOD_ENABLE_GENERATE_APP_IMAGE}")
+message(
+  STATUS "│ HESIOD_MINIMAL_NODE_SET:            ${HESIOD_MINIMAL_NODE_SET}")
+message(STATUS "│ HESIOD_ENABLE_LTO:                  ${HESIOD_ENABLE_LTO}")
+message(
+  STATUS "│ HESIOD_UNUSED_FUNCTIONS:            ${HESIOD_UNUSED_FUNCTIONS}")
+message(STATUS "│ HESIOD_PROFILE_BUILD:               ${HESIOD_PROFILE_BUILD}")
+message(STATUS "│ HESIOD_ENABLE_PCH:                  ${HESIOD_ENABLE_PCH}")
+message(STATUS "│ CMAKE_BUILD_TYPE:                   ${CMAKE_BUILD_TYPE}")
+message(STATUS "│ CMAKE_CXX_COMPILER_ID:              ${CMAKE_CXX_COMPILER_ID}")
+message(STATUS "└─────────────────────────────────────")
+
+# ------------------------------
 # Subdirectories
 # ------------------------------
 add_subdirectory(external)
 add_subdirectory(Hesiod)
+add_subdirectory(bridges)
 
 if(HESIOD_ENABLE_GENERATE_APP_IMAGE)
   add_subdirectory(scripts/generate_appimage)
